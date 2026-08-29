@@ -53,8 +53,11 @@ export function TasksColumn({ userId }: { userId: string }) {
   const today = new Date().toISOString().slice(0, 10);
 
   return (
-    <div className="rounded-xl border border-white/10 bg-white/[0.03] p-5 flex flex-col gap-3">
-      <div className="text-neutral-100 font-medium text-sm">Tarefas</div>
+    <div className="dgs-card flex flex-col gap-3">
+      <div className="flex items-center gap-2">
+        <span className="text-base">✅</span>
+        <div className="text-neutral-100 font-medium text-sm">Tarefas</div>
+      </div>
 
       <div className="flex flex-col gap-2">
         <input
@@ -98,7 +101,7 @@ export function TasksColumn({ userId }: { userId: string }) {
                 </div>
               )}
             </div>
-            <button onClick={() => deleteTask(task.id)} className="text-red-400 text-xs">
+            <button onClick={() => deleteTask(task.id)} className="text-red-400 text-xs hover:text-red-300">
               ×
             </button>
           </div>

@@ -155,12 +155,15 @@ export function AdminConteudosClient({ initialModules }: { initialModules: Modul
         ← Voltar aos conteúdos
       </Link>
 
-      <h1 className="text-neutral-100 text-xl font-medium mt-6 mb-8">Gerenciar conteúdos</h1>
+      <div className="flex items-center gap-3 mt-6 mb-8">
+        <div className="w-10 h-10 rounded-xl bg-brand/10 flex items-center justify-center text-lg">📚</div>
+        <h1 className="text-neutral-100 text-xl font-medium">Gerenciar conteúdos</h1>
+      </div>
 
-      <div className="max-w-2xl flex flex-col gap-8">
+      <div className="max-w-2xl flex flex-col gap-6">
         {moduleForm ? (
-          <div className="rounded-xl border border-white/10 bg-white/[0.03] p-5 flex flex-col gap-3">
-            <div className="text-neutral-100 font-medium text-sm">
+          <div className="dgs-card flex flex-col gap-3">
+            <div className="text-neutral-100 font-medium text-sm mb-1">
               {moduleForm.id ? "Editar módulo" : "Novo módulo"}
             </div>
             <input
@@ -177,19 +180,19 @@ export function AdminConteudosClient({ initialModules }: { initialModules: Modul
               onChange={(e) => setModuleForm({ ...moduleForm, description: e.target.value })}
             />
             <div>
-              <label className="text-neutral-500 text-xs block mb-1.5">Foto de capa</label>
+              <label className="text-neutral-500 text-xs block mb-2">Foto de capa</label>
               <input
                 type="file"
                 accept="image/*"
                 onChange={(e) => setModuleForm({ ...moduleForm, coverFile: e.target.files?.[0] ?? null })}
-                className="text-neutral-400 text-xs file:mr-3 file:py-2 file:px-3 file:rounded-lg file:border-0 file:bg-white/10 file:text-neutral-200 file:text-xs"
+                className="dgs-file"
               />
             </div>
-            <div className="flex gap-2">
+            <div className="flex gap-2 mt-1">
               <button onClick={saveModule} disabled={savingModule} className="dgs-btn-primary w-auto px-5">
                 Salvar módulo
               </button>
-              <button onClick={() => setModuleForm(null)} className="text-neutral-500 text-sm">
+              <button onClick={() => setModuleForm(null)} className="dgs-btn-ghost">
                 cancelar
               </button>
             </div>
@@ -204,39 +207,39 @@ export function AdminConteudosClient({ initialModules }: { initialModules: Modul
         )}
 
         {modules.map((mod) => (
-          <div key={mod.id} className="rounded-xl border border-white/10 bg-white/[0.03] overflow-hidden">
+          <div key={mod.id} className="dgs-card !p-0 overflow-hidden">
             {mod.cover_image_path && (
               <img src={coverUrl(mod.cover_image_path) ?? ""} alt="" className="w-full h-32 object-cover" />
             )}
             <div className="p-5">
-              <div className="flex items-center justify-between mb-3">
+              <div className="flex items-center justify-between mb-4">
                 <div className="text-neutral-100 font-medium text-sm">{mod.title}</div>
-                <div className="flex gap-3">
+                <div className="flex gap-2">
                   <button
                     onClick={() =>
                       setModuleForm({ id: mod.id, title: mod.title, description: mod.description ?? "", coverFile: null })
                     }
-                    className="text-neutral-500 text-xs"
+                    className="dgs-btn-ghost"
                   >
                     editar
                   </button>
-                  <button onClick={() => deleteModule(mod.id)} className="text-red-400 text-xs">
+                  <button onClick={() => deleteModule(mod.id)} className="dgs-btn-danger">
                     excluir
                   </button>
                 </div>
               </div>
 
-              <div className="flex flex-col gap-1 mb-4">
+              <div className="flex flex-col gap-1.5 mb-4">
                 {mod.content_lessons?.map((l) => (
-                  <div key={l.id} className="flex items-center justify-between text-sm py-1.5 px-2 rounded bg-white/[0.02]">
+                  <div key={l.id} className="flex items-center justify-between text-sm py-2 px-3 rounded-lg bg-white/[0.02] border border-white/5">
                     <span className="text-neutral-300">
                       {l.content_type === "video" ? "🎬" : l.content_type === "audio" ? "🎧" : "📄"} {l.title}
                     </span>
-                    <div className="flex gap-3">
-                      <button onClick={() => openEditLesson(mod.id, l)} className="text-neutral-500 text-xs">
+                    <div className="flex gap-2">
+                      <button onClick={() => openEditLesson(mod.id, l)} className="dgs-btn-ghost">
                         editar
                       </button>
-                      <button onClick={() => deleteLesson(l.id)} className="text-red-400 text-xs">
+                      <button onClick={() => deleteLesson(l.id)} className="dgs-btn-danger">
                         excluir
                       </button>
                     </div>
@@ -248,7 +251,7 @@ export function AdminConteudosClient({ initialModules }: { initialModules: Modul
               </div>
 
               {lessonForm?.moduleId === mod.id ? (
-                <div className="flex flex-col gap-2 border-t border-white/10 pt-3">
+                <div className="flex flex-col gap-2.5 border-t border-white/10 pt-4">
                   <input
                     className="dgs-input"
                     placeholder="Título da aula"
@@ -292,11 +295,11 @@ export function AdminConteudosClient({ initialModules }: { initialModules: Modul
                       onSave={(html) => setLessonForm((f) => (f ? { ...f, bodyHtml: html } : f))}
                     />
                   )}
-                  <div className="flex gap-2">
+                  <div className="flex gap-2 mt-1">
                     <button onClick={saveLesson} disabled={savingLesson} className="dgs-btn-primary w-auto px-5">
                       Salvar aula
                     </button>
-                    <button onClick={() => setLessonForm(null)} className="text-neutral-500 text-sm">
+                    <button onClick={() => setLessonForm(null)} className="dgs-btn-ghost">
                       cancelar
                     </button>
                   </div>

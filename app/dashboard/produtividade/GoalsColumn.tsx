@@ -64,8 +64,11 @@ export function GoalsColumn({ userId }: { userId: string }) {
   }
 
   return (
-    <div className="rounded-xl border border-white/10 bg-white/[0.03] p-5 flex flex-col gap-3">
-      <div className="text-neutral-100 font-medium text-sm">Metas</div>
+    <div className="dgs-card flex flex-col gap-3">
+      <div className="flex items-center gap-2">
+        <span className="text-base">🎯</span>
+        <div className="text-neutral-100 font-medium text-sm">Metas</div>
+      </div>
 
       {showForm ? (
         <div className="flex flex-col gap-2">

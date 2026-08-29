@@ -133,7 +133,7 @@ export function EarningForm({
           type="file"
           accept="image/*"
           onChange={(e) => setFile(e.target.files?.[0] ?? null)}
-          className="text-neutral-400 text-xs file:mr-3 file:py-2 file:px-3 file:rounded-lg file:border-0 file:bg-white/10 file:text-neutral-200 file:text-xs"
+          className="dgs-file"
         />
       </div>
 
