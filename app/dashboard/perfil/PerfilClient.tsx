@@ -25,27 +25,47 @@ export function PerfilClient({
   );
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   function handleFile(f: File | null) {
     setFile(f);
+    setError(null);
     if (f) setPreview(URL.createObjectURL(f));
   }
 
   async function save() {
     setSaving(true);
     setSaved(false);
+    setError(null);
 
     let avatarPathToSave = avatarPath;
     if (file) {
-      const ext = file.name.split(".").pop();
-      const path = `${userId}/avatar.${ext}`;
-      const { error } = await supabase.storage.from("avatars").upload(path, file, { upsert: true });
-      if (!error) avatarPathToSave = path;
+      const ext = file.name.split(".").pop() || "jpg";
+      const path = `${userId}/avatar-${Date.now()}.${ext}`;
+      const { error: uploadError } = await supabase.storage
+        .from("avatars")
+        .upload(path, file, { upsert: true, contentType: file.type || "image/jpeg" });
+
+      if (uploadError) {
+        setSaving(false);
+        setError(`Não foi possível enviar a foto: ${uploadError.message}`);
+        return;
+      }
+      avatarPathToSave = path;
     }
 
-    await supabase.from("profiles").update({ nickname: nickname || null, avatar_path: avatarPathToSave }).eq("id", userId);
+    const { error: updateError } = await supabase
+      .from("profiles")
+      .update({ nickname: nickname || null, avatar_path: avatarPathToSave })
+      .eq("id", userId);
 
     setSaving(false);
+
+    if (updateError) {
+      setError(`Não foi possível salvar o perfil: ${updateError.message}`);
+      return;
+    }
+
     setSaved(true);
     setTimeout(() => setSaved(false), 2500);
   }
@@ -92,6 +112,7 @@ export function PerfilClient({
         <button onClick={save} disabled={saving} className="dgs-btn-primary">
           {saving ? "Salvando…" : saved ? "✓ Salvo" : "Salvar alterações"}
         </button>
+        {error && <p className="text-red-400 text-xs text-center -mt-2">{error}</p>}
       </div>
     </div>
   );

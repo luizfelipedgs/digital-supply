@@ -20,6 +20,11 @@ export default async function DashboardPage() {
   if (!profile || profile.status === "pending") redirect("/aguardando");
   if (profile.status !== "active") redirect("/login");
 
+  const { data: settings } = await supabase.from("site_settings").select("cover_path").eq("id", "main").maybeSingle();
+  const coverUrl = settings?.cover_path
+    ? supabase.storage.from("content-covers").getPublicUrl(settings.cover_path).data.publicUrl
+    : null;
+
   const displayName = (profile.nickname || profile.full_name || "aluno").split(" ")[0];
 
   let expiresLabel: string | null = null;
@@ -61,6 +66,18 @@ export default async function DashboardPage() {
     <div className="min-h-screen bg-ink-900 p-6 sm:p-10 flex flex-col">
       <div className="max-w-5xl w-full mx-auto">
         <DashboardHeader />
+      </div>
+
+      <div className="max-w-5xl w-full mx-auto mb-2">
+        {coverUrl ? (
+          <img
+            src={coverUrl}
+            alt=""
+            className="w-full h-32 sm:h-44 object-cover rounded-2xl border border-white/10"
+          />
+        ) : (
+          <div className="w-full h-32 sm:h-44 rounded-2xl border border-white/10 bg-gradient-to-br from-brand/10 via-white/[0.02] to-transparent" />
+        )}
       </div>
 
       <div className="flex-1 flex items-center justify-center">

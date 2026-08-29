@@ -2,6 +2,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { DashboardHeader } from "@/components/DashboardHeader";
+import { CoverUploader } from "./CoverUploader";
 
 export default async function AdminHubPage() {
   const supabase = createClient();
@@ -10,6 +11,8 @@ export default async function AdminHubPage() {
 
   const { data: profile } = await supabase.from("profiles").select("is_admin").eq("id", userData.user.id).single();
   if (!profile?.is_admin) redirect("/dashboard");
+
+  const { data: settings } = await supabase.from("site_settings").select("cover_path").eq("id", "main").maybeSingle();
 
   const items = [
     { href: "/dashboard/admin/conteudos", icon: "📚", title: "Conteúdos", description: "Módulos, aulas e capas." },
@@ -21,6 +24,9 @@ export default async function AdminHubPage() {
       <div className="max-w-xl mx-auto">
         <DashboardHeader backHref="/dashboard" />
         <h1 className="text-neutral-100 text-xl font-medium mb-6">Painel admin</h1>
+
+        <CoverUploader initialCoverPath={settings?.cover_path ?? null} />
+
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           {items.map((item) => (
             <Link key={item.href} href={item.href} className="dgs-card dgs-hover-card no-underline flex flex-col gap-3">
