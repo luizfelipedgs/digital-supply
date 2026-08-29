@@ -52,7 +52,7 @@ export function PerfilClient({
       const path = `${currentUserId}/avatar-${Date.now()}.${ext}`;
       const { error: uploadError } = await supabase.storage
         .from("avatars")
-        .upload(path, file, { upsert: true, contentType: file.type || "image/jpeg" });
+        .upload(path, file, { contentType: file.type || "image/jpeg" });
 
       if (uploadError) {
         setSaving(false);
