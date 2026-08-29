@@ -103,6 +103,29 @@ export default function PlanosPage() {
           ))}
         </div>
 
+        <div
+          className="dgs-card w-full max-w-2xl mt-10 dgs-fade-up"
+          style={{ animationDelay: "0.55s" }}
+        >
+          <div className="w-11 h-11 rounded-xl bg-brand/10 flex items-center justify-center text-xl mb-4">👥</div>
+          <h2 className="text-neutral-100 text-xl font-bold mb-4">Para quem é a DGS</h2>
+          <div className="text-neutral-400 text-sm leading-relaxed flex flex-col gap-4">
+            <p>
+              A Digital Supply reúne pessoas que querem construir uma fonte de renda real através de páginas de
+              conteúdo digital, unindo estratégia, constância e monetização por meio de campanhas musicais.
+            </p>
+            <p>
+              Se você já tem alguma experiência com redes sociais ou criação de conteúdo — ou está disposto a
+              desenvolver essa habilidade — vai encontrar aqui um caminho estruturado, com acompanhamento e
+              comunidade.
+            </p>
+            <p>
+              Não é para quem busca fórmula mágica. É para quem está pronto para aprender, aplicar e evoluir junto
+              com outras pessoas com o mesmo objetivo.
+            </p>
+          </div>
+        </div>
+
         <p className="text-neutral-600 text-xs mt-10 text-center max-w-md dgs-fade-up" style={{ animationDelay: "0.7s" }}>
           Depois de confirmado o pagamento, seu acesso é liberado automaticamente — normalmente em poucos minutos.
         </p>
