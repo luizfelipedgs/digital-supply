@@ -2,19 +2,39 @@
 
 import { useEffect, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
-import { Logo } from "@/components/Logo";
 import { CHECKOUT_LINKS, checkoutUrl } from "@/lib/plans";
 
 const PLANS: {
   id: keyof typeof CHECKOUT_LINKS;
   label: string;
   price: string;
-  sub: string;
+  duration: string;
+  description: string;
   featured?: boolean;
 }[] = [
-  { id: "mensal", label: "MENSAL", price: "R$ 47,90", sub: "por mês" },
-  { id: "trimestral", label: "TRIMESTRAL", price: "R$ 129,90", sub: "equivale a R$ 43,30/mês", featured: true },
-  { id: "anual", label: "ANUAL", price: "R$ 527,90", sub: "equivale a R$ 43,99/mês" },
+  {
+    id: "mensal",
+    label: "ASSINATURA MENSAL",
+    price: "R$ 47,90",
+    duration: "30 dias de acesso à comunidade",
+    description: "Ideal para começar sua jornada, acompanhar as aulas ao vivo e colocar as estratégias em prática.",
+  },
+  {
+    id: "trimestral",
+    label: "ASSINATURA TRIMESTRAL",
+    price: "R$ 129,90",
+    duration: "90 dias de acesso à comunidade",
+    description: "Mais tempo para aprender, aplicar as estratégias, testar seus conteúdos e evoluir suas páginas.",
+    featured: true,
+  },
+  {
+    id: "anual",
+    label: "ASSINATURA ANUAL",
+    price: "R$ 527,90",
+    duration: "365 dias de acesso à comunidade",
+    description:
+      "Para quem decidiu construir sua operação no digital a longo prazo e acompanhar continuamente as estratégias, atualizações e oportunidades da comunidade.",
+  },
 ];
 
 export default function PlanosPage() {
@@ -32,40 +52,59 @@ export default function PlanosPage() {
   }
 
   return (
-    <div className="dgs-scene">
-      <div className="dgs-glow" style={{ left: "50%", top: "8%", transform: "translate(-50%,-50%)", width: 260, height: 260 }} />
-      <div className="relative flex flex-col items-center w-full max-w-2xl">
-        <Logo size={44} className="text-brand mb-2" />
-        <div className="text-brand text-[10px] tracking-[5px] mb-4">COMUNIDADE DGS</div>
-        <div className="text-neutral-100 text-xl font-medium mb-8 text-center">
-          Escolha seu plano de acesso
-        </div>
+    <div className="dgs-scene py-16" style={{ alignItems: "flex-start" }}>
+      <div className="dgs-glow" style={{ left: "50%", top: "6%", transform: "translate(-50%,-50%)", width: 320, height: 320 }} />
+      <div className="relative flex flex-col items-center w-full max-w-4xl">
+        <h1 className="text-neutral-100 text-3xl sm:text-4xl font-semibold mb-3 text-center dgs-fade-up">
+          Escolha seu plano
+        </h1>
+        <p
+          className="text-neutral-500 text-sm mb-10 text-center max-w-md dgs-fade-up"
+          style={{ animationDelay: "0.15s" }}
+        >
+          Tenha acesso à comunidade pelo período que fizer mais sentido para o seu momento.
+        </p>
 
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 w-full">
-          {PLANS.map((plan) => (
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-5 w-full">
+          {PLANS.map((plan, i) => (
             <div
               key={plan.id}
-              className={`rounded-xl p-5 flex flex-col items-center text-center border ${
+              className={`relative rounded-2xl p-6 flex flex-col border dgs-fade-up transition-all duration-300 ${
                 plan.featured
-                  ? "bg-brand/5 border-brand/30"
-                  : "bg-white/[0.03] border-white/10"
+                  ? "bg-brand/5 border-brand/40 sm:-translate-y-2 hover:shadow-[0_0_36px_-10px_rgba(154,205,50,0.5)]"
+                  : "bg-white/[0.03] border-white/10 hover:border-white/20 hover:bg-white/[0.05]"
               }`}
+              style={{ animationDelay: `${0.3 + i * 0.12}s` }}
             >
-              <div className={`text-xs tracking-widest mb-2.5 ${plan.featured ? "text-brand" : "text-neutral-400"}`}>
+              {plan.featured && (
+                <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-brand text-ink-950 text-[10px] font-bold tracking-wider px-3 py-1 rounded-full whitespace-nowrap">
+                  MAIS POPULAR
+                </div>
+              )}
+
+              <div className={`text-xs font-bold tracking-wider mb-3 ${plan.featured ? "text-brand" : "text-neutral-400"}`}>
                 {plan.label}
               </div>
-              <div className="text-neutral-100 text-xl font-medium mb-1">{plan.price}</div>
-              <div className="text-neutral-500 text-[11px] mb-4">{plan.sub}</div>
-              <a href={planUrl(plan.id)} className="dgs-btn-primary text-center no-underline">
-                Assinar
+              <div className="text-neutral-100 text-3xl font-bold mb-1">{plan.price}</div>
+              <div className="text-neutral-300 text-xs font-medium mb-4">{plan.duration}</div>
+              <p className="text-neutral-500 text-sm leading-relaxed mb-6 flex-1">{plan.description}</p>
+
+              <a
+                href={planUrl(plan.id)}
+                className={`text-center no-underline rounded-lg py-3 text-sm font-bold tracking-wide uppercase transition-all ${
+                  plan.featured
+                    ? "bg-brand text-ink-950 hover:brightness-110"
+                    : "bg-white/5 text-neutral-100 border border-white/15 hover:bg-white/10"
+                }`}
+              >
+                Assinar agora
               </a>
             </div>
           ))}
         </div>
 
-        <p className="text-neutral-500 text-xs mt-8 text-center max-w-md">
-          Depois de confirmado o pagamento, seu acesso é liberado automaticamente —
-          normalmente em poucos minutos.
+        <p className="text-neutral-600 text-xs mt-10 text-center max-w-md dgs-fade-up" style={{ animationDelay: "0.7s" }}>
+          Depois de confirmado o pagamento, seu acesso é liberado automaticamente — normalmente em poucos minutos.
         </p>
       </div>
     </div>
