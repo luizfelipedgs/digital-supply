@@ -53,11 +53,19 @@ export default function CadastroPage() {
     <div className="dgs-scene">
       <div className="dgs-glow" style={{ left: "50%", top: "14%", transform: "translate(-50%,-50%)", width: 220, height: 220 }} />
       <div className="relative flex flex-col items-center w-full max-w-sm">
-        <Logo size={56} className="text-brand mb-3" />
-        <div className="text-brand text-[11px] tracking-[5px] mb-5">COMUNIDADE DGS</div>
-        <div className="text-neutral-100 text-lg font-medium mb-7">Criar sua conta</div>
+        <Logo size={56} className="text-brand mb-3 dgs-fade-up" style={{ animationDelay: "0.3s" }} />
+        <div className="text-brand text-[11px] tracking-[5px] mb-5 dgs-fade-up" style={{ animationDelay: "0.6s" }}>
+          COMUNIDADE DGS
+        </div>
+        <div className="text-neutral-100 text-lg font-medium mb-7 dgs-fade-up" style={{ animationDelay: "0.8s" }}>
+          Criar sua conta
+        </div>
 
-        <form onSubmit={handleSubmit} className="w-full flex flex-col gap-3">
+        <form
+          onSubmit={handleSubmit}
+          className="w-full flex flex-col gap-3 dgs-fade-up"
+          style={{ animationDelay: "1s" }}
+        >
           <input
             type="text"
             placeholder="Nome completo"

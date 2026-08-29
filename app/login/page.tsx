@@ -40,12 +40,23 @@ export default function LoginPage() {
     <div className="dgs-scene">
       <div className="dgs-glow" style={{ left: "50%", top: "32%", transform: "translate(-50%,-50%)" }} />
       <div className="relative flex flex-col items-center w-full max-w-sm">
-        <Logo size={88} className="text-brand mb-5" />
-        <div className="text-brand text-[13px] tracking-[6px] mb-2">COMUNIDADE DGS</div>
-        <div className="text-neutral-100 text-2xl tracking-[6px] font-medium mb-4">DIGITAL SUPPLY</div>
-        <div className="h-px w-16 bg-brand/50 mb-8" />
+        <Logo size={88} className="text-brand mb-5 dgs-fade-up" style={{ animationDelay: "0.9s" }} />
+        <div className="text-brand text-[13px] tracking-[6px] mb-2 dgs-fade-up" style={{ animationDelay: "1.5s" }}>
+          COMUNIDADE DGS
+        </div>
+        <div
+          className="text-neutral-100 text-2xl tracking-[6px] font-medium mb-4 dgs-fade-up"
+          style={{ animationDelay: "1.8s" }}
+        >
+          DIGITAL SUPPLY
+        </div>
+        <div className="h-px bg-brand/50 mb-8 dgs-grow-line" style={{ animationDelay: "2.1s" }} />
 
-        <form onSubmit={handleSubmit} className="w-full flex flex-col gap-3">
+        <form
+          onSubmit={handleSubmit}
+          className="w-full flex flex-col gap-3 dgs-fade-up"
+          style={{ animationDelay: "2.3s" }}
+        >
           <input
             type="email"
             placeholder="seu@email.com"
@@ -71,6 +82,7 @@ export default function LoginPage() {
           </p>
         </form>
       </div>
+      <div className="dgs-overlay" />
     </div>
   );
 }

@@ -3,12 +3,7 @@
 import { useEffect, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { Logo } from "@/components/Logo";
-
-const CHECKOUT_LINKS = {
-  mensal: "https://pay.cakto.com.br/33i9p85_1029588",
-  trimestral: "https://pay.cakto.com.br/32u4hd6",
-  anual: "https://pay.cakto.com.br/hpdu9fn",
-};
+import { CHECKOUT_LINKS, checkoutUrl } from "@/lib/plans";
 
 const PLANS: {
   id: keyof typeof CHECKOUT_LINKS;
@@ -32,11 +27,8 @@ export default function PlanosPage() {
     });
   }, [supabase]);
 
-  function checkoutUrl(plan: keyof typeof CHECKOUT_LINKS) {
-    const base = CHECKOUT_LINKS[plan];
-    if (!email) return base;
-    const params = new URLSearchParams({ email, confirmEmail: email });
-    return `${base}?${params.toString()}`;
+  function planUrl(plan: keyof typeof CHECKOUT_LINKS) {
+    return checkoutUrl(plan, email);
   }
 
   return (
@@ -64,7 +56,7 @@ export default function PlanosPage() {
               </div>
               <div className="text-neutral-100 text-xl font-medium mb-1">{plan.price}</div>
               <div className="text-neutral-500 text-[11px] mb-4">{plan.sub}</div>
-              <a href={checkoutUrl(plan.id)} className="dgs-btn-primary text-center no-underline">
+              <a href={planUrl(plan.id)} className="dgs-btn-primary text-center no-underline">
                 Assinar
               </a>
             </div>

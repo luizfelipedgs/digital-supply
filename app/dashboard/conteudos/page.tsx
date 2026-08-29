@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
+import { DashboardHeader } from "@/components/DashboardHeader";
 
 export default async function ConteudosPage() {
   const supabase = createClient();
@@ -30,6 +31,7 @@ export default async function ConteudosPage() {
 
   return (
     <div className="min-h-screen bg-ink-900 p-6 sm:p-8">
+      <DashboardHeader backHref="/dashboard" />
       <div className="flex items-center justify-between mb-8">
         <h1 className="text-neutral-100 text-xl font-medium">Conteúdos</h1>
         {profile.is_admin && (

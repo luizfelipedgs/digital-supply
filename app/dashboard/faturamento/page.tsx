@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation";
-import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
+import { DashboardHeader } from "@/components/DashboardHeader";
 import { FaturamentoClient } from "./FaturamentoClient";
 
 export default async function FaturamentoPage() {
@@ -18,10 +18,8 @@ export default async function FaturamentoPage() {
 
   return (
     <div className="min-h-screen bg-ink-900 p-6 sm:p-8">
-      <Link href="/dashboard" className="text-neutral-500 text-sm no-underline">
-        ← Voltar
-      </Link>
-      <h1 className="text-neutral-100 text-xl font-medium mt-4 mb-6">Faturamento</h1>
+      <DashboardHeader backHref="/dashboard" />
+      <h1 className="text-neutral-100 text-xl font-medium mb-6">Faturamento</h1>
       <FaturamentoClient userId={userData.user.id} />
     </div>
   );

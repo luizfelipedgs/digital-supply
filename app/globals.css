@@ -74,6 +74,38 @@
   cursor: not-allowed;
 }
 
+@keyframes dgsBlackout {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+@keyframes dgsFadeUp {
+  from { opacity: 0; transform: translateY(10px) scale(0.98); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes dgsGrowLine {
+  to { width: 64px; }
+}
+
+.dgs-overlay {
+  position: absolute;
+  inset: 0;
+  background: #000;
+  pointer-events: none;
+  animation: dgsBlackout 1.4s ease-out forwards;
+}
+
+.dgs-fade-up {
+  opacity: 0;
+  animation: dgsFadeUp 0.7s ease-out forwards;
+}
+
+.dgs-grow-line {
+  width: 0;
+  animation: dgsGrowLine 0.8s ease-out forwards;
+}
+
 .dgs-card {
   background: rgba(255, 255, 255, 0.03);
   border: 0.5px solid rgba(255, 255, 255, 0.1);

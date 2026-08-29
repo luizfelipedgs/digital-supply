@@ -1,9 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
 import { RichTextEditor } from "@/components/RichTextEditor";
+import { DashboardHeader } from "@/components/DashboardHeader";
 
 type Lesson = {
   id: string;
@@ -151,9 +151,7 @@ export function AdminConteudosClient({ initialModules }: { initialModules: Modul
 
   return (
     <div className="min-h-screen bg-ink-900 p-6 sm:p-8">
-      <Link href="/dashboard/conteudos" className="text-neutral-500 text-sm no-underline">
-        ← Voltar aos conteúdos
-      </Link>
+      <DashboardHeader backHref="/dashboard/conteudos" backLabel="Voltar aos conteúdos" />
 
       <div className="flex items-center gap-3 mt-6 mb-8">
         <div className="w-10 h-10 rounded-xl bg-brand/10 flex items-center justify-center text-lg">📚</div>

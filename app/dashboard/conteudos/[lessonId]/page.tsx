@@ -1,6 +1,6 @@
 import { redirect, notFound } from "next/navigation";
-import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
+import { DashboardHeader } from "@/components/DashboardHeader";
 import { MarkCompleteButton } from "./MarkCompleteButton";
 
 export default async function LessonPage({ params }: { params: { lessonId: string } }) {
@@ -33,9 +33,7 @@ export default async function LessonPage({ params }: { params: { lessonId: strin
 
   return (
     <div className="min-h-screen bg-ink-900 p-6 sm:p-8">
-      <Link href="/dashboard/conteudos" className="text-neutral-500 text-sm no-underline">
-        ← Voltar aos conteúdos
-      </Link>
+      <DashboardHeader backHref="/dashboard/conteudos" backLabel="Voltar aos conteúdos" />
 
       <div className="max-w-2xl mt-6">
         <h1 className="text-neutral-100 text-xl font-medium mb-2">{lesson.title}</h1>

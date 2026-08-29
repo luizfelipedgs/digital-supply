@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation";
-import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
+import { DashboardHeader } from "@/components/DashboardHeader";
 import { TasksColumn } from "./TasksColumn";
 import { GoalsColumn } from "./GoalsColumn";
 import { NotesColumn } from "./NotesColumn";
@@ -20,10 +20,8 @@ export default async function ProdutividadePage() {
 
   return (
     <div className="min-h-screen bg-ink-900 p-6 sm:p-8">
-      <Link href="/dashboard" className="text-neutral-500 text-sm no-underline">
-        ← Voltar
-      </Link>
-      <h1 className="text-neutral-100 text-xl font-medium mt-4 mb-6">Anotações, tarefas e metas</h1>
+      <DashboardHeader backHref="/dashboard" />
+      <h1 className="text-neutral-100 text-xl font-medium mb-6">Anotações, tarefas e metas</h1>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-5 max-w-6xl">
         <TasksColumn userId={userData.user.id} />
