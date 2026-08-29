@@ -98,7 +98,15 @@ export function DashboardHeader({ backHref, backLabel = "Voltar" }: { backHref?:
             className="relative w-9 h-9 rounded-full border border-white/10 bg-white/[0.03] flex items-center justify-center hover:bg-white/[0.06] transition-colors"
             aria-label="Notificações"
           >
-            <span className="text-sm">🔔</span>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" className="text-white/70">
+              <path
+                d="M12 3a6 6 0 00-6 6v3.5c0 .6-.2 1.2-.6 1.6L4 15.5c-.6.7-.1 1.8.8 1.8h14.4c.9 0 1.4-1.1.8-1.8l-1.4-1.4c-.4-.4-.6-1-.6-1.6V9a6 6 0 00-6-6z"
+                stroke="currentColor"
+                strokeWidth="1.6"
+                strokeLinejoin="round"
+              />
+              <path d="M9.5 19a2.5 2.5 0 005 0" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+            </svg>
             {unreadCount > 0 && (
               <span className="absolute -top-0.5 -right-0.5 w-4 h-4 rounded-full bg-brand text-[9px] text-ink-950 font-bold flex items-center justify-center">
                 {unreadCount}
