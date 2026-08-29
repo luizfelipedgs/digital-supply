@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
 import { Logo } from "@/components/Logo";
+import { PasswordInput } from "@/components/PasswordInput";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -52,13 +53,12 @@ export default function LoginPage() {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
           />
-          <input
-            type="password"
-            placeholder="Senha"
-            className="dgs-input"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
+          <PasswordInput value={password} onChange={setPassword} placeholder="Senha" />
+          <div className="text-right -mt-1">
+            <Link href="/esqueci-senha" className="text-neutral-500 text-xs">
+              Esqueceu a senha?
+            </Link>
+          </div>
           {error && <p className="text-red-400 text-xs">{error}</p>}
           <button type="submit" disabled={loading} className="dgs-btn-primary mt-1">
             {loading ? "Entrando…" : "Entrar"}

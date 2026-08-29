@@ -59,9 +59,10 @@ export default async function LessonPage({ params }: { params: { lessonId: strin
         )}
 
         {lesson.content_type === "text" && lesson.body_text && (
-          <div className="text-neutral-300 text-sm leading-relaxed whitespace-pre-wrap mb-6">
-            {lesson.body_text}
-          </div>
+          <div
+            className="text-neutral-300 text-sm leading-relaxed mb-6 [&_blockquote]:border-l-2 [&_blockquote]:border-brand/50 [&_blockquote]:pl-3 [&_blockquote]:text-neutral-400 [&_blockquote]:italic [&_a]:text-brand [&_a]:underline"
+            dangerouslySetInnerHTML={{ __html: lesson.body_text }}
+          />
         )}
 
         <MarkCompleteButton lessonId={lesson.id} initiallyCompleted={!!progress} />

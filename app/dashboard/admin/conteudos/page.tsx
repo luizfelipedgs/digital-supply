@@ -17,7 +17,7 @@ export default async function AdminConteudosPage() {
 
   const { data: modules } = await supabase
     .from("content_modules")
-    .select("id, title, order_index, content_lessons(id, title, content_type, order_index)")
+    .select("id, title, description, cover_image_path, order_index, content_lessons(id, title, description, content_type, body_text, video_url, audio_url, order_index)")
     .order("order_index", { ascending: true });
 
   return <AdminConteudosClient initialModules={modules ?? []} />;

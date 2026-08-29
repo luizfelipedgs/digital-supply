@@ -1,0 +1,28 @@
+import { redirect } from "next/navigation";
+import Link from "next/link";
+import { createClient } from "@/lib/supabase/server";
+import { FaturamentoClient } from "./FaturamentoClient";
+
+export default async function FaturamentoPage() {
+  const supabase = createClient();
+  const { data: userData } = await supabase.auth.getUser();
+  if (!userData.user) redirect("/login");
+
+  const { data: profile } = await supabase
+    .from("profiles")
+    .select("status")
+    .eq("id", userData.user.id)
+    .single();
+
+  if (!profile || profile.status !== "active") redirect("/aguardando");
+
+  return (
+    <div className="min-h-screen bg-ink-900 p-6 sm:p-8">
+      <Link href="/dashboard" className="text-neutral-500 text-sm no-underline">
+        ← Voltar
+      </Link>
+      <h1 className="text-neutral-100 text-xl font-medium mt-4 mb-6">Faturamento</h1>
+      <FaturamentoClient userId={userData.user.id} />
+    </div>
+  );
+}

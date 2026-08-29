@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
 import { Logo } from "@/components/Logo";
+import { PasswordInput } from "@/components/PasswordInput";
 
 export default function CadastroPage() {
   const router = useRouter();
@@ -78,13 +79,7 @@ export default function CadastroPage() {
             value={phone}
             onChange={(e) => setPhone(e.target.value)}
           />
-          <input
-            type="password"
-            placeholder="Criar senha"
-            className="dgs-input"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
+          <PasswordInput value={password} onChange={setPassword} placeholder="Criar senha" />
           {error && <p className="text-red-400 text-xs">{error}</p>}
           <button type="submit" disabled={loading} className="dgs-btn-primary mt-1">
             {loading ? "Criando conta…" : "Criar conta"}

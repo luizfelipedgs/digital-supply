@@ -26,11 +26,15 @@ export default async function DashboardPage() {
           <div className="text-neutral-500 text-xs">Plano {profile.plan} · ativo</div>
         </div>
       </div>
-      <div className="text-neutral-500 text-sm mb-4">
-        Próximas etapas: dashboard de faturamento, metas e tarefas entram aqui.
-      </div>
-      <a href="/dashboard/conteudos" className="text-brand text-sm no-underline">
+      <div className="text-neutral-500 text-sm mb-4">Bem-vindo de volta.</div>
+      <a href="/dashboard/conteudos" className="text-brand text-sm no-underline block mb-2">
         → Ver conteúdos
+      </a>
+      <a href="/dashboard/faturamento" className="text-brand text-sm no-underline block mb-2">
+        → Ver faturamento
+      </a>
+      <a href="/dashboard/produtividade" className="text-brand text-sm no-underline block">
+        → Anotações, tarefas e metas
       </a>
     </div>
   );

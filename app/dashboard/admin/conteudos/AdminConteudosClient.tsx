@@ -3,69 +3,150 @@
 import { useState } from "react";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
+import { RichTextEditor } from "@/components/RichTextEditor";
 
-type Lesson = { id: string; title: string; content_type: string; order_index: number };
-type Module = { id: string; title: string; order_index: number; content_lessons: Lesson[] };
+type Lesson = {
+  id: string;
+  title: string;
+  description: string | null;
+  content_type: string;
+  body_text: string | null;
+  video_url: string | null;
+  audio_url: string | null;
+  order_index: number;
+};
+type Module = {
+  id: string;
+  title: string;
+  description: string | null;
+  cover_image_path: string | null;
+  order_index: number;
+  content_lessons: Lesson[];
+};
+
+const emptyLessonForm = {
+  id: null as string | null,
+  moduleId: null as string | null,
+  title: "",
+  description: "",
+  contentType: "video" as "text" | "video" | "audio",
+  bodyHtml: "",
+  videoUrl: "",
+  audioUrl: "",
+};
+
+function coverUrl(path: string | null) {
+  if (!path) return null;
+  const supabase = createClient();
+  return supabase.storage.from("content-covers").getPublicUrl(path).data.publicUrl;
+}
 
 export function AdminConteudosClient({ initialModules }: { initialModules: Module[] }) {
   const supabase = createClient();
   const [modules, setModules] = useState<Module[]>(initialModules);
 
-  const [newModuleTitle, setNewModuleTitle] = useState("");
-  const [creatingModule, setCreatingModule] = useState(false);
-
-  const [lessonForm, setLessonForm] = useState<{
-    moduleId: string | null;
+  const [moduleForm, setModuleForm] = useState<{
+    id: string | null;
     title: string;
-    contentType: "text" | "video" | "audio";
-    bodyText: string;
-    videoUrl: string;
-    audioUrl: string;
-  }>({ moduleId: null, title: "", contentType: "video", bodyText: "", videoUrl: "", audioUrl: "" });
-  const [creatingLesson, setCreatingLesson] = useState(false);
+    description: string;
+    coverFile: File | null;
+  } | null>(null);
+  const [savingModule, setSavingModule] = useState(false);
+
+  const [lessonForm, setLessonForm] = useState<typeof emptyLessonForm | null>(null);
+  const [savingLesson, setSavingLesson] = useState(false);
 
   async function refresh() {
     const { data } = await supabase
       .from("content_modules")
-      .select("id, title, order_index, content_lessons(id, title, content_type, order_index)")
+      .select("id, title, description, cover_image_path, order_index, content_lessons(id, title, description, content_type, body_text, video_url, audio_url, order_index)")
       .order("order_index", { ascending: true });
     setModules((data as Module[]) ?? []);
   }
 
-  async function createModule() {
-    if (!newModuleTitle.trim()) return;
-    setCreatingModule(true);
-    await supabase.from("content_modules").insert({ title: newModuleTitle, order_index: modules.length });
-    setNewModuleTitle("");
-    setCreatingModule(false);
-    refresh();
-  }
+  async function saveModule() {
+    if (!moduleForm || !moduleForm.title.trim()) return;
+    setSavingModule(true);
 
-  async function createLesson() {
-    if (!lessonForm.moduleId || !lessonForm.title.trim()) return;
-    setCreatingLesson(true);
-    await supabase.from("content_lessons").insert({
-      module_id: lessonForm.moduleId,
-      title: lessonForm.title,
-      content_type: lessonForm.contentType,
-      body_text: lessonForm.contentType === "text" ? lessonForm.bodyText : null,
-      video_url: lessonForm.contentType === "video" ? lessonForm.videoUrl : null,
-      audio_url: lessonForm.contentType === "audio" ? lessonForm.audioUrl : null,
-      order_index: 0,
-    });
-    setLessonForm({ moduleId: lessonForm.moduleId, title: "", contentType: "video", bodyText: "", videoUrl: "", audioUrl: "" });
-    setCreatingLesson(false);
-    refresh();
-  }
+    let coverPath: string | undefined;
+    if (moduleForm.coverFile) {
+      const ext = moduleForm.coverFile.name.split(".").pop();
+      const path = `${crypto.randomUUID()}.${ext}`;
+      const { error } = await supabase.storage.from("content-covers").upload(path, moduleForm.coverFile);
+      if (!error) coverPath = path;
+    }
 
-  async function deleteLesson(id: string) {
-    await supabase.from("content_lessons").delete().eq("id", id);
+    if (moduleForm.id) {
+      await supabase
+        .from("content_modules")
+        .update({
+          title: moduleForm.title,
+          description: moduleForm.description,
+          ...(coverPath ? { cover_image_path: coverPath } : {}),
+        })
+        .eq("id", moduleForm.id);
+    } else {
+      await supabase.from("content_modules").insert({
+        title: moduleForm.title,
+        description: moduleForm.description,
+        cover_image_path: coverPath ?? null,
+        order_index: modules.length,
+      });
+    }
+
+    setModuleForm(null);
+    setSavingModule(false);
     refresh();
   }
 
   async function deleteModule(id: string) {
+    if (!confirm("Apagar este módulo e todas as aulas dentro dele?")) return;
     await supabase.from("content_modules").delete().eq("id", id);
     refresh();
+  }
+
+  async function saveLesson() {
+    if (!lessonForm || !lessonForm.moduleId || !lessonForm.title.trim()) return;
+    setSavingLesson(true);
+
+    const payload = {
+      module_id: lessonForm.moduleId,
+      title: lessonForm.title,
+      description: lessonForm.description || null,
+      content_type: lessonForm.contentType,
+      body_text: lessonForm.contentType === "text" ? lessonForm.bodyHtml : null,
+      video_url: lessonForm.contentType === "video" ? lessonForm.videoUrl : null,
+      audio_url: lessonForm.contentType === "audio" ? lessonForm.audioUrl : null,
+    };
+
+    if (lessonForm.id) {
+      await supabase.from("content_lessons").update(payload).eq("id", lessonForm.id);
+    } else {
+      await supabase.from("content_lessons").insert({ ...payload, order_index: 0 });
+    }
+
+    setLessonForm(null);
+    setSavingLesson(false);
+    refresh();
+  }
+
+  async function deleteLesson(id: string) {
+    if (!confirm("Apagar esta aula?")) return;
+    await supabase.from("content_lessons").delete().eq("id", id);
+    refresh();
+  }
+
+  function openEditLesson(moduleId: string, lesson: Lesson) {
+    setLessonForm({
+      id: lesson.id,
+      moduleId,
+      title: lesson.title,
+      description: lesson.description ?? "",
+      contentType: lesson.content_type as any,
+      bodyHtml: lesson.body_text ?? "",
+      videoUrl: lesson.video_url ?? "",
+      audioUrl: lesson.audio_url ?? "",
+    });
   }
 
   return (
@@ -77,111 +158,158 @@ export function AdminConteudosClient({ initialModules }: { initialModules: Modul
       <h1 className="text-neutral-100 text-xl font-medium mt-6 mb-8">Gerenciar conteúdos</h1>
 
       <div className="max-w-2xl flex flex-col gap-8">
-        {/* Criar módulo */}
-        <div className="rounded-xl border border-white/10 bg-white/[0.03] p-5">
-          <div className="text-neutral-100 font-medium mb-3 text-sm">Novo módulo</div>
-          <div className="flex gap-2">
+        {moduleForm ? (
+          <div className="rounded-xl border border-white/10 bg-white/[0.03] p-5 flex flex-col gap-3">
+            <div className="text-neutral-100 font-medium text-sm">
+              {moduleForm.id ? "Editar módulo" : "Novo módulo"}
+            </div>
             <input
               className="dgs-input"
-              placeholder="Ex: Fundamentos da clipagem"
-              value={newModuleTitle}
-              onChange={(e) => setNewModuleTitle(e.target.value)}
+              placeholder="Título do módulo"
+              value={moduleForm.title}
+              onChange={(e) => setModuleForm({ ...moduleForm, title: e.target.value })}
             />
-            <button onClick={createModule} disabled={creatingModule} className="dgs-btn-primary w-auto px-5 whitespace-nowrap">
-              Criar
-            </button>
-          </div>
-        </div>
-
-        {/* Lista de módulos + aulas */}
-        {modules.map((mod) => (
-          <div key={mod.id} className="rounded-xl border border-white/10 bg-white/[0.03] p-5">
-            <div className="flex items-center justify-between mb-3">
-              <div className="text-neutral-100 font-medium text-sm">{mod.title}</div>
-              <button onClick={() => deleteModule(mod.id)} className="text-red-400 text-xs">
-                excluir módulo
+            <textarea
+              className="dgs-input"
+              rows={2}
+              placeholder="Descrição curta (opcional)"
+              value={moduleForm.description}
+              onChange={(e) => setModuleForm({ ...moduleForm, description: e.target.value })}
+            />
+            <div>
+              <label className="text-neutral-500 text-xs block mb-1.5">Foto de capa</label>
+              <input
+                type="file"
+                accept="image/*"
+                onChange={(e) => setModuleForm({ ...moduleForm, coverFile: e.target.files?.[0] ?? null })}
+                className="text-neutral-400 text-xs file:mr-3 file:py-2 file:px-3 file:rounded-lg file:border-0 file:bg-white/10 file:text-neutral-200 file:text-xs"
+              />
+            </div>
+            <div className="flex gap-2">
+              <button onClick={saveModule} disabled={savingModule} className="dgs-btn-primary w-auto px-5">
+                Salvar módulo
+              </button>
+              <button onClick={() => setModuleForm(null)} className="text-neutral-500 text-sm">
+                cancelar
               </button>
             </div>
+          </div>
+        ) : (
+          <button
+            onClick={() => setModuleForm({ id: null, title: "", description: "", coverFile: null })}
+            className="dgs-btn-primary w-auto px-5 self-start"
+          >
+            + novo módulo
+          </button>
+        )}
 
-            <div className="flex flex-col gap-1 mb-4">
-              {mod.content_lessons?.map((l) => (
-                <div key={l.id} className="flex items-center justify-between text-sm py-1.5 px-2 rounded bg-white/[0.02]">
-                  <span className="text-neutral-300">
-                    {l.content_type === "video" ? "🎬" : l.content_type === "audio" ? "🎧" : "📄"} {l.title}
-                  </span>
-                  <button onClick={() => deleteLesson(l.id)} className="text-red-400 text-xs">
+        {modules.map((mod) => (
+          <div key={mod.id} className="rounded-xl border border-white/10 bg-white/[0.03] overflow-hidden">
+            {mod.cover_image_path && (
+              <img src={coverUrl(mod.cover_image_path) ?? ""} alt="" className="w-full h-32 object-cover" />
+            )}
+            <div className="p-5">
+              <div className="flex items-center justify-between mb-3">
+                <div className="text-neutral-100 font-medium text-sm">{mod.title}</div>
+                <div className="flex gap-3">
+                  <button
+                    onClick={() =>
+                      setModuleForm({ id: mod.id, title: mod.title, description: mod.description ?? "", coverFile: null })
+                    }
+                    className="text-neutral-500 text-xs"
+                  >
+                    editar
+                  </button>
+                  <button onClick={() => deleteModule(mod.id)} className="text-red-400 text-xs">
                     excluir
                   </button>
                 </div>
-              ))}
-              {(!mod.content_lessons || mod.content_lessons.length === 0) && (
-                <div className="text-neutral-600 text-xs">Nenhuma aula ainda.</div>
+              </div>
+
+              <div className="flex flex-col gap-1 mb-4">
+                {mod.content_lessons?.map((l) => (
+                  <div key={l.id} className="flex items-center justify-between text-sm py-1.5 px-2 rounded bg-white/[0.02]">
+                    <span className="text-neutral-300">
+                      {l.content_type === "video" ? "🎬" : l.content_type === "audio" ? "🎧" : "📄"} {l.title}
+                    </span>
+                    <div className="flex gap-3">
+                      <button onClick={() => openEditLesson(mod.id, l)} className="text-neutral-500 text-xs">
+                        editar
+                      </button>
+                      <button onClick={() => deleteLesson(l.id)} className="text-red-400 text-xs">
+                        excluir
+                      </button>
+                    </div>
+                  </div>
+                ))}
+                {(!mod.content_lessons || mod.content_lessons.length === 0) && (
+                  <div className="text-neutral-600 text-xs">Nenhuma aula ainda.</div>
+                )}
+              </div>
+
+              {lessonForm?.moduleId === mod.id ? (
+                <div className="flex flex-col gap-2 border-t border-white/10 pt-3">
+                  <input
+                    className="dgs-input"
+                    placeholder="Título da aula"
+                    value={lessonForm.title}
+                    onChange={(e) => setLessonForm({ ...lessonForm, title: e.target.value })}
+                  />
+                  <input
+                    className="dgs-input"
+                    placeholder="Descrição curta (opcional)"
+                    value={lessonForm.description}
+                    onChange={(e) => setLessonForm({ ...lessonForm, description: e.target.value })}
+                  />
+                  <select
+                    className="dgs-input"
+                    value={lessonForm.contentType}
+                    onChange={(e) => setLessonForm({ ...lessonForm, contentType: e.target.value as any })}
+                  >
+                    <option value="video">Vídeo (YouTube/Vimeo não-listado, link de embed)</option>
+                    <option value="audio">Áudio (link direto do arquivo)</option>
+                    <option value="text">Texto (editor rico)</option>
+                  </select>
+                  {lessonForm.contentType === "video" && (
+                    <input
+                      className="dgs-input"
+                      placeholder="https://www.youtube.com/embed/..."
+                      value={lessonForm.videoUrl}
+                      onChange={(e) => setLessonForm({ ...lessonForm, videoUrl: e.target.value })}
+                    />
+                  )}
+                  {lessonForm.contentType === "audio" && (
+                    <input
+                      className="dgs-input"
+                      placeholder="https://.../aula.mp3"
+                      value={lessonForm.audioUrl}
+                      onChange={(e) => setLessonForm({ ...lessonForm, audioUrl: e.target.value })}
+                    />
+                  )}
+                  {lessonForm.contentType === "text" && (
+                    <RichTextEditor
+                      initialValue={lessonForm.bodyHtml}
+                      onSave={(html) => setLessonForm((f) => (f ? { ...f, bodyHtml: html } : f))}
+                    />
+                  )}
+                  <div className="flex gap-2">
+                    <button onClick={saveLesson} disabled={savingLesson} className="dgs-btn-primary w-auto px-5">
+                      Salvar aula
+                    </button>
+                    <button onClick={() => setLessonForm(null)} className="text-neutral-500 text-sm">
+                      cancelar
+                    </button>
+                  </div>
+                </div>
+              ) : (
+                <button
+                  onClick={() => setLessonForm({ ...emptyLessonForm, moduleId: mod.id })}
+                  className="text-brand text-xs"
+                >
+                  + adicionar aula
+                </button>
               )}
             </div>
-
-            {/* Form de nova aula pra este módulo */}
-            {lessonForm.moduleId === mod.id ? (
-              <div className="flex flex-col gap-2 border-t border-white/10 pt-3">
-                <input
-                  className="dgs-input"
-                  placeholder="Título da aula"
-                  value={lessonForm.title}
-                  onChange={(e) => setLessonForm({ ...lessonForm, title: e.target.value })}
-                />
-                <select
-                  className="dgs-input"
-                  value={lessonForm.contentType}
-                  onChange={(e) => setLessonForm({ ...lessonForm, contentType: e.target.value as any })}
-                >
-                  <option value="video">Vídeo (YouTube/Vimeo não-listado, link de embed)</option>
-                  <option value="audio">Áudio (link direto do arquivo)</option>
-                  <option value="text">Texto</option>
-                </select>
-                {lessonForm.contentType === "video" && (
-                  <input
-                    className="dgs-input"
-                    placeholder="https://www.youtube.com/embed/..."
-                    value={lessonForm.videoUrl}
-                    onChange={(e) => setLessonForm({ ...lessonForm, videoUrl: e.target.value })}
-                  />
-                )}
-                {lessonForm.contentType === "audio" && (
-                  <input
-                    className="dgs-input"
-                    placeholder="https://.../aula.mp3"
-                    value={lessonForm.audioUrl}
-                    onChange={(e) => setLessonForm({ ...lessonForm, audioUrl: e.target.value })}
-                  />
-                )}
-                {lessonForm.contentType === "text" && (
-                  <textarea
-                    className="dgs-input"
-                    rows={5}
-                    placeholder="Conteúdo da aula em texto"
-                    value={lessonForm.bodyText}
-                    onChange={(e) => setLessonForm({ ...lessonForm, bodyText: e.target.value })}
-                  />
-                )}
-                <div className="flex gap-2">
-                  <button onClick={createLesson} disabled={creatingLesson} className="dgs-btn-primary w-auto px-5">
-                    Salvar aula
-                  </button>
-                  <button
-                    onClick={() => setLessonForm({ ...lessonForm, moduleId: null })}
-                    className="text-neutral-500 text-sm"
-                  >
-                    cancelar
-                  </button>
-                </div>
-              </div>
-            ) : (
-              <button
-                onClick={() => setLessonForm({ ...lessonForm, moduleId: mod.id })}
-                className="text-brand text-xs"
-              >
-                + adicionar aula
-              </button>
-            )}
           </div>
         ))}
       </div>
