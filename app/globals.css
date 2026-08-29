@@ -1,0 +1,75 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --font-sans: "Inter", system-ui, sans-serif;
+}
+
+/* Fundo cinematográfico padrão usado nas telas do funil de acesso */
+.dgs-scene {
+  position: relative;
+  min-height: 100svh;
+  background: radial-gradient(ellipse at 50% 35%, #0c0e09 0%, #050503 55%, #020201 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 1.5rem;
+  overflow: hidden;
+}
+
+.dgs-glow {
+  position: absolute;
+  width: 320px;
+  height: 320px;
+  border-radius: 9999px;
+  background: radial-gradient(circle, rgba(154, 205, 50, 0.18) 0%, rgba(154, 205, 50, 0) 70%);
+  pointer-events: none;
+  animation: dgsGlowPulse 4s ease-in-out infinite;
+}
+
+@keyframes dgsGlowPulse {
+  0%, 100% { opacity: 0.35; }
+  50% { opacity: 0.6; }
+}
+
+.dgs-input {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.035);
+  border: 0.5px solid rgba(255, 255, 255, 0.12);
+  border-radius: 8px;
+  padding: 12px 14px;
+  color: #f2f2ee;
+  font-size: 14px;
+}
+
+.dgs-input::placeholder {
+  color: #6b6b63;
+}
+
+.dgs-input:focus {
+  outline: none;
+  border-color: #9acd32;
+}
+
+.dgs-btn-primary {
+  width: 100%;
+  background: #9acd32;
+  color: #080806;
+  border: none;
+  border-radius: 8px;
+  padding: 12px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: filter 0.15s ease;
+}
+
+.dgs-btn-primary:hover {
+  filter: brightness(1.08);
+}
+
+.dgs-btn-primary:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
