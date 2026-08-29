@@ -67,6 +67,7 @@ export async function POST(req: NextRequest) {
     const plan = resolvePlan(offerId);
 
     if (!buyerEmail || !plan) {
+      // Sem e-mail ou produto não reconhecido — fica logado pra revisão manual
       return NextResponse.json({ ok: true, warning: "Evento registrado mas não processado automaticamente" });
     }
 
@@ -77,6 +78,7 @@ export async function POST(req: NextRequest) {
       .maybeSingle();
 
     if (!profile) {
+      // Nenhum cadastro pendente com esse e-mail — cai na fila de aprovação manual
       return NextResponse.json({ ok: true, warning: "Nenhum aluno encontrado com esse e-mail" });
     }
 
@@ -127,5 +129,6 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ ok: true });
   }
 
+  // Evento que não tratamos (ex: boleto gerado, pix gerado) — só fica registrado no log
   return NextResponse.json({ ok: true, ignored: true });
 }
