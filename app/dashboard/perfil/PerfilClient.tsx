@@ -38,17 +38,25 @@ export function PerfilClient({
     setSaved(false);
     setError(null);
 
+    const { data: authData, error: authError } = await supabase.auth.getUser();
+    if (authError || !authData.user) {
+      setSaving(false);
+      setError("Sessão expirada. Saia e entre de novo antes de tentar salvar.");
+      return;
+    }
+    const currentUserId = authData.user.id;
+
     let avatarPathToSave = avatarPath;
     if (file) {
       const ext = file.name.split(".").pop() || "jpg";
-      const path = `${userId}/avatar-${Date.now()}.${ext}`;
+      const path = `${currentUserId}/avatar-${Date.now()}.${ext}`;
       const { error: uploadError } = await supabase.storage
         .from("avatars")
         .upload(path, file, { upsert: true, contentType: file.type || "image/jpeg" });
 
       if (uploadError) {
         setSaving(false);
-        setError(`Não foi possível enviar a foto: ${uploadError.message}`);
+        setError(`Não foi possível enviar a foto (${path}): ${uploadError.message}`);
         return;
       }
       avatarPathToSave = path;
@@ -57,7 +65,7 @@ export function PerfilClient({
     const { error: updateError } = await supabase
       .from("profiles")
       .update({ nickname: nickname || null, avatar_path: avatarPathToSave })
-      .eq("id", userId);
+      .eq("id", currentUserId);
 
     setSaving(false);
 
