@@ -1,7 +1,15 @@
 // Logo vetorial real da Comunidade DGS (extraído do arquivo original em alta resolução)
-export function Logo({ size = 64, className = "" }: { size?: number; className?: string }) {
+export function Logo({
+  size = 64,
+  className = "",
+  style,
+}: {
+  size?: number;
+  className?: string;
+  style?: React.CSSProperties;
+}) {
   return (
-    <svg width={size} height={size} viewBox="0 0 2000 2000" className={className}>
+    <svg width={size} height={size} viewBox="0 0 2000 2000" className={className} style={style}>
       <g transform="translate(0,2000) scale(0.1,-0.1)" fill="currentColor" stroke="none">
         <path
           d="M0 10000 l0 -10000 10000 0 10000 0 0 10000 0 10000 -10000 0 -10000
