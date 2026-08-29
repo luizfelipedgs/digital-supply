@@ -31,21 +31,22 @@ export default async function ConteudosPage() {
 
   return (
     <div className="min-h-screen bg-ink-900 p-6 sm:p-8">
-      <DashboardHeader backHref="/dashboard" />
-      <div className="flex items-center justify-between mb-8">
-        <h1 className="text-neutral-100 text-xl font-medium">Conteúdos</h1>
-        {profile.is_admin && (
-          <Link href="/dashboard/admin/conteudos" className="text-brand text-sm no-underline">
-            + Gerenciar conteúdos
-          </Link>
+      <div className="max-w-4xl mx-auto">
+        <DashboardHeader backHref="/dashboard" />
+        <div className="flex items-center justify-between mb-8">
+          <h1 className="text-neutral-100 text-xl font-medium">Conteúdos</h1>
+          {profile.is_admin && (
+            <Link href="/dashboard/admin/conteudos" className="text-brand text-sm no-underline">
+              + Gerenciar conteúdos
+            </Link>
+          )}
+        </div>
+
+        {(!modules || modules.length === 0) && (
+          <p className="text-neutral-500 text-sm">Nenhum conteúdo publicado ainda.</p>
         )}
-      </div>
 
-      {(!modules || modules.length === 0) && (
-        <p className="text-neutral-500 text-sm">Nenhum conteúdo publicado ainda.</p>
-      )}
-
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 max-w-4xl">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
         {modules?.map((mod) => {
           const lessons = [...(mod.content_lessons ?? [])].sort((a, b) => a.order_index - b.order_index);
           const cover = mod.cover_image_path
@@ -93,6 +94,7 @@ export default async function ConteudosPage() {
             </div>
           );
         })}
+        </div>
       </div>
     </div>
   );

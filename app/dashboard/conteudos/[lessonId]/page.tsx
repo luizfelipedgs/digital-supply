@@ -33,9 +33,10 @@ export default async function LessonPage({ params }: { params: { lessonId: strin
 
   return (
     <div className="min-h-screen bg-ink-900 p-6 sm:p-8">
-      <DashboardHeader backHref="/dashboard/conteudos" backLabel="Voltar aos conteúdos" />
+      <div className="max-w-2xl mx-auto">
+        <DashboardHeader backHref="/dashboard/conteudos" backLabel="Voltar aos conteúdos" />
 
-      <div className="max-w-2xl mt-6">
+        <div className="mt-6">
         <h1 className="text-neutral-100 text-xl font-medium mb-2">{lesson.title}</h1>
         {lesson.description && <p className="text-neutral-500 text-sm mb-6">{lesson.description}</p>}
 
@@ -64,6 +65,7 @@ export default async function LessonPage({ params }: { params: { lessonId: strin
         )}
 
         <MarkCompleteButton lessonId={lesson.id} initiallyCompleted={!!progress} />
+        </div>
       </div>
     </div>
   );

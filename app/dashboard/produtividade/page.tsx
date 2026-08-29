@@ -20,13 +20,15 @@ export default async function ProdutividadePage() {
 
   return (
     <div className="min-h-screen bg-ink-900 p-6 sm:p-8">
-      <DashboardHeader backHref="/dashboard" />
-      <h1 className="text-neutral-100 text-xl font-medium mb-6">Anotações, tarefas e metas</h1>
+      <div className="max-w-6xl mx-auto">
+        <DashboardHeader backHref="/dashboard" />
+        <h1 className="text-neutral-100 text-xl font-medium mb-6">Anotações, tarefas e metas</h1>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-5 max-w-6xl">
-        <TasksColumn userId={userData.user.id} />
-        <GoalsColumn userId={userData.user.id} />
-        <NotesColumn userId={userData.user.id} />
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+          <TasksColumn userId={userData.user.id} />
+          <GoalsColumn userId={userData.user.id} />
+          <NotesColumn userId={userData.user.id} />
+        </div>
       </div>
     </div>
   );

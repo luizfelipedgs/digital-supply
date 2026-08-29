@@ -151,14 +151,15 @@ export function AdminConteudosClient({ initialModules }: { initialModules: Modul
 
   return (
     <div className="min-h-screen bg-ink-900 p-6 sm:p-8">
-      <DashboardHeader backHref="/dashboard/conteudos" backLabel="Voltar aos conteúdos" />
+      <div className="max-w-2xl mx-auto">
+        <DashboardHeader backHref="/dashboard/conteudos" backLabel="Voltar aos conteúdos" />
 
-      <div className="flex items-center gap-3 mt-6 mb-8">
-        <div className="w-10 h-10 rounded-xl bg-brand/10 flex items-center justify-center text-lg">📚</div>
-        <h1 className="text-neutral-100 text-xl font-medium">Gerenciar conteúdos</h1>
-      </div>
+        <div className="flex items-center gap-3 mt-6 mb-8">
+          <div className="w-10 h-10 rounded-xl bg-brand/10 flex items-center justify-center text-lg">📚</div>
+          <h1 className="text-neutral-100 text-xl font-medium">Gerenciar conteúdos</h1>
+        </div>
 
-      <div className="max-w-2xl flex flex-col gap-6">
+        <div className="flex flex-col gap-6">
         {moduleForm ? (
           <div className="dgs-card flex flex-col gap-3">
             <div className="text-neutral-100 font-medium text-sm mb-1">
@@ -313,6 +314,7 @@ export function AdminConteudosClient({ initialModules }: { initialModules: Modul
             </div>
           </div>
         ))}
+        </div>
       </div>
     </div>
   );

@@ -45,10 +45,11 @@ export function AvisosClient({
 
   return (
     <div className="min-h-screen bg-ink-900 p-6 sm:p-8">
-      <DashboardHeader backHref="/dashboard" />
-      <h1 className="text-neutral-100 text-xl font-medium mb-6">Avisos para os alunos</h1>
+      <div className="max-w-xl mx-auto">
+        <DashboardHeader backHref="/dashboard" />
+        <h1 className="text-neutral-100 text-xl font-medium mb-6">Avisos para os alunos</h1>
 
-      <div className="max-w-xl flex flex-col gap-6">
+        <div className="flex flex-col gap-6">
         <div className="dgs-card flex flex-col gap-3">
           <div className="text-neutral-100 font-medium text-sm">Publicar novo aviso</div>
           <input className="dgs-input" placeholder="Título" value={title} onChange={(e) => setTitle(e.target.value)} />
@@ -80,6 +81,7 @@ export function AvisosClient({
             </div>
           ))}
           {announcements.length === 0 && <div className="text-neutral-600 text-xs">Nenhum aviso publicado ainda.</div>}
+        </div>
         </div>
       </div>
     </div>

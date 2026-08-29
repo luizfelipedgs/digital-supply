@@ -18,9 +18,11 @@ export default async function FaturamentoPage() {
 
   return (
     <div className="min-h-screen bg-ink-900 p-6 sm:p-8">
-      <DashboardHeader backHref="/dashboard" />
-      <h1 className="text-neutral-100 text-xl font-medium mb-6">Faturamento</h1>
-      <FaturamentoClient userId={userData.user.id} />
+      <div className="max-w-4xl mx-auto">
+        <DashboardHeader backHref="/dashboard" />
+        <h1 className="text-neutral-100 text-xl font-medium mb-6">Faturamento</h1>
+        <FaturamentoClient userId={userData.user.id} />
+      </div>
     </div>
   );
 }

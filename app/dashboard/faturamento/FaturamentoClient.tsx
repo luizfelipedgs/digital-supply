@@ -102,7 +102,7 @@ export function FaturamentoClient({ userId }: { userId: string }) {
   }
 
   return (
-    <div className="max-w-4xl">
+    <div>
       {/* Cards fixos: hoje / 7 dias / 30 dias */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-6">
         {fixedStats.map((stat) => (
