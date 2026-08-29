@@ -8,22 +8,24 @@ const PLAN_DURATIONS: Record<string, number> = {
   anual: 365,
 };
 
-// Mapeia o ID do produto na Cakto pro nome do plano no nosso sistema.
+// Mapeia o ID da OFERTA na Cakto pro nome do plano no nosso sistema.
+// Como o produto é uma assinatura única com 3 ofertas (mensal/trimestral/anual),
+// o webhook identifica o plano pelo ID da oferta, não do produto.
 // IMPORTANTE: preencha esses IDs no .env (veja .env.example) com os IDs reais
-// dos 3 produtos cadastrados no painel da Cakto.
-function resolvePlan(productId: string | undefined): string | null {
-  if (!productId) return null;
-  if (productId === process.env.CAKTO_PRODUCT_ID_MENSAL) return "mensal";
-  if (productId === process.env.CAKTO_PRODUCT_ID_TRIMESTRAL) return "trimestral";
-  if (productId === process.env.CAKTO_PRODUCT_ID_ANUAL) return "anual";
+// das 3 ofertas cadastradas dentro do produto na Cakto.
+function resolvePlan(offerId: string | undefined): string | null {
+  if (!offerId) return null;
+  if (offerId === process.env.CAKTO_OFFER_ID_MENSAL) return "mensal";
+  if (offerId === process.env.CAKTO_OFFER_ID_TRIMESTRAL) return "trimestral";
+  if (offerId === process.env.CAKTO_OFFER_ID_ANUAL) return "anual";
   return null;
 }
 
 // Eventos que devem liberar/renovar o acesso do aluno.
-// A Cakto usa "purchase_approved" para pagamento aprovado; para assinaturas
-// pode haver variações (ex: subscription_renewed) — confirme os nomes exatos
-// na aba Webhooks > Eventos do seu produto e ajuste esta lista se necessário.
-const GRANT_ACCESS_EVENTS = ["purchase_approved", "subscription_renewed"];
+// Para assinaturas, o primeiro pagamento normalmente dispara "purchase_approved"
+// e as renovações mensais/trimestrais/anuais seguintes disparam "subscription_renewed".
+// Confirme os nomes exatos na aba Webhooks > Eventos do seu produto.
+const GRANT_ACCESS_EVENTS = ["purchase_approved", "subscription_renewed", "subscription_created"];
 
 // Eventos que devem suspender o acesso do aluno.
 const REVOKE_ACCESS_EVENTS = ["subscription_canceled", "chargeback", "refund"];
@@ -47,14 +49,14 @@ export async function POST(req: NextRequest) {
   const event: string = payload.event;
   const data = payload.data ?? {};
   const buyerEmail: string | undefined = data.customer?.email?.toLowerCase().trim();
-  const productId: string | undefined = data.product?.id;
+  const offerId: string | undefined = data.offer?.id;
 
   // Registra o evento bruto pra auditoria/depuração, independente do resultado
   const { data: logRow } = await supabase
     .from("cakto_events")
     .insert({
       event_type: event,
-      product_id: productId ?? null,
+      product_id: offerId ?? null,
       buyer_email: buyerEmail ?? null,
       raw_payload: payload,
     })
@@ -62,10 +64,9 @@ export async function POST(req: NextRequest) {
     .single();
 
   if (GRANT_ACCESS_EVENTS.includes(event)) {
-    const plan = resolvePlan(productId);
+    const plan = resolvePlan(offerId);
 
     if (!buyerEmail || !plan) {
-      // Sem e-mail ou produto não reconhecido — fica logado pra revisão manual
       return NextResponse.json({ ok: true, warning: "Evento registrado mas não processado automaticamente" });
     }
 
@@ -76,7 +77,6 @@ export async function POST(req: NextRequest) {
       .maybeSingle();
 
     if (!profile) {
-      // Nenhum cadastro pendente com esse e-mail — cai na fila de aprovação manual
       return NextResponse.json({ ok: true, warning: "Nenhum aluno encontrado com esse e-mail" });
     }
 
@@ -127,6 +127,5 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ ok: true });
   }
 
-  // Evento que não tratamos (ex: boleto gerado, pix gerado) — só fica registrado no log
   return NextResponse.json({ ok: true, ignored: true });
 }
