@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { Logo } from "@/components/Logo";
 
@@ -19,6 +20,7 @@ export function DashboardHeader({
   extraRight?: React.ReactNode;
 }) {
   const supabase = createClient();
+  const router = useRouter();
   const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
   const [nickname, setNickname] = useState<string | null>(null);
   const [announcements, setAnnouncements] = useState<Announcement[]>([]);
@@ -83,6 +85,11 @@ export function DashboardHeader({
 
   const unreadCount = announcements.filter((a) => !readIds.has(a.id)).length;
 
+  async function handleLogout() {
+    await supabase.auth.signOut();
+    router.push("/login");
+  }
+
   function timeAgo(iso: string) {
     const diffMs = Date.now() - new Date(iso).getTime();
     const days = Math.floor(diffMs / 86400000);
@@ -105,6 +112,31 @@ export function DashboardHeader({
 
       <div className="flex items-center gap-3">
         {extraRight}
+
+        <button
+          onClick={handleLogout}
+          className="w-9 h-9 rounded-full border border-white/10 bg-white/[0.03] flex items-center justify-center hover:bg-white/[0.06] transition-colors"
+          aria-label="Sair da conta"
+          title="Sair"
+        >
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" className="text-white/70">
+            <path
+              d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"
+              stroke="currentColor"
+              strokeWidth="1.8"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+            <path
+              d="M16 17l5-5-5-5M21 12H9"
+              stroke="currentColor"
+              strokeWidth="1.8"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          </svg>
+        </button>
+
         <div className="relative" ref={popRef}>
           <button
             onClick={openPanel}
