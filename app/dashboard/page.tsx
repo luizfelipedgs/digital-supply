@@ -80,6 +80,12 @@ export default async function DashboardPage() {
       description: "Lance seus ganhos por plataforma e acompanhe sua evolução com gráficos e comparativos.",
     },
     {
+      href: "/dashboard/templates",
+      icon: "🎬",
+      title: "Templates Prontos",
+      description: "Tenha acesso a mais de 1.000 vídeos no Canva para modelar e utilizar em suas páginas.",
+    },
+    {
       href: "/dashboard/produtividade",
       icon: "🎯",
       title: "Anotações, tarefas e metas",
@@ -90,12 +96,6 @@ export default async function DashboardPage() {
       icon: "📚",
       title: "Conteúdos",
       description: "Aulas em texto, áudio e vídeo, organizadas por módulo, com acompanhamento de progresso.",
-    },
-    {
-      href: "/dashboard/templates",
-      icon: "🎬",
-      title: "Templates Prontos",
-      description: "Templates de vídeo no Canva, prontos pra usar, com tutorial de como aplicar.",
     },
   ];
 
