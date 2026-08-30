@@ -7,7 +7,17 @@ import { Logo } from "@/components/Logo";
 
 type Announcement = { id: string; title: string; body: string | null; created_at: string };
 
-export function DashboardHeader({ backHref, backLabel = "Voltar" }: { backHref?: string; backLabel?: string }) {
+export function DashboardHeader({
+  backHref,
+  backLabel = "Voltar",
+  left,
+  extraRight,
+}: {
+  backHref?: string;
+  backLabel?: string;
+  left?: React.ReactNode;
+  extraRight?: React.ReactNode;
+}) {
   const supabase = createClient();
   const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
   const [nickname, setNickname] = useState<string | null>(null);
@@ -83,7 +93,9 @@ export function DashboardHeader({ backHref, backLabel = "Voltar" }: { backHref?:
 
   return (
     <div className="flex items-center justify-between mb-6">
-      {backHref ? (
+      {left ? (
+        left
+      ) : backHref ? (
         <Link href={backHref} className="text-neutral-500 text-sm no-underline hover:text-neutral-300 transition-colors">
           ← {backLabel}
         </Link>
@@ -92,6 +104,7 @@ export function DashboardHeader({ backHref, backLabel = "Voltar" }: { backHref?:
       )}
 
       <div className="flex items-center gap-3">
+        {extraRight}
         <div className="relative" ref={popRef}>
           <button
             onClick={openPanel}
