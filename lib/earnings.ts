@@ -6,7 +6,15 @@ export function toISODate(d: Date): string {
 }
 
 export function todayISO(): string {
-  return toISODate(new Date());
+  // Usa o fuso de Brasília (America/Sao_Paulo) pra definir o que é "hoje" —
+  // o servidor roda em UTC, que fica 3h na frente do Brasil. Sem isso, entre
+  // ~21h e meia-noite (horário de Brasília) o site já mostraria o dia seguinte.
+  return new Intl.DateTimeFormat("en-CA", {
+    timeZone: "America/Sao_Paulo",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  }).format(new Date()); // locale en-CA formata como YYYY-MM-DD
 }
 
 export function subtractDays(iso: string, days: number): string {
