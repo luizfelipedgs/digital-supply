@@ -2,6 +2,8 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import { Logo } from "@/components/Logo";
 import { FaqAccordion } from "./FaqAccordion";
+import { LineIcon } from "./LineIcon";
+import { ResultsCarousel } from "./ResultsCarousel";
 
 export const metadata: Metadata = {
   title: "Digital Supply — Comunidade DGS",
@@ -11,58 +13,45 @@ export const metadata: Metadata = {
 
 const BENEFITS = [
   {
-    icon: "🎥",
+    icon: "video",
     title: "Aulas e reuniões ao vivo",
     description: "Aprenda diretamente com quem já atua no mercado, com ensinamentos práticos realizados ao vivo dentro da comunidade.",
   },
   {
-    icon: "📈",
+    icon: "trending",
     title: "Estratégias de crescimento",
     description: "Aprenda como estruturar suas páginas do jeito certo e aumentar o alcance dos seus conteúdos para milhões de pessoas.",
   },
   {
-    icon: "⚡",
+    icon: "zap",
     title: "Métodos de viralização",
     description: "Estratégias para encontrar, adaptar e trabalhar conteúdos com potencial de viralização.",
   },
   {
-    icon: "💰",
+    icon: "wallet",
     title: "Monetização com músicas",
     description: "Aprenda a trabalhar com campanhas que remuneram criadores de acordo com as visualizações dos conteúdos.",
   },
   {
-    icon: "📊",
+    icon: "chart",
     title: "Dashboard de faturamento",
     description: "Lance seus ganhos por plataforma e acompanhe sua evolução com gráficos e comparativos em tempo real.",
   },
   {
-    icon: "🎬",
+    icon: "play",
     title: "Templates prontos no Canva",
     description: "Mais de 1.000 vídeos prontos pra modelar e aplicar direto nas suas páginas.",
   },
   {
-    icon: "✨",
+    icon: "sparkles",
     title: "Ferramenta de edição em massa",
     description: "Acesso à ferramenta de edição de vídeo exclusiva da comunidade para acelerar sua produção.",
   },
   {
-    icon: "📱",
+    icon: "phone",
     title: "App no seu celular",
     description: "Instale a plataforma como app, direto na tela inicial, sem precisar baixar nada de loja.",
   },
-];
-
-const ACCESS_ITEMS = [
-  "Dashboard completo de faturamento",
-  "Ranking semanal da comunidade",
-  "Mais de 1.000 templates prontos no Canva",
-  "Aulas e conteúdos em texto, áudio e vídeo",
-  "Programa de indique e ganhe",
-  "Anotações, tarefas e metas num só lugar",
-  "Estratégias de crescimento e viralização",
-  "Campanhas de monetização por música",
-  "Avisos e atualizações direto no painel",
-  "App instalável no celular",
 ];
 
 const FAQ_ITEMS = [
@@ -98,8 +87,8 @@ export default function LandingPage() {
             <a href="#beneficios" className="hover:text-neutral-100 transition-colors">
               Benefícios
             </a>
-            <a href="#acesso" className="hover:text-neutral-100 transition-colors">
-              O que você recebe
+            <a href="#resultados" className="hover:text-neutral-100 transition-colors">
+              Resultados
             </a>
             <a href="#faq" className="hover:text-neutral-100 transition-colors">
               Dúvidas
@@ -152,8 +141,8 @@ export default function LandingPage() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
           {BENEFITS.map((b) => (
             <div key={b.title} className="dgs-card dgs-hover-card">
-              <div className="w-11 h-11 rounded-xl bg-brand/10 flex items-center justify-center text-xl mb-4">
-                {b.icon}
+              <div className="w-11 h-11 rounded-xl bg-brand/10 flex items-center justify-center text-brand mb-4">
+                <LineIcon name={b.icon} />
               </div>
               <div className="text-neutral-100 font-medium mb-1.5">{b.title}</div>
               <div className="text-neutral-500 text-sm leading-relaxed">{b.description}</div>
@@ -162,41 +151,15 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* Fluxo de monetização */}
-      <section className="max-w-4xl mx-auto px-6 py-16">
-        <div className="dgs-card">
-          <h2 className="text-xl sm:text-2xl font-bold mb-2 text-center">Transforme visualizações em receita</h2>
-          <p className="text-neutral-500 text-sm text-center mb-10 max-w-lg mx-auto">
-            Você já sabe que uma página pode alcançar milhões de pessoas. Aqui você aprende a usar esse alcance a seu
-            favor.
+      {/* Resultados da comunidade */}
+      <section id="resultados" className="max-w-4xl mx-auto px-6 py-16">
+        <div className="text-center mb-10">
+          <h2 className="text-2xl sm:text-3xl font-bold mb-3">Resultados da comunidade</h2>
+          <p className="text-neutral-500 text-sm max-w-md mx-auto">
+            Prints reais compartilhados pelos próprios membros, direto do grupo da comunidade.
           </p>
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
-            {["Página", "Conteúdo", "Visualizações", "Campanhas", "Monetização"].map((step, i, arr) => (
-              <div key={step} className="flex items-center gap-4">
-                <div className="flex flex-col items-center gap-2 shrink-0">
-                  <div className="w-10 h-10 rounded-full bg-brand/10 border border-brand/20 flex items-center justify-center text-brand text-xs font-bold">
-                    {i + 1}
-                  </div>
-                  <span className="text-neutral-300 text-xs whitespace-nowrap">{step}</span>
-                </div>
-                {i < arr.length - 1 && <span className="text-neutral-700 hidden sm:block">→</span>}
-              </div>
-            ))}
-          </div>
         </div>
-      </section>
-
-      {/* O que você recebe */}
-      <section id="acesso" className="max-w-3xl mx-auto px-6 py-16">
-        <h2 className="text-2xl sm:text-3xl font-bold mb-8 text-center">O que você vai ter acesso</h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-          {ACCESS_ITEMS.map((item) => (
-            <div key={item} className="flex items-center gap-3 dgs-card !py-3">
-              <span className="text-brand text-sm shrink-0">✓</span>
-              <span className="text-neutral-300 text-sm">{item}</span>
-            </div>
-          ))}
-        </div>
+        <ResultsCarousel />
       </section>
 
       {/* Para quem é */}
