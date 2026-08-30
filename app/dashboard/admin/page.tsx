@@ -15,6 +15,7 @@ export default async function AdminHubPage() {
   const { data: settings } = await supabase.from("site_settings").select("cover_path").eq("id", "main").maybeSingle();
 
   const items = [
+    { href: "/dashboard/admin/alunos", icon: "👤", title: "Alunos", description: "Aprovação manual e gestão de acesso." },
     { href: "/dashboard/admin/conteudos", icon: "📚", title: "Conteúdos", description: "Módulos, aulas e capas." },
     { href: "/dashboard/admin/avisos", icon: "📢", title: "Avisos", description: "Notificações pros alunos." },
   ];
