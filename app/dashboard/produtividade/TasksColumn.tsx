@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
+import { todayISO } from "@/lib/earnings";
 
 type Task = { id: string; title: string; notes: string | null; done: boolean; due_date: string | null };
 
@@ -50,7 +51,7 @@ export function TasksColumn({ userId }: { userId: string }) {
     load();
   }
 
-  const today = new Date().toISOString().slice(0, 10);
+  const today = todayISO();
 
   return (
     <div className="dgs-card flex flex-col gap-3">
