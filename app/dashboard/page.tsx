@@ -86,6 +86,12 @@ export default async function DashboardPage() {
       description: "Tenha acesso a mais de 1.000 vídeos no Canva para modelar e utilizar em suas páginas.",
     },
     {
+      href: "/dashboard/indique",
+      icon: "🎁",
+      title: "Indique e Ganhe",
+      description: "Indique novos membros e receba comissão recorrente sobre cada assinatura.",
+    },
+    {
       href: "/dashboard/produtividade",
       icon: "🎯",
       title: "Anotações, tarefas e metas",
