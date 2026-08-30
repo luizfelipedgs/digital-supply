@@ -1,20 +1,42 @@
 "use client";
 
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 
 const RESULTS = ["/resultados/r1.png", "/resultados/r4.png", "/resultados/r5.png", "/resultados/r6.png", "/resultados/r7.png", "/resultados/r9.png"];
 
 export function ResultsCarousel() {
   const scrollerRef = useRef<HTMLDivElement>(null);
+  const pausedRef = useRef(false);
 
   function scrollBy(delta: number) {
     scrollerRef.current?.scrollBy({ left: delta, behavior: "smooth" });
   }
 
+  // Avança sozinho a cada poucos segundos, voltando ao início ao chegar no fim.
+  // Pausa enquanto o mouse está sobre o carrossel, pra não atrapalhar quem
+  // está olhando com calma.
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const el = scrollerRef.current;
+      if (!el || pausedRef.current) return;
+
+      const atEnd = el.scrollLeft + el.clientWidth >= el.scrollWidth - 10;
+      if (atEnd) {
+        el.scrollTo({ left: 0, behavior: "smooth" });
+      } else {
+        el.scrollBy({ left: 236, behavior: "smooth" });
+      }
+    }, 3000);
+    return () => clearInterval(interval);
+  }, []);
+
   return (
     <div className="relative">
       <div
         ref={scrollerRef}
+        onMouseEnter={() => (pausedRef.current = true)}
+        onMouseLeave={() => (pausedRef.current = false)}
+        onTouchStart={() => (pausedRef.current = true)}
         className="flex gap-4 overflow-x-auto pb-2 snap-x snap-mandatory scroll-smooth [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
       >
         {RESULTS.map((src, i) => (
