@@ -12,26 +12,35 @@ export default function AguardandoPage() {
   const router = useRouter();
   const [checking, setChecking] = useState(false);
 
+  async function checkStatus() {
+    setChecking(true);
+    const { data: userData, error: userError } = await supabase.auth.getUser();
+
+    // Sessão caiu (ex: token expirou) — manda de volta pro login em vez de
+    // ficar girando pra sempre sem fazer nada.
+    if (userError || !userData.user) {
+      router.push("/login");
+      return;
+    }
+
+    const { data: profile } = await supabase
+      .from("profiles")
+      .select("status")
+      .eq("id", userData.user.id)
+      .single();
+
+    setChecking(false);
+    if (profile?.status === "active") {
+      router.push("/dashboard");
+    }
+  }
+
   useEffect(() => {
-    const interval = setInterval(async () => {
-      setChecking(true);
-      const { data: userData } = await supabase.auth.getUser();
-      if (!userData.user) return;
-
-      const { data: profile } = await supabase
-        .from("profiles")
-        .select("status")
-        .eq("id", userData.user.id)
-        .single();
-
-      setChecking(false);
-      if (profile?.status === "active") {
-        router.push("/dashboard");
-      }
-    }, 8000); // confere a cada 8 segundos
-
+    checkStatus(); // confere imediatamente ao carregar a página
+    const interval = setInterval(checkStatus, 8000); // e depois a cada 8 segundos
     return () => clearInterval(interval);
-  }, [supabase, router]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <div className="dgs-scene">
