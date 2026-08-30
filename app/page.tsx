@@ -11,19 +11,29 @@ export const metadata: Metadata = {
 
 const BENEFITS = [
   {
-    icon: "🎓",
-    title: "Aulas e conteúdos práticos",
-    description: "Aulas em texto, áudio e vídeo, organizadas por módulo, com acompanhamento do seu progresso.",
+    icon: "🎥",
+    title: "Aulas e reuniões ao vivo",
+    description: "Aprenda diretamente com quem já atua no mercado, com ensinamentos práticos realizados ao vivo dentro da comunidade.",
+  },
+  {
+    icon: "📈",
+    title: "Estratégias de crescimento",
+    description: "Aprenda como estruturar suas páginas do jeito certo e aumentar o alcance dos seus conteúdos para milhões de pessoas.",
+  },
+  {
+    icon: "⚡",
+    title: "Métodos de viralização",
+    description: "Estratégias para encontrar, adaptar e trabalhar conteúdos com potencial de viralização.",
   },
   {
     icon: "💰",
-    title: "Dashboard de faturamento",
-    description: "Lance seus ganhos por plataforma e acompanhe sua evolução com gráficos e comparativos em tempo real.",
+    title: "Monetização com músicas",
+    description: "Aprenda a trabalhar com campanhas que remuneram criadores de acordo com as visualizações dos conteúdos.",
   },
   {
-    icon: "🏆",
-    title: "Ranking semanal",
-    description: "Compare seus resultados com o resto da comunidade toda semana, direto no seu painel.",
+    icon: "📊",
+    title: "Dashboard de faturamento",
+    description: "Lance seus ganhos por plataforma e acompanhe sua evolução com gráficos e comparativos em tempo real.",
   },
   {
     icon: "🎬",
@@ -31,9 +41,9 @@ const BENEFITS = [
     description: "Mais de 1.000 vídeos prontos pra modelar e aplicar direto nas suas páginas.",
   },
   {
-    icon: "🎁",
-    title: "Indique e ganhe",
-    description: "Receba comissão recorrente indicando novos membros pra comunidade.",
+    icon: "✨",
+    title: "Ferramenta de edição em massa",
+    description: "Acesso à ferramenta de edição de vídeo exclusiva da comunidade para acelerar sua produção.",
   },
   {
     icon: "📱",
