@@ -3,7 +3,11 @@ import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { Logo } from "@/components/Logo";
 import { DashboardHeader } from "@/components/DashboardHeader";
+import { TodayEarningsCard } from "./TodayEarningsCard";
 import { PLAN_LABEL, checkoutUrl } from "@/lib/plans";
+import { dailySeries, sumInRange, subtractDays, todayISO } from "@/lib/earnings";
+
+const WEEKDAY_LABEL = ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"];
 
 export default async function DashboardPage() {
   const supabase = createClient();
@@ -40,6 +44,23 @@ export default async function DashboardPage() {
     profile.plan && ["mensal", "trimestral", "anual"].includes(profile.plan)
       ? checkoutUrl(profile.plan as any, profile.email)
       : null;
+
+  // Faturamento dos últimos 7 dias, pro mini-gráfico da home
+  const today = todayISO();
+  const weekStart = subtractDays(today, 6);
+  const { data: recentEarnings } = await supabase
+    .from("earnings")
+    .select("entry_date, amount")
+    .eq("user_id", userData.user.id)
+    .gte("entry_date", weekStart)
+    .lte("entry_date", today);
+
+  const earningsEntries = recentEarnings ?? [];
+  const todayTotal = sumInRange(earningsEntries, today, today);
+  const weekSeries = dailySeries(earningsEntries, weekStart, today).map((d) => ({
+    ...d,
+    label: WEEKDAY_LABEL[new Date(d.date + "T00:00:00Z").getUTCDay()],
+  }));
 
   const sections = [
     {
@@ -120,6 +141,8 @@ export default async function DashboardPage() {
           <div className="text-neutral-100 text-lg font-medium mb-1">Bem-vindo de volta</div>
           <div className="text-neutral-500 text-sm">Escolha uma área pra continuar.</div>
         </div>
+
+        <TodayEarningsCard series={weekSeries} todayTotal={todayTotal} />
 
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
           {sections.map((s) => (
