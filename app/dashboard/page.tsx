@@ -11,13 +11,27 @@ export default async function DashboardPage() {
 
   if (!userData.user) redirect("/login");
 
-  const { data: profile } = await supabase
+  const { data: profile, error: profileError } = await supabase
     .from("profiles")
     .select("status, full_name, nickname, plan, plan_expires_at, is_admin, email")
     .eq("id", userData.user.id)
     .single();
 
-  if (!profile || profile.status === "pending") redirect("/aguardando");
+  // Diagnóstico temporário: se algo der errado na busca do perfil, mostra o
+  // erro exato na tela em vez de redirecionar às cegas pra /aguardando.
+  if (profileError || !profile) {
+    return (
+      <div className="min-h-screen bg-ink-900 p-8 text-neutral-200 text-sm font-mono whitespace-pre-wrap">
+        <p className="text-red-400 mb-4">DIAGNÓSTICO — algo falhou ao buscar o perfil:</p>
+        <p className="mb-2">user.id: {userData.user.id}</p>
+        <p className="mb-2">user.email: {userData.user.email}</p>
+        <p className="mb-2">profile: {JSON.stringify(profile)}</p>
+        <p className="mb-2">error: {JSON.stringify(profileError)}</p>
+      </div>
+    );
+  }
+
+  if (profile.status === "pending") redirect("/aguardando");
   if (profile.status !== "active") redirect("/login");
 
   const { data: settings } = await supabase.from("site_settings").select("cover_path").eq("id", "main").maybeSingle();
