@@ -88,15 +88,15 @@ export default async function DashboardPage() {
       <div className="max-w-5xl w-full mx-auto">
         <DashboardHeader
           left={
-            <div className="flex items-center gap-3">
-              <Logo size={36} className="text-brand" />
-              <div>
-                <div className="text-neutral-100 font-medium text-sm">Olá, {displayName}</div>
+            <div className="flex items-center gap-3 min-w-0 flex-1">
+              <Logo size={36} className="text-brand shrink-0" />
+              <div className="min-w-0">
+                <div className="text-neutral-100 font-medium text-sm truncate">Olá, {displayName}</div>
                 <div className="flex items-center gap-1.5 text-xs text-neutral-500">
-                  <span className="w-1.5 h-1.5 rounded-full bg-brand" />
-                  Assinatura {PLAN_LABEL[profile.plan ?? ""] ?? profile.plan}
-                  {expiresLabel ? ` · Ativa até ${expiresLabel}` : " · ativa"}
+                  <span className="w-1.5 h-1.5 rounded-full bg-brand shrink-0" />
+                  <span className="truncate">Assinatura {PLAN_LABEL[profile.plan ?? ""] ?? profile.plan}</span>
                 </div>
+                {expiresLabel && <div className="text-[11px] text-neutral-600 mt-0.5">Ativa até {expiresLabel}</div>}
               </div>
             </div>
           }
