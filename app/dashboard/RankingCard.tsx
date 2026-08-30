@@ -30,7 +30,7 @@ export function RankingCard({
         </div>
         <div className="text-neutral-600 text-[11px]">{weekRangeLabel()}</div>
       </div>
-      <div className="text-neutral-500 text-xs mb-4">Top 3 em faturamento acumulado — renova toda segunda-feira.</div>
+      <div className="text-neutral-500 text-xs mb-4 whitespace-nowrap">Top 3 em faturamento - renova toda segunda-feira.</div>
 
       {entries.length === 0 ? (
         <div className="text-neutral-600 text-sm py-4 text-center">
