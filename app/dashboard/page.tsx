@@ -91,6 +91,12 @@ export default async function DashboardPage() {
       title: "Conteúdos",
       description: "Aulas em texto, áudio e vídeo, organizadas por módulo, com acompanhamento de progresso.",
     },
+    {
+      href: "/dashboard/templates",
+      icon: "🎬",
+      title: "Templates Prontos",
+      description: "Templates de vídeo no Canva, prontos pra usar, com tutorial de como aplicar.",
+    },
   ];
 
   return (
@@ -151,7 +157,7 @@ export default async function DashboardPage() {
 
         <RankingCard entries={rankingEntries} />
 
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
           {sections.map((s) => (
             <Link key={s.href} href={s.href} className="dgs-card dgs-hover-card no-underline flex flex-col gap-4">
               <div className="w-11 h-11 rounded-xl bg-brand/10 flex items-center justify-center text-xl">{s.icon}</div>
