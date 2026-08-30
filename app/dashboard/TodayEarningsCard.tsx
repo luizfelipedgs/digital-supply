@@ -17,9 +17,17 @@ function formatCurrency(value: number) {
   return value.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
 }
 
-export function TodayEarningsCard({ series, todayTotal }: { series: SeriesPoint[]; todayTotal: number }) {
+export function TodayEarningsCard({
+  series,
+  todayTotal,
+  className = "",
+}: {
+  series: SeriesPoint[];
+  todayTotal: number;
+  className?: string;
+}) {
   return (
-    <div className="dgs-card mb-8">
+    <div className={`dgs-card mb-8 ${className}`}>
       <div className="text-neutral-500 text-xs mb-1.5">Faturamento de Hoje:</div>
       <div className="text-neutral-100 text-3xl font-bold mb-4">{formatCurrency(todayTotal)}</div>
 

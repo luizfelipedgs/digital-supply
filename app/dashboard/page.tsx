@@ -4,6 +4,7 @@ import { createClient } from "@/lib/supabase/server";
 import { Logo } from "@/components/Logo";
 import { DashboardHeader } from "@/components/DashboardHeader";
 import { TodayEarningsCard } from "./TodayEarningsCard";
+import { RankingCard } from "./RankingCard";
 import { PLAN_LABEL, checkoutUrl } from "@/lib/plans";
 import { dailySeries, sumInRange, subtractDays, todayISO } from "@/lib/earnings";
 
@@ -60,6 +61,15 @@ export default async function DashboardPage() {
   const weekSeries = dailySeries(earningsEntries, weekStart, today).map((d) => ({
     ...d,
     label: WEEKDAY_LABEL[new Date(d.date + "T00:00:00Z").getUTCDay()],
+  }));
+
+  // Top 3 da semana (ranking da comunidade)
+  const { data: rankingRaw } = await supabase.rpc("weekly_ranking", { top_n: 3 });
+  const rankingEntries = (rankingRaw ?? []).map((r: any) => ({
+    user_id: r.user_id,
+    display_name: r.display_name,
+    total: Number(r.total),
+    avatarUrl: r.avatar_path ? supabase.storage.from("avatars").getPublicUrl(r.avatar_path).data.publicUrl : null,
   }));
 
   const sections = [
@@ -137,12 +147,9 @@ export default async function DashboardPage() {
           </div>
         )}
 
-        <div className="mb-8 mt-6">
-          <div className="text-neutral-100 text-lg font-medium mb-1">Bem-vindo de volta</div>
-          <div className="text-neutral-500 text-sm">Escolha uma área pra continuar.</div>
-        </div>
+        <TodayEarningsCard series={weekSeries} todayTotal={todayTotal} className="mt-6" />
 
-        <TodayEarningsCard series={weekSeries} todayTotal={todayTotal} />
+        <RankingCard entries={rankingEntries} />
 
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
           {sections.map((s) => (
