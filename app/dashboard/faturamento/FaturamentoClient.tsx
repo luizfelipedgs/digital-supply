@@ -171,6 +171,16 @@ export function FaturamentoClient({ userId }: { userId: string }) {
         </div>
       </div>
 
+      {/* Aviso sobre honestidade nos lançamentos */}
+      <div className="rounded-lg border border-orange-700/30 bg-orange-700/5 px-4 py-3 mb-4 flex items-start gap-2.5">
+        <span className="text-sm shrink-0 mt-0.5">⚠️</span>
+        <p className="text-neutral-400 text-xs leading-relaxed">
+          Lance apenas valores reais, condizentes com o que você faturou de fato. Esse espaço existe pra te ajudar a
+          acompanhar sua própria evolução — inflar números só atrapalha seu próprio processo de aprendizado. Em breve,
+          o sistema de conquistas vai exigir comprovação dos lançamentos, então mantenha tudo honesto desde já.
+        </p>
+      </div>
+
       {/* Botão novo lançamento / formulário */}
       {showForm || editingEntry ? (
         <div className="mb-6">
