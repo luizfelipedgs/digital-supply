@@ -2,7 +2,15 @@
 
 import { useEffect, useRef } from "react";
 
-const RESULTS = ["/resultados/r1.png", "/resultados/r4.png", "/resultados/r5.png", "/resultados/r6.png", "/resultados/r7.png", "/resultados/r9.png"];
+const RESULTS = [
+  "/resultados/r1.jpg",
+  "/resultados/r2.jpg",
+  "/resultados/r3.jpg",
+  "/resultados/r4.jpg",
+  "/resultados/r6.jpg",
+  "/resultados/r9.jpg",
+  "/resultados/r10.jpg",
+];
 
 export function ResultsCarousel() {
   const scrollerRef = useRef<HTMLDivElement>(null);
@@ -42,9 +50,13 @@ export function ResultsCarousel() {
         {RESULTS.map((src, i) => (
           <div
             key={i}
-            className="snap-center shrink-0 w-[220px] aspect-[3/4] rounded-xl overflow-hidden border border-white/10 bg-white/[0.02]"
+            className="snap-center shrink-0 w-[190px] aspect-[823/1600] rounded-xl overflow-hidden border border-white/10 bg-black"
           >
-            <img src={src} alt={`Resultado de faturamento compartilhado por um membro da comunidade`} className="w-full h-full object-cover" />
+            <img
+              src={src}
+              alt="Resultado de faturamento compartilhado por um membro da comunidade"
+              className="w-full h-full object-contain"
+            />
           </div>
         ))}
       </div>
