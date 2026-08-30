@@ -65,7 +65,28 @@ export default async function DashboardPage() {
   return (
     <div className="min-h-screen bg-ink-900 p-6 sm:p-10 flex flex-col">
       <div className="max-w-5xl w-full mx-auto">
-        <DashboardHeader />
+        <DashboardHeader
+          left={
+            <div className="flex items-center gap-3">
+              <Logo size={36} className="text-brand" />
+              <div>
+                <div className="text-neutral-100 font-medium text-sm">Olá, {displayName}</div>
+                <div className="flex items-center gap-1.5 text-xs text-neutral-500">
+                  <span className="w-1.5 h-1.5 rounded-full bg-brand" />
+                  Assinatura {PLAN_LABEL[profile.plan ?? ""] ?? profile.plan}
+                  {expiresLabel ? ` · Ativa até ${expiresLabel}` : " · ativa"}
+                </div>
+              </div>
+            </div>
+          }
+          extraRight={
+            profile.is_admin ? (
+              <Link href="/dashboard/admin" className="dgs-btn-ghost no-underline">
+                Painel admin
+              </Link>
+            ) : undefined
+          }
+        />
       </div>
 
       <div className="max-w-5xl w-full mx-auto mb-2">
@@ -81,25 +102,8 @@ export default async function DashboardPage() {
       </div>
 
       <div className="max-w-5xl w-full mx-auto">
-        <div className="flex items-center gap-3 mt-6 mb-10">
-          <Logo size={40} className="text-brand" />
-          <div>
-            <div className="text-neutral-100 font-medium">Olá, {displayName}</div>
-            <div className="flex items-center gap-1.5 text-xs text-neutral-500">
-              <span className="w-1.5 h-1.5 rounded-full bg-brand" />
-              Assinatura {PLAN_LABEL[profile.plan ?? ""] ?? profile.plan}
-              {expiresLabel ? ` · Ativa até ${expiresLabel}` : " · ativa"}
-            </div>
-          </div>
-          {profile.is_admin && (
-            <Link href="/dashboard/admin" className="dgs-btn-ghost no-underline ml-auto">
-              Painel admin
-            </Link>
-          )}
-        </div>
-
         {showRenewalWarning && renewUrl && (
-          <div className="dgs-card border-brand/30 bg-brand/5 flex items-center justify-between gap-4 mb-8 flex-wrap">
+          <div className="dgs-card border-brand/30 bg-brand/5 flex items-center justify-between gap-4 mb-8 mt-6 flex-wrap">
             <div>
               <div className="text-neutral-100 text-sm font-medium mb-1">
                 {daysRemaining === 0 ? "Sua assinatura expira hoje" : `Sua assinatura expira em ${daysRemaining} dia${daysRemaining === 1 ? "" : "s"}`}
@@ -112,7 +116,7 @@ export default async function DashboardPage() {
           </div>
         )}
 
-        <div className="mb-8">
+        <div className="mb-8 mt-6">
           <div className="text-neutral-100 text-lg font-medium mb-1">Bem-vindo de volta</div>
           <div className="text-neutral-500 text-sm">Escolha uma área pra continuar.</div>
         </div>
