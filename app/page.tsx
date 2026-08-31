@@ -57,7 +57,7 @@ const BENEFITS = [
 const FAQ_ITEMS = [
   {
     q: "Como funciona o acesso à comunidade?",
-    a: "Você se cadastra na plataforma, escolhe o plano que faz mais sentido pro seu momento, e o acesso é liberado automaticamente assim que o pagamento é confirmado — geralmente em poucos minutos.",
+    a: "O processo tem 4 etapas: 1) você faz o cadastro na plataforma com seu email e senha; 2) escolhe um plano e paga via Cakto; 3) o pagamento é confirmado automaticamente pelo sistema, geralmente em poucos minutos; 4) você já consegue fazer login e acessar tudo — sem espera manual.",
   },
   {
     q: "Preciso ter experiência para entrar?",
@@ -106,7 +106,7 @@ export default function LandingPage() {
       </header>
 
       {/* Hero */}
-      <section className="dgs-scene !min-h-0 py-24 sm:py-32">
+      <section className="dgs-scene !min-h-0 py-16 sm:py-20">
         <div className="dgs-glow" style={{ left: "50%", top: "20%", transform: "translate(-50%,-50%)", width: 420, height: 420 }} />
         <div className="relative flex flex-col items-center text-center max-w-2xl mx-auto px-6">
           <div className="text-brand text-xs tracking-[5px] mb-5 dgs-fade-up" style={{ animationDelay: "0.2s" }}>
@@ -131,9 +131,9 @@ export default function LandingPage() {
       </section>
 
       {/* Resultados da comunidade */}
-      <section id="resultados" className="max-w-4xl mx-auto px-6 py-16">
-        <div className="text-center mb-10">
-          <h2 className="text-2xl sm:text-3xl font-bold mb-3">Resultados da comunidade</h2>
+      <section id="resultados" className="max-w-4xl mx-auto px-6 py-10">
+        <div className="text-center mb-6">
+          <h2 className="text-2xl sm:text-3xl font-bold mb-2">Resultados da comunidade</h2>
           <p className="text-neutral-500 text-sm max-w-md mx-auto">
             Prints reais compartilhados pelos próprios membros, direto do grupo da comunidade.
           </p>
@@ -142,9 +142,9 @@ export default function LandingPage() {
       </section>
 
       {/* Benefícios */}
-      <section id="beneficios" className="max-w-5xl mx-auto px-6 py-20">
-        <div className="text-center mb-12">
-          <h2 className="text-2xl sm:text-3xl font-bold mb-3">Tudo o que você precisa está dentro da comunidade</h2>
+      <section id="beneficios" className="max-w-5xl mx-auto px-6 py-12">
+        <div className="text-center mb-8">
+          <h2 className="text-2xl sm:text-3xl font-bold mb-2">Tudo o que você precisa está dentro da comunidade</h2>
           <p className="text-neutral-500 text-sm max-w-md mx-auto">
             Uma plataforma própria, feita pra acompanhar sua evolução do primeiro clipe ao primeiro milhão de views.
           </p>
@@ -162,31 +162,10 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* Para quem é */}
-      <section className="max-w-2xl mx-auto px-6 py-16">
-        <div className="dgs-card">
-          <div className="w-11 h-11 rounded-xl bg-brand/10 flex items-center justify-center text-brand mb-4">
-            <LineIcon name="users" />
-          </div>
-          <h2 className="text-xl font-bold mb-4">Para quem é a DGS</h2>
-          <div className="text-neutral-400 text-sm leading-relaxed flex flex-col gap-4">
-            <p>
-              A Digital Supply é pra quem quer construir uma renda real através do digital — desenvolvendo páginas
-              dark, aumentando alcance e monetizando conteúdo por meio de campanhas musicais.
-            </p>
-            <p>
-              Serve tanto pra quem já tentou outros caminhos no digital e tem alguma experiência com criação de
-              conteúdo ou redes sociais, quanto pra quem está começando agora e quer aprender do zero.
-            </p>
-            <p>Se você tem disposição pra aprender e executar, a comunidade foi feita pra você.</p>
-          </div>
-        </div>
-      </section>
-
       {/* CTA final */}
-      <section className="max-w-2xl mx-auto px-6 py-16 text-center">
+      <section className="max-w-2xl mx-auto px-6 py-12 text-center">
         <h2 className="text-2xl font-bold mb-3">Pronto pra começar?</h2>
-        <p className="text-neutral-500 text-sm mb-8">
+        <p className="text-neutral-500 text-sm mb-6">
           Cadastre-se e escolha o plano que faz mais sentido pro seu momento — o acesso é liberado automaticamente
           assim que o pagamento é confirmado.
         </p>
@@ -196,13 +175,13 @@ export default function LandingPage() {
       </section>
 
       {/* FAQ */}
-      <section id="faq" className="max-w-2xl mx-auto px-6 py-16">
-        <h2 className="text-2xl sm:text-3xl font-bold mb-8 text-center">Tire suas dúvidas</h2>
+      <section id="faq" className="max-w-2xl mx-auto px-6 py-12">
+        <h2 className="text-2xl sm:text-3xl font-bold mb-6 text-center">Tire suas dúvidas</h2>
         <FaqAccordion items={FAQ_ITEMS} />
       </section>
 
       {/* Footer */}
-      <footer className="border-t border-white/5 py-8">
+      <footer className="border-t border-white/5 py-6">
         <div className="max-w-5xl mx-auto px-6 flex flex-col sm:flex-row items-center justify-between gap-3">
           <div className="flex items-center gap-2">
             <Logo size={20} />

@@ -16,29 +16,43 @@ const RESULTS = [
   "/resultados/r14.jpg",
 ];
 
+// Duplica a lista uma vez — isso permite um loop contínuo de verdade: quando o
+// scroll passa do fim do primeiro conjunto, ele volta pro início instantaneamente
+// (sem animação), mas como o conteúdo é idêntico, o "salto" é invisível.
+const LOOPED_RESULTS = [...RESULTS, ...RESULTS];
+
 export function ResultsCarousel() {
   const scrollerRef = useRef<HTMLDivElement>(null);
+  const boundaryRef = useRef<HTMLDivElement>(null);
   const pausedRef = useRef(false);
 
   function scrollBy(delta: number) {
     scrollerRef.current?.scrollBy({ left: delta, behavior: "smooth" });
   }
 
-  // Avança sozinho a cada poucos segundos, voltando ao início ao chegar no fim.
-  // Pausa enquanto o mouse está sobre o carrossel, pra não atrapalhar quem
-  // está olhando com calma.
+  // Reseta instantaneamente pro início assim que o scroll ultrapassa o fim do
+  // primeiro conjunto — como o segundo conjunto é idêntico, ninguém percebe.
+  useEffect(() => {
+    const el = scrollerRef.current;
+    const boundary = boundaryRef.current;
+    if (!el || !boundary) return;
+
+    function handleScroll() {
+      if (el!.scrollLeft >= boundary!.offsetLeft) {
+        el!.scrollLeft -= boundary!.offsetLeft;
+      }
+    }
+    el.addEventListener("scroll", handleScroll);
+    return () => el.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  // Avança sozinho a cada poucos segundos. Pausa enquanto o mouse está sobre
+  // o carrossel, pra não atrapalhar quem está olhando com calma.
   useEffect(() => {
     const interval = setInterval(() => {
-      const el = scrollerRef.current;
-      if (!el || pausedRef.current) return;
-
-      const atEnd = el.scrollLeft + el.clientWidth >= el.scrollWidth - 10;
-      if (atEnd) {
-        el.scrollTo({ left: 0, behavior: "smooth" });
-      } else {
-        el.scrollBy({ left: 236, behavior: "smooth" });
-      }
-    }, 3000);
+      if (pausedRef.current) return;
+      scrollerRef.current?.scrollBy({ left: 206, behavior: "smooth" });
+    }, 2800);
     return () => clearInterval(interval);
   }, []);
 
@@ -49,18 +63,21 @@ export function ResultsCarousel() {
         onMouseEnter={() => (pausedRef.current = true)}
         onMouseLeave={() => (pausedRef.current = false)}
         onTouchStart={() => (pausedRef.current = true)}
-        className="flex gap-4 overflow-x-auto pb-2 snap-x snap-mandatory scroll-smooth [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+        className="flex gap-4 overflow-x-auto pb-2 scroll-smooth [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
       >
-        {RESULTS.map((src, i) => (
-          <div
-            key={i}
-            className="snap-center shrink-0 w-[190px] aspect-[823/1600] rounded-xl overflow-hidden border border-white/10 bg-black"
-          >
-            <img
-              src={src}
-              alt="Resultado de faturamento compartilhado por um membro da comunidade"
-              className="w-full h-full object-contain"
-            />
+        {LOOPED_RESULTS.map((src, i) => (
+          <div key={i} className="relative shrink-0">
+            {i === RESULTS.length && (
+              <div ref={boundaryRef} className="absolute -left-2 top-0 w-px h-full" aria-hidden />
+            )}
+            <div className="w-[190px] aspect-[823/1600] rounded-xl overflow-hidden border border-white/10 bg-black">
+              <img
+                src={src}
+                alt="Resultado de faturamento compartilhado por um membro da comunidade"
+                className="w-full h-full object-contain"
+                loading={i < RESULTS.length ? "eager" : "lazy"}
+              />
+            </div>
           </div>
         ))}
       </div>
