@@ -4,6 +4,7 @@ import { DashboardHeader } from "@/components/DashboardHeader";
 import { TasksColumn } from "./TasksColumn";
 import { GoalsColumn } from "./GoalsColumn";
 import { NotesColumn } from "./NotesColumn";
+import { VisionBoard } from "./VisionBoard";
 
 export default async function ProdutividadePage() {
   const supabase = createClient();
@@ -12,7 +13,7 @@ export default async function ProdutividadePage() {
 
   const { data: profile } = await supabase
     .from("profiles")
-    .select("status")
+    .select("status, vision_photo_path")
     .eq("id", userData.user.id)
     .single();
 
@@ -25,8 +26,9 @@ export default async function ProdutividadePage() {
         <h1 className="text-neutral-100 text-xl font-medium mb-6">Anotações, tarefas e metas</h1>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-          <TasksColumn userId={userData.user.id} />
+          <VisionBoard userId={userData.user.id} initialPhotoPath={profile.vision_photo_path} />
           <GoalsColumn userId={userData.user.id} />
+          <TasksColumn userId={userData.user.id} />
           <NotesColumn userId={userData.user.id} />
         </div>
       </div>
