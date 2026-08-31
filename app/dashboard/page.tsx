@@ -83,6 +83,7 @@ export default async function DashboardPage() {
     {
       href: "/dashboard/templates",
       icon: "play",
+      title: "Templates Prontos",
       description: "Tenha acesso a mais de 1.000 vídeos no Canva para modelar e utilizar em suas páginas.",
     },
     {

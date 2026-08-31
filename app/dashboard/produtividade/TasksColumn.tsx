@@ -10,6 +10,7 @@ type Task = { id: string; title: string; notes: string | null; done: boolean; du
 export function TasksColumn({ userId }: { userId: string }) {
   const supabase = createClient();
   const [tasks, setTasks] = useState<Task[]>([]);
+  const [showForm, setShowForm] = useState(false);
   const [newTitle, setNewTitle] = useState("");
   const [newDueDate, setNewDueDate] = useState("");
   const [loading, setLoading] = useState(true);
@@ -39,6 +40,7 @@ export function TasksColumn({ userId }: { userId: string }) {
     });
     setNewTitle("");
     setNewDueDate("");
+    setShowForm(false);
     load();
   }
 
@@ -61,26 +63,43 @@ export function TasksColumn({ userId }: { userId: string }) {
         <div className="text-neutral-100 font-medium text-sm">Tarefas</div>
       </div>
 
-      <div className="flex flex-col gap-2">
-        <input
-          className="dgs-input"
-          placeholder="Nova tarefa"
-          value={newTitle}
-          onChange={(e) => setNewTitle(e.target.value)}
-          onKeyDown={(e) => e.key === "Enter" && addTask()}
-        />
-        <div className="flex gap-2">
+      {showForm ? (
+        <div className="flex flex-col gap-2">
+          <input
+            className="dgs-input"
+            placeholder="Nova tarefa"
+            value={newTitle}
+            onChange={(e) => setNewTitle(e.target.value)}
+            onKeyDown={(e) => e.key === "Enter" && addTask()}
+            autoFocus
+          />
           <input
             type="date"
             className="dgs-input"
             value={newDueDate}
             onChange={(e) => setNewDueDate(e.target.value)}
           />
-          <button onClick={addTask} className="text-brand text-xs whitespace-nowrap shrink-0 self-center">
-            + adicionar
-          </button>
+          <div className="flex gap-2">
+            <button onClick={addTask} className="dgs-btn-primary w-auto px-4">
+              Salvar
+            </button>
+            <button
+              onClick={() => {
+                setShowForm(false);
+                setNewTitle("");
+                setNewDueDate("");
+              }}
+              className="text-neutral-500 text-xs"
+            >
+              cancelar
+            </button>
+          </div>
         </div>
-      </div>
+      ) : (
+        <button onClick={() => setShowForm(true)} className="text-brand text-xs text-left">
+          + nova tarefa
+        </button>
+      )}
 
       <div className="flex flex-col gap-1.5 mt-1">
         {loading && <div className="text-neutral-600 text-xs">Carregando…</div>}
