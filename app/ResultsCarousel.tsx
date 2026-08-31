@@ -31,15 +31,24 @@ export function ResultsCarousel() {
   const dragStartScrollRef = useRef(0);
 
   // Reseta instantaneamente pro início assim que o scroll ultrapassa o fim do
-  // primeiro conjunto — como o segundo conjunto é idêntico, ninguém percebe.
+  // primeiro conjunto. Calcula a posição real do "meio" da lista medindo a
+  // distância entre o marcador e o início do carrossel (em vez de usar
+  // offsetLeft puro, que pode dar errado dependendo do contexto de
+  // posicionamento — foi exatamente esse cálculo errado que causava o bug de
+  // resetar a cada quadro).
   useEffect(() => {
     const el = scrollerRef.current;
     const boundary = boundaryRef.current;
     if (!el || !boundary) return;
 
+    function midpoint() {
+      return boundary!.getBoundingClientRect().left - el!.getBoundingClientRect().left + el!.scrollLeft;
+    }
+
     function handleScroll() {
-      if (el!.scrollLeft >= boundary!.offsetLeft) {
-        el!.scrollLeft -= boundary!.offsetLeft;
+      const mid = midpoint();
+      if (mid > 0 && el!.scrollLeft >= mid) {
+        el!.scrollLeft -= mid;
       }
     }
     el.addEventListener("scroll", handleScroll);
@@ -54,7 +63,7 @@ export function ResultsCarousel() {
     function tick() {
       const el = scrollerRef.current;
       if (el && !pausedRef.current && !draggingRef.current) {
-        el.scrollLeft += 0.4; // velocidade bem suave
+        el.scrollLeft += 0.35;
       }
       frameId = requestAnimationFrame(tick);
     }
@@ -100,10 +109,8 @@ export function ResultsCarousel() {
         className="flex gap-4 overflow-x-auto pb-2 cursor-grab active:cursor-grabbing select-none [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
       >
         {LOOPED_RESULTS.map((src, i) => (
-          <div key={i} className="relative shrink-0">
-            {i === RESULTS.length && (
-              <div ref={boundaryRef} className="absolute -left-2 top-0 w-px h-full" aria-hidden />
-            )}
+          <div key={i} className="shrink-0 flex">
+            {i === RESULTS.length && <div ref={boundaryRef} className="w-0" aria-hidden />}
             <div className="w-[190px] aspect-[823/1600] rounded-xl overflow-hidden border border-white/10 bg-black pointer-events-none">
               <img
                 src={src}
