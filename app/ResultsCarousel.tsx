@@ -10,6 +10,10 @@ const RESULTS = [
   "/resultados/r6.jpg",
   "/resultados/r9.jpg",
   "/resultados/r10.jpg",
+  "/resultados/r11.jpg",
+  "/resultados/r12.jpg",
+  "/resultados/r13.jpg",
+  "/resultados/r14.jpg",
 ];
 
 export function ResultsCarousel() {

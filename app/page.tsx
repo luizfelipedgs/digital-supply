@@ -130,6 +130,17 @@ export default function LandingPage() {
         </div>
       </section>
 
+      {/* Resultados da comunidade */}
+      <section id="resultados" className="max-w-4xl mx-auto px-6 py-16">
+        <div className="text-center mb-10">
+          <h2 className="text-2xl sm:text-3xl font-bold mb-3">Resultados da comunidade</h2>
+          <p className="text-neutral-500 text-sm max-w-md mx-auto">
+            Prints reais compartilhados pelos próprios membros, direto do grupo da comunidade.
+          </p>
+        </div>
+        <ResultsCarousel />
+      </section>
+
       {/* Benefícios */}
       <section id="beneficios" className="max-w-5xl mx-auto px-6 py-20">
         <div className="text-center mb-12">
@@ -149,17 +160,6 @@ export default function LandingPage() {
             </div>
           ))}
         </div>
-      </section>
-
-      {/* Resultados da comunidade */}
-      <section id="resultados" className="max-w-4xl mx-auto px-6 py-16">
-        <div className="text-center mb-10">
-          <h2 className="text-2xl sm:text-3xl font-bold mb-3">Resultados da comunidade</h2>
-          <p className="text-neutral-500 text-sm max-w-md mx-auto">
-            Prints reais compartilhados pelos próprios membros, direto do grupo da comunidade.
-          </p>
-        </div>
-        <ResultsCarousel />
       </section>
 
       {/* Para quem é */}
