@@ -18,6 +18,7 @@ export default async function AdminHubPage() {
     { href: "/dashboard/admin/alunos", icon: "👤", title: "Alunos", description: "Aprovação manual e gestão de acesso." },
     { href: "/dashboard/admin/conteudos", icon: "📚", title: "Conteúdos", description: "Módulos, aulas e capas." },
     { href: "/dashboard/admin/templates", icon: "🎬", title: "Templates Prontos", description: "Vídeo tutorial e links do Canva." },
+    { href: "/dashboard/admin/paginas", icon: "🔎", title: "Lista de Páginas", description: "Páginas BR e gringas pra reciclar vídeos." },
     { href: "/dashboard/admin/indique", icon: "🎁", title: "Indique e Ganhe", description: "Link de afiliado e comissão." },
     { href: "/dashboard/admin/avisos", icon: "📢", title: "Avisos", description: "Notificações pros alunos." },
   ];

@@ -86,6 +86,12 @@ export default async function DashboardPage() {
       description: "Tenha acesso a mais de 1.000 vídeos no Canva para modelar e utilizar em suas páginas.",
     },
     {
+      href: "/dashboard/paginas",
+      icon: "🔎",
+      title: "Lista de Páginas",
+      description: "Páginas em português e gringas pra buscar vídeos com potencial de viralização.",
+    },
+    {
       href: "/dashboard/indique",
       icon: "🎁",
       title: "Indique e Ganhe",
