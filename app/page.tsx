@@ -2,7 +2,7 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import { Logo } from "@/components/Logo";
 import { FaqAccordion } from "./FaqAccordion";
-import { LineIcon } from "./LineIcon";
+import { LineIcon } from "@/components/LineIcon";
 import { ResultsCarousel } from "./ResultsCarousel";
 
 export const metadata: Metadata = {
@@ -165,7 +165,9 @@ export default function LandingPage() {
       {/* Para quem é */}
       <section className="max-w-2xl mx-auto px-6 py-16">
         <div className="dgs-card">
-          <div className="w-11 h-11 rounded-xl bg-brand/10 flex items-center justify-center text-xl mb-4">👥</div>
+          <div className="w-11 h-11 rounded-xl bg-brand/10 flex items-center justify-center text-brand mb-4">
+            <LineIcon name="users" />
+          </div>
           <h2 className="text-xl font-bold mb-4">Para quem é a DGS</h2>
           <div className="text-neutral-400 text-sm leading-relaxed flex flex-col gap-4">
             <p>

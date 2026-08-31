@@ -13,9 +13,10 @@ import {
 import { createClient } from "@/lib/supabase/client";
 import { computeFixedStats, dailySeries, sumInRange, subtractDays, todayISO } from "@/lib/earnings";
 import { EarningForm, type EarningEntry } from "./EarningForm";
+import { LineIcon } from "@/components/LineIcon";
 
 const PLATFORM_LABEL: Record<string, string> = { instagram: "Instagram", tiktok: "TikTok", youtube: "YouTube" };
-const PLATFORM_ICON: Record<string, string> = { instagram: "📸", tiktok: "🎵", youtube: "▶️" };
+const PLATFORM_ICON: Record<string, string> = { instagram: "instagram", tiktok: "music", youtube: "play" };
 
 function formatCurrency(value: number) {
   return value.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
@@ -173,7 +174,9 @@ export function FaturamentoClient({ userId }: { userId: string }) {
 
       {/* Aviso sobre honestidade nos lançamentos */}
       <div className="rounded-lg border border-orange-700/30 bg-orange-700/5 px-4 py-3 mb-4 flex items-start gap-2.5">
-        <span className="text-sm shrink-0 mt-0.5">⚠️</span>
+        <span className="shrink-0 mt-0.5 text-orange-500">
+          <LineIcon name="warning" size={14} />
+        </span>
         <p className="text-neutral-400 text-xs leading-relaxed">
           Lance apenas valores reais, condizentes com o que você faturou de fato. Esse espaço existe pra te ajudar a
           acompanhar sua própria evolução — inflar números só atrapalha seu próprio processo de aprendizado. Em breve,
@@ -225,7 +228,8 @@ export function FaturamentoClient({ userId }: { userId: string }) {
             )}
             <div className="flex-1 min-w-0">
               <div className="text-neutral-200 text-sm truncate">
-                {PLATFORM_ICON[entry.platform]} {entry.title}
+                <LineIcon name={PLATFORM_ICON[entry.platform]} size={13} className="inline-block align-[-2px] mr-1 text-neutral-400" />
+                {entry.title}
               </div>
               <div className="text-neutral-500 text-xs">
                 {formatDatePt(entry.entry_date)} · {PLATFORM_LABEL[entry.platform]}

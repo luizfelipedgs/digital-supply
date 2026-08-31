@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { DashboardHeader } from "@/components/DashboardHeader";
 import { toYoutubeEmbedUrl } from "@/lib/youtube";
+import { LineIcon } from "@/components/LineIcon";
 
 export default async function PaginasPage() {
   const supabase = createClient();
@@ -61,7 +62,9 @@ export default async function PaginasPage() {
             href="/dashboard/paginas/portugues"
             className="dgs-card dgs-hover-card no-underline flex flex-col gap-3"
           >
-            <div className="w-11 h-11 rounded-xl bg-brand/10 flex items-center justify-center text-xl">🇧🇷</div>
+            <div className="w-11 h-11 rounded-xl bg-brand/10 flex items-center justify-center text-brand">
+              <LineIcon name="globe" />
+            </div>
             <div>
               <div className="text-neutral-100 font-medium mb-1">Páginas em Português</div>
               <div className="text-neutral-500 text-sm leading-relaxed">
@@ -72,7 +75,9 @@ export default async function PaginasPage() {
           </Link>
 
           <Link href="/dashboard/paginas/gringas" className="dgs-card dgs-hover-card no-underline flex flex-col gap-3">
-            <div className="w-11 h-11 rounded-xl bg-brand/10 flex items-center justify-center text-xl">🌎</div>
+            <div className="w-11 h-11 rounded-xl bg-brand/10 flex items-center justify-center text-brand">
+              <LineIcon name="globe" />
+            </div>
             <div>
               <div className="text-neutral-100 font-medium mb-1">Páginas Gringas</div>
               <div className="text-neutral-500 text-sm leading-relaxed">

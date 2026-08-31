@@ -4,6 +4,7 @@ import { useState } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { RichTextEditor } from "@/components/RichTextEditor";
 import { DashboardHeader } from "@/components/DashboardHeader";
+import { LineIcon } from "@/components/LineIcon";
 
 type Lesson = {
   id: string;
@@ -155,7 +156,9 @@ export function AdminConteudosClient({ initialModules }: { initialModules: Modul
         <DashboardHeader backHref="/dashboard/conteudos" backLabel="Voltar aos conteúdos" />
 
         <div className="flex items-center gap-3 mt-6 mb-8">
-          <div className="w-10 h-10 rounded-xl bg-brand/10 flex items-center justify-center text-lg">📚</div>
+          <div className="w-10 h-10 rounded-xl bg-brand/10 flex items-center justify-center text-brand">
+            <LineIcon name="book" size={18} />
+          </div>
           <h1 className="text-neutral-100 text-xl font-medium">Gerenciar conteúdos</h1>
         </div>
 
@@ -232,7 +235,12 @@ export function AdminConteudosClient({ initialModules }: { initialModules: Modul
                 {mod.content_lessons?.map((l) => (
                   <div key={l.id} className="flex items-center justify-between text-sm py-2 px-3 rounded-lg bg-white/[0.02] border border-white/5">
                     <span className="text-neutral-300">
-                      {l.content_type === "video" ? "🎬" : l.content_type === "audio" ? "🎧" : "📄"} {l.title}
+                      <LineIcon
+                        name={l.content_type === "video" ? "play" : l.content_type === "audio" ? "headphones" : "file-text"}
+                        size={14}
+                        className="inline-block align-[-2px] mr-1"
+                      />
+                      {l.title}
                     </span>
                     <div className="flex gap-2">
                       <button onClick={() => openEditLesson(mod.id, l)} className="dgs-btn-ghost">

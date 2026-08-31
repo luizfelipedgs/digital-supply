@@ -4,6 +4,7 @@ import { useState } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { DashboardHeader } from "@/components/DashboardHeader";
 import { toYoutubeEmbedUrl } from "@/lib/youtube";
+import { LineIcon } from "@/components/LineIcon";
 
 type Template = { id: string; name: string; canva_url: string; description: string | null; order_index: number };
 
@@ -110,8 +111,14 @@ export function TemplatesAdminClient({
             onChange={(e) => setDescription(e.target.value)}
           />
 
-          <button onClick={saveSettings} disabled={savingSettings} className="dgs-btn-primary w-auto px-5 self-start">
-            {savingSettings ? "Salvando…" : settingsSaved ? "✓ Salvo" : "Salvar"}
+          <button onClick={saveSettings} disabled={savingSettings} className="dgs-btn-primary w-auto px-5 self-start flex items-center justify-center gap-1.5">
+            {savingSettings ? "Salvando…" : settingsSaved ? (
+              <>
+                <LineIcon name="check" size={14} /> Salvo
+              </>
+            ) : (
+              "Salvar"
+            )}
           </button>
         </div>
 

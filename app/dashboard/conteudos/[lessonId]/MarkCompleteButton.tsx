@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { createClient } from "@/lib/supabase/client";
+import { LineIcon } from "@/components/LineIcon";
 
 export function MarkCompleteButton({
   lessonId,
@@ -37,13 +38,19 @@ export function MarkCompleteButton({
     <button
       onClick={toggle}
       disabled={loading}
-      className={`text-sm rounded-lg px-4 py-2 border transition-colors ${
+      className={`text-sm rounded-lg px-4 py-2 border transition-colors flex items-center justify-center gap-1.5 ${
         completed
           ? "bg-brand/10 border-brand/30 text-brand"
           : "bg-white/[0.03] border-white/10 text-neutral-300"
       }`}
     >
-      {completed ? "✓ Aula concluída" : "Marcar como concluída"}
+      {completed ? (
+        <>
+          <LineIcon name="check" size={14} /> Aula concluída
+        </>
+      ) : (
+        "Marcar como concluída"
+      )}
     </button>
   );
 }

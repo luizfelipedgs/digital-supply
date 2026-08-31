@@ -7,6 +7,7 @@ import { TodayEarningsCard } from "./TodayEarningsCard";
 import { RankingCard } from "./RankingCard";
 import { PLAN_LABEL, checkoutUrl } from "@/lib/plans";
 import { dailySeries, sumInRange, subtractDays, todayISO } from "@/lib/earnings";
+import { LineIcon } from "@/components/LineIcon";
 
 const WEEKDAY_LABEL = ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"];
 
@@ -75,37 +76,36 @@ export default async function DashboardPage() {
   const sections = [
     {
       href: "/dashboard/faturamento",
-      icon: "💰",
+      icon: "wallet",
       title: "Faturamento",
       description: "Lance seus ganhos por plataforma e acompanhe sua evolução com gráficos e comparativos.",
     },
     {
       href: "/dashboard/templates",
-      icon: "🎬",
-      title: "Templates Prontos",
+      icon: "play",
       description: "Tenha acesso a mais de 1.000 vídeos no Canva para modelar e utilizar em suas páginas.",
     },
     {
       href: "/dashboard/paginas",
-      icon: "🔎",
+      icon: "search",
       title: "Lista de Páginas",
       description: "Páginas em português e gringas pra buscar vídeos com potencial de viralização.",
     },
     {
       href: "/dashboard/indique",
-      icon: "🎁",
+      icon: "gift",
       title: "Indique e Ganhe",
       description: "Indique novos membros e receba comissão recorrente sobre cada assinatura.",
     },
     {
       href: "/dashboard/produtividade",
-      icon: "🎯",
+      icon: "target",
       title: "Anotações, tarefas e metas",
       description: "Organize sua rotina diária, defina metas de performance e guarde ideias e anotações.",
     },
     {
       href: "/dashboard/conteudos",
-      icon: "📚",
+      icon: "book",
       title: "Conteúdos",
       description: "Aulas em texto, áudio e vídeo, organizadas por módulo, com acompanhamento de progresso.",
     },
@@ -172,7 +172,9 @@ export default async function DashboardPage() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
           {sections.map((s) => (
             <Link key={s.href} href={s.href} className="dgs-card dgs-hover-card no-underline flex flex-col gap-4">
-              <div className="w-11 h-11 rounded-xl bg-brand/10 flex items-center justify-center text-xl">{s.icon}</div>
+              <div className="w-11 h-11 rounded-xl bg-brand/10 flex items-center justify-center text-brand">
+                <LineIcon name={s.icon} />
+              </div>
               <div>
                 <div className="text-neutral-100 font-medium mb-1.5">{s.title}</div>
                 <div className="text-neutral-500 text-sm leading-relaxed">{s.description}</div>

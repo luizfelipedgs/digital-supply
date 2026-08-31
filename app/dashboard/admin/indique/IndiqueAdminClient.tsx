@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { DashboardHeader } from "@/components/DashboardHeader";
+import { LineIcon } from "@/components/LineIcon";
 
 export function IndiqueAdminClient({
   initialLink,
@@ -81,8 +82,14 @@ export function IndiqueAdminClient({
             <label className="text-neutral-500 text-xs block mb-1.5">Link de afiliação (Cakto)</label>
             <input className="dgs-input" value={link} onChange={(e) => setLink(e.target.value)} />
           </div>
-          <button onClick={save} disabled={saving} className="dgs-btn-primary w-auto px-5 self-start">
-            {saving ? "Salvando…" : saved ? "✓ Salvo" : "Salvar"}
+          <button onClick={save} disabled={saving} className="dgs-btn-primary w-auto px-5 self-start flex items-center justify-center gap-1.5">
+            {saving ? "Salvando…" : saved ? (
+              <>
+                <LineIcon name="check" size={14} /> Salvo
+              </>
+            ) : (
+              "Salvar"
+            )}
           </button>
         </div>
 

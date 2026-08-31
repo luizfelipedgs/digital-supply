@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
+import { LineIcon } from "@/components/LineIcon";
 
 type Goal = {
   id: string;
@@ -66,7 +67,7 @@ export function GoalsColumn({ userId }: { userId: string }) {
   return (
     <div className="dgs-card flex flex-col gap-3">
       <div className="flex items-center gap-2">
-        <span className="text-base">🎯</span>
+        <LineIcon name="target" size={16} className="text-brand" />
         <div className="text-neutral-100 font-medium text-sm">Metas</div>
       </div>
 

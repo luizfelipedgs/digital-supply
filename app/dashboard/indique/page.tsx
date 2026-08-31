@@ -2,6 +2,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { DashboardHeader } from "@/components/DashboardHeader";
+import { LineIcon } from "@/components/LineIcon";
 
 const STEPS = [
   { title: "Acesse o link de afiliação", description: "Clique no botão abaixo pra abrir o convite de afiliado da Cakto." },
@@ -55,8 +56,8 @@ export default async function IndiquePage() {
 
         {/* Card principal */}
         <div className="dgs-card mb-6 text-center">
-          <div className="w-12 h-12 rounded-xl bg-brand/10 flex items-center justify-center text-2xl mx-auto mb-4">
-            💰
+          <div className="w-12 h-12 rounded-xl bg-brand/10 flex items-center justify-center text-brand mx-auto mb-4">
+            <LineIcon name="wallet" size={24} />
           </div>
           <div className="text-neutral-100 text-lg font-medium mb-2">
             {settings?.title ?? "Programa de Afiliados DGS"}
@@ -85,7 +86,9 @@ export default async function IndiquePage() {
 
         {/* Aviso importante */}
         <div className="rounded-lg border border-orange-700/30 bg-orange-700/5 px-4 py-3 mb-6 flex items-start gap-2.5">
-          <span className="text-sm shrink-0 mt-0.5">⚠️</span>
+          <span className="shrink-0 mt-0.5 text-orange-500">
+            <LineIcon name="warning" size={14} />
+          </span>
           <p className="text-neutral-400 text-xs leading-relaxed">
             <strong className="text-neutral-300">Importante: não convide qualquer pessoa.</strong> O objetivo desse
             programa não é trazer o maior número de membros, e sim construir uma comunidade forte, saudável e formada

@@ -2,6 +2,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { DashboardHeader } from "@/components/DashboardHeader";
+import { LineIcon } from "@/components/LineIcon";
 import { CoverUploader } from "./CoverUploader";
 
 export default async function AdminHubPage() {
@@ -15,12 +16,12 @@ export default async function AdminHubPage() {
   const { data: settings } = await supabase.from("site_settings").select("cover_path").eq("id", "main").maybeSingle();
 
   const items = [
-    { href: "/dashboard/admin/alunos", icon: "👤", title: "Alunos", description: "Aprovação manual e gestão de acesso." },
-    { href: "/dashboard/admin/conteudos", icon: "📚", title: "Conteúdos", description: "Módulos, aulas e capas." },
-    { href: "/dashboard/admin/templates", icon: "🎬", title: "Templates Prontos", description: "Vídeo tutorial e links do Canva." },
-    { href: "/dashboard/admin/paginas", icon: "🔎", title: "Lista de Páginas", description: "Páginas BR e gringas pra reciclar vídeos." },
-    { href: "/dashboard/admin/indique", icon: "🎁", title: "Indique e Ganhe", description: "Link de afiliado e comissão." },
-    { href: "/dashboard/admin/avisos", icon: "📢", title: "Avisos", description: "Notificações pros alunos." },
+    { href: "/dashboard/admin/alunos", icon: "person", title: "Alunos", description: "Aprovação manual e gestão de acesso." },
+    { href: "/dashboard/admin/conteudos", icon: "book", title: "Conteúdos", description: "Módulos, aulas e capas." },
+    { href: "/dashboard/admin/templates", icon: "play", title: "Templates Prontos", description: "Vídeo tutorial e links do Canva." },
+    { href: "/dashboard/admin/paginas", icon: "search", title: "Lista de Páginas", description: "Páginas BR e gringas pra reciclar vídeos." },
+    { href: "/dashboard/admin/indique", icon: "gift", title: "Indique e Ganhe", description: "Link de afiliado e comissão." },
+    { href: "/dashboard/admin/avisos", icon: "megaphone", title: "Avisos", description: "Notificações pros alunos." },
   ];
 
   return (
@@ -34,7 +35,9 @@ export default async function AdminHubPage() {
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           {items.map((item) => (
             <Link key={item.href} href={item.href} className="dgs-card dgs-hover-card no-underline flex flex-col gap-3">
-              <div className="w-10 h-10 rounded-xl bg-brand/10 flex items-center justify-center text-lg">{item.icon}</div>
+              <div className="w-10 h-10 rounded-xl bg-brand/10 flex items-center justify-center text-brand">
+                <LineIcon name={item.icon} size={18} />
+              </div>
               <div>
                 <div className="text-neutral-100 font-medium text-sm mb-1">{item.title}</div>
                 <div className="text-neutral-500 text-xs">{item.description}</div>

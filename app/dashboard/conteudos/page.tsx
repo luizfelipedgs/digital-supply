@@ -2,6 +2,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { DashboardHeader } from "@/components/DashboardHeader";
+import { LineIcon } from "@/components/LineIcon";
 
 export default async function ConteudosPage() {
   const supabase = createClient();
@@ -27,7 +28,7 @@ export default async function ConteudosPage() {
     .eq("user_id", userData.user.id);
 
   const completedIds = new Set((progress ?? []).map((p) => p.lesson_id));
-  const typeIcon: Record<string, string> = { text: "📄", video: "🎬", audio: "🎧" };
+  const typeIcon: Record<string, string> = { text: "file-text", video: "play", audio: "headphones" };
 
   return (
     <div className="min-h-screen bg-ink-900 p-6 sm:p-8">
@@ -81,7 +82,13 @@ export default async function ConteudosPage() {
                       href={`/dashboard/conteudos/${lesson.id}`}
                       className="flex items-center gap-3 py-2 px-3 rounded-lg no-underline hover:bg-white/[0.06] transition-colors"
                     >
-                      <span className="text-sm">{typeIcon[lesson.content_type] ?? "📄"}</span>
+                      <span className="text-neutral-300">
+                        <LineIcon
+                          name={typeIcon[lesson.content_type] ?? "file-text"}
+                          size={14}
+                          className="inline-block align-[-2px] mr-1"
+                        />
+                      </span>
                       <span className="text-neutral-200 text-sm flex-1">{lesson.title}</span>
                       {completedIds.has(lesson.id) && <span className="text-brand text-xs">concluída</span>}
                     </Link>

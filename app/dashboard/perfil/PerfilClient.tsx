@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { DashboardHeader } from "@/components/DashboardHeader";
+import { LineIcon } from "@/components/LineIcon";
 
 export function PerfilClient({
   initialNickname,
@@ -91,8 +92,8 @@ export function PerfilClient({
               {(nickname || fullName || "A").charAt(0).toUpperCase()}
             </div>
           )}
-          <label className="absolute -bottom-1 -right-1 w-8 h-8 rounded-full bg-brand flex items-center justify-center cursor-pointer text-xs">
-            ✏️
+          <label className="absolute -bottom-1 -right-1 w-8 h-8 rounded-full bg-brand flex items-center justify-center cursor-pointer text-ink-950">
+            <LineIcon name="edit" size={14} />
             <input type="file" accept="image/*" className="hidden" onChange={(e) => handleFile(e.target.files?.[0] ?? null)} />
           </label>
         </div>
@@ -117,8 +118,14 @@ export function PerfilClient({
           </div>
         </div>
 
-        <button onClick={save} disabled={saving} className="dgs-btn-primary">
-          {saving ? "Salvando…" : saved ? "✓ Salvo" : "Salvar alterações"}
+        <button onClick={save} disabled={saving} className="dgs-btn-primary flex items-center justify-center gap-1.5">
+          {saving ? "Salvando…" : saved ? (
+            <>
+              <LineIcon name="check" size={14} /> Salvo
+            </>
+          ) : (
+            "Salvar alterações"
+          )}
         </button>
         {error && <p className="text-red-400 text-xs text-center -mt-2">{error}</p>}
       </div>

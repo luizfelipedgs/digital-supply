@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
+import { LineIcon } from "@/components/LineIcon";
 
 type Note = { id: string; title: string; body: string | null; updated_at: string };
 
@@ -67,7 +68,7 @@ export function NotesColumn({ userId }: { userId: string }) {
   return (
     <div className="dgs-card flex flex-col gap-3">
       <div className="flex items-center gap-2">
-        <span className="text-base">📝</span>
+        <LineIcon name="note" size={16} className="text-brand" />
         <div className="text-neutral-100 font-medium text-sm">Anotações</div>
       </div>
 

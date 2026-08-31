@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { todayISO } from "@/lib/earnings";
+import { LineIcon } from "@/components/LineIcon";
 
 type Task = { id: string; title: string; notes: string | null; done: boolean; due_date: string | null };
 
@@ -56,7 +57,7 @@ export function TasksColumn({ userId }: { userId: string }) {
   return (
     <div className="dgs-card flex flex-col gap-3">
       <div className="flex items-center gap-2">
-        <span className="text-base">✅</span>
+        <LineIcon name="check" size={16} className="text-brand" />
         <div className="text-neutral-100 font-medium text-sm">Tarefas</div>
       </div>
 
@@ -75,8 +76,8 @@ export function TasksColumn({ userId }: { userId: string }) {
             value={newDueDate}
             onChange={(e) => setNewDueDate(e.target.value)}
           />
-          <button onClick={addTask} className="dgs-btn-primary w-auto px-4 whitespace-nowrap">
-            Adicionar
+          <button onClick={addTask} className="text-brand text-xs whitespace-nowrap shrink-0 self-center">
+            + adicionar
           </button>
         </div>
       </div>

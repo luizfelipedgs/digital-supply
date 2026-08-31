@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { createClient } from "@/lib/supabase/client";
+import { LineIcon } from "@/components/LineIcon";
 
 export function VisionBoard({ userId, initialPhotoPath }: { userId: string; initialPhotoPath: string | null }) {
   const supabase = createClient();
@@ -36,7 +37,7 @@ export function VisionBoard({ userId, initialPhotoPath }: { userId: string; init
   return (
     <div className="dgs-card flex flex-col gap-3 md:col-span-3">
       <div className="flex items-center gap-2">
-        <span className="text-base">✨</span>
+        <LineIcon name="sparkles" size={16} className="text-brand" />
         <div className="text-neutral-100 font-medium text-sm">Quadro de visão</div>
       </div>
 

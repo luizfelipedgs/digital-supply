@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { createClient } from "@/lib/supabase/client";
+import { LineIcon } from "@/components/LineIcon";
 
 export function CoverUploader({ initialCoverPath }: { initialCoverPath: string | null }) {
   const supabase = createClient();
@@ -56,7 +57,7 @@ export function CoverUploader({ initialCoverPath }: { initialCoverPath: string |
   return (
     <div className="dgs-card flex flex-col gap-3 mb-6">
       <div className="flex items-center gap-2">
-        <span className="text-base">🖼️</span>
+        <LineIcon name="image" size={16} className="text-brand" />
         <div className="text-neutral-100 font-medium text-sm">Capa do dashboard</div>
       </div>
       <div className="text-neutral-500 text-xs -mt-1">
@@ -75,8 +76,14 @@ export function CoverUploader({ initialCoverPath }: { initialCoverPath: string |
 
       {error && <p className="text-red-400 text-xs">{error}</p>}
 
-      <button onClick={save} disabled={!file || saving} className="dgs-btn-primary w-auto px-5 self-start">
-        {saving ? "Salvando…" : saved ? "✓ Salvo" : "Salvar capa"}
+      <button onClick={save} disabled={!file || saving} className="dgs-btn-primary w-auto px-5 self-start flex items-center justify-center gap-1.5">
+        {saving ? "Salvando…" : saved ? (
+          <>
+            <LineIcon name="check" size={14} /> Salvo
+          </>
+        ) : (
+          "Salvar capa"
+        )}
       </button>
     </div>
   );

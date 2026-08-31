@@ -1,4 +1,6 @@
-const MEDAL = ["🥇", "🥈", "🥉"];
+import { LineIcon } from "@/components/LineIcon";
+
+const MEDAL_COLOR = ["text-yellow-400", "text-neutral-300", "text-orange-600"];
 const BORDER_COLOR = ["border-yellow-400/30", "border-neutral-400/30", "border-orange-700/30"];
 const BG_COLOR = ["bg-yellow-400/5", "bg-neutral-400/5", "bg-orange-700/5"];
 
@@ -26,7 +28,8 @@ export function RankingCard({
     <div className="dgs-card mb-8">
       <div className="flex items-center justify-between mb-1">
         <div className="text-neutral-100 font-medium text-sm flex items-center gap-2">
-          🏆 Ranking da Semana
+          <LineIcon name="trophy" size={16} className="text-brand" />
+          Ranking da Semana
         </div>
         <div className="text-neutral-600 text-[11px]">{weekRangeLabel()}</div>
       </div>
@@ -43,7 +46,11 @@ export function RankingCard({
               key={e.user_id}
               className={`flex items-center gap-3 rounded-lg border ${BORDER_COLOR[i]} ${BG_COLOR[i]} px-3 py-2.5`}
             >
-              <div className="text-lg w-6 text-center shrink-0">{MEDAL[i]}</div>
+              <div
+                className={`w-6 h-6 rounded-full border ${BORDER_COLOR[i]} flex items-center justify-center text-xs font-bold shrink-0 ${MEDAL_COLOR[i]}`}
+              >
+                {i + 1}
+              </div>
               {e.avatarUrl ? (
                 <img src={e.avatarUrl} alt="" className="w-8 h-8 rounded-full object-cover border border-white/10 shrink-0" />
               ) : (

@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { CHECKOUT_LINKS, checkoutUrl } from "@/lib/plans";
+import { LineIcon } from "@/components/LineIcon";
 
 const PLANS: {
   id: keyof typeof CHECKOUT_LINKS;
@@ -107,7 +108,9 @@ export default function PlanosPage() {
           className="dgs-card w-full max-w-2xl mt-10 dgs-fade-up"
           style={{ animationDelay: "0.55s" }}
         >
-          <div className="w-11 h-11 rounded-xl bg-brand/10 flex items-center justify-center text-xl mb-4">👥</div>
+          <div className="w-11 h-11 rounded-xl bg-brand/10 flex items-center justify-center text-brand mb-4">
+            <LineIcon name="users" />
+          </div>
           <h2 className="text-neutral-100 text-xl font-bold mb-4">Para quem é a DGS</h2>
           <div className="text-neutral-400 text-sm leading-relaxed flex flex-col gap-4">
             <p>
