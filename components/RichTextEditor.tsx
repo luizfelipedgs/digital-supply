@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { LineIcon } from "@/components/LineIcon";
 
 // Editor de texto rico simples, baseado em contentEditable.
 // Guarda o conteúdo como HTML (lido via ref no momento de salvar, não a cada
@@ -121,7 +122,8 @@ export function RichTextEditor({
           " Citação
         </button>
         <button type="button" className={btnClass} onClick={applyLink}>
-          🔗 Link
+          <LineIcon name="link" size={13} className="inline-block align-[-2px] mr-1" />
+          Link
         </button>
       </div>
 
