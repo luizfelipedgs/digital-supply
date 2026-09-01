@@ -75,6 +75,12 @@ export default async function DashboardPage() {
 
   const sections = [
     {
+      href: "/dashboard/legendas",
+      icon: "sparkles",
+      title: "Mestre das Legendas",
+      description: "Envie um vídeo, imagem ou legenda e receba conteúdo pronto pra publicar, com contexto e headlines.",
+    },
+    {
       href: "/dashboard/faturamento",
       icon: "wallet",
       title: "Faturamento",

@@ -58,6 +58,33 @@ Depois, em **Integrações > Webhooks > Adicionar**:
 
 ⚠️ **Importante**: o payload de exemplo usado neste código foi baseado na documentação oficial da Cakto para pagamento único. Como os planos são recorrentes (assinatura), os nomes exatos dos eventos de renovação/cancelamento podem ter uma variação — depois de configurar o webhook, faça uma compra de teste (ou peça um evento de teste no painel da Cakto) e confira o payload recebido na tabela `cakto_events` do Supabase para confirmar os nomes exatos. Ajuste as listas `GRANT_ACCESS_EVENTS` e `REVOKE_ACCESS_EVENTS` em `app/api/webhooks/cakto/route.ts` se precisar.
 
+### 4.1 Configurar o agente "Mestre das Legendas"
+
+A seção `/dashboard/legendas` é um chat de IA disponível pra qualquer aluno com assinatura ativa. Ele usa a API de
+chat completions da OpenAI (modelo `gpt-4o` por padrão, com suporte a texto e imagem).
+
+1. Crie uma chave em [platform.openai.com](https://platform.openai.com/api-keys) e coloque em `OPENAI_API_KEY`
+   (no `.env.local` e depois nas variáveis de ambiente da Vercel).
+2. Opcional: defina `OPENAI_MODEL` pra trocar o modelo (ex: `gpt-4o-mini` pra reduzir custo).
+3. A personalidade e as regras editoriais do agente ficam em `lib/legendas-prompt.ts` — edite esse arquivo pra
+   ajustar tom, regras ou estilo sem mexer no resto do código.
+
+Como funciona o envio de vídeo: o navegador extrai automaticamente ~6 frames (imagens) do vídeo selecionado e
+envia esses frames pro modelo — não há transcrição de áudio/narração nesta versão. Pra a maioria dos vídeos de
+curiosidade/fato visual isso é suficiente, mas se o conteúdo depender de algo só falado (sem aparecer na tela), o
+agente avisa que não tem essa informação em vez de inventar. Se no futuro você quiser transcrição de áudio, dá pra
+acrescentar uma chamada à API de transcrição da OpenAI (Whisper) nesse mesmo fluxo.
+
+O histórico da conversa não é salvo no banco — cada aluno começa do zero ao recarregar a página. Se depois vocês
+quiserem manter histórico por aluno, dá pra criar uma tabela `legendas_messages` (padrão RLS igual às outras
+tabelas do schema) e persistir ali.
+
+Sobre custo e limites: cada mensagem com imagem/vídeo custa mais tokens que uma mensagem só de texto (frames de
+vídeo geram 6 imagens por chamada). A rota já limita o tamanho da conversa e a quantidade de imagens por mensagem
+pra evitar abuso, mas vale acompanhar o consumo no painel da OpenAI nas primeiras semanas. Se estiver no plano
+Hobby da Vercel, respostas mais lentas (vídeo com muitos frames) podem esbarrar no limite de tempo de execução —
+o plano Pro permite functions mais longas (`maxDuration` já está configurado em 60s na rota).
+
 ### 5. Rodar localmente
 
 ```bash
