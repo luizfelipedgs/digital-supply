@@ -100,6 +100,65 @@ cadastrar o cartão, definir um limite de gastos mensal em Billing bem acima dis
 R$ 100–150), e depois de a primeira semana no ar, conferir o consumo real no painel da OpenAI e ajustar o limite
 pra baixo se quiser mais aperto.
 
+### 4.2 Configurar a "Trilha em Massa" (créditos + música em lote)
+
+A seção `/dashboard/trilha` deixa o aluno subir vários vídeos de uma vez, escolher uma música (com play/pause e
+escolha manual do início — ex: o refrão) e recebe todos de volta com o áudio original mudo e essa música no volume
+cheio, cortada automaticamente no tamanho de cada vídeo, num único `.zip` pra baixar. Cada vídeo processado consome
+**1 crédito** do aluno; o admin (`profiles.is_admin`) não consome créditos.
+
+1. **Rode `supabase/video_credits.sql` no SQL Editor do Supabase** (projeto já existente — não precisa rodar o
+   `schema.sql` inteiro de novo). Isso: adiciona a coluna `video_credits` ao perfil; dá **10 créditos grátis pra
+   todo aluno que já está ativo hoje** (de forma segura pra rodar mais de uma vez, sem duplicar); faz todo cadastro
+   novo já nascer com 10 créditos grátis; cria as tabelas do lote (`video_batch_jobs`, `video_batch_items`); e cria
+   o bucket de Storage `video-batch` (privado, cada aluno só acessa a própria pasta).
+2. **Configure os 4 pacotes de créditos na Cakto** (produto único, 4 ofertas — mesmo modelo já usado nos planos de
+   assinatura) e copie o ID de cada oferta (o trecho depois da `/` no link de checkout) pras variáveis
+   `CAKTO_OFFER_ID_CREDITS_BOOST`, `_TURBO`, `_PRO` e `_ESCALA` no `.env.local` e na Vercel:
+
+   | Pacote | Preço | Créditos | Link de checkout |
+   |---|---|---|---|
+   | Boost | R$ 14,90 | 200 | `pay.cakto.com.br/334zfon_1078640` |
+   | Turbo | R$ 34,90 | 600 | `pay.cakto.com.br/5sncq9k` |
+   | Pro | R$ 64,90 | 1300 | `pay.cakto.com.br/32cktrc` |
+   | Escala | R$ 118,90 | 2500 | `pay.cakto.com.br/jo8bokv` |
+
+   ⚠️ Mesmo aviso já feito pra assinatura: depois de configurar, faça uma **compra de teste** de qualquer pacote e
+   confira na tabela `cakto_events` do Supabase se `data.offer.id` realmente bateu com o ID que você colocou —
+   assim confirma que o pagamento vai creditar certinho antes de divulgar pros alunos.
+3. **Defina `CRON_SECRET`** (qualquer texto secreto) no `.env.local` e na Vercel — protege a rota de limpeza
+   automática (`/api/cron/video-batch-cleanup`), que a Vercel Cron chama de hora em hora (configurado em
+   `vercel.json`) pra apagar vídeos, música e resultados com mais de 12h. O cron só é ativado depois que este
+   `vercel.json` for publicado — confirme em **Settings > Cron Jobs** no painel da Vercel depois do deploy.
+4. Pra mudar limites (vídeos por lote, tamanho máximo de arquivo, horas de retenção, créditos grátis iniciais),
+   edite só `lib/video-batch-config.ts`. Pra mudar preço/quantidade dos pacotes, edite `lib/video-credits.ts`.
+
+**Processamento**: o corte de música roda no servidor (função da Vercel), usando o pacote `ffmpeg-static` — a
+imagem do vídeo é copiada sem recodificar (rápido) e só o áudio é trocado. Isso é mais pesado que o Mestre das
+Legendas, então fique de olho nos primeiros lotes reais:
+
+- **Plano da Vercel**: no plano Hobby (grátis), cada vídeo processado tem até 300s pra terminar — deve sobrar folga
+  de sobra pra vídeo de Reels/TikTok, mas um vídeo muito grande ou longo pode estourar. Se acontecer, considere o
+  plano Pro da Vercel (permite função com duração maior).
+- **Empacotamento do ffmpeg**: configurei o `next.config.js` pra garantir que o binário do ffmpeg vá junto no
+  deploy, mas isso é uma parte mais sensível — se depois de publicar o primeiro vídeo processado der erro tipo
+  "binário do ffmpeg não encontrado", me manda o print do erro que eu ajusto.
+- **Armazenamento no Supabase**: vídeo em lote ocupa bastante espaço de Storage. O plano Free do Supabase só dá
+  1GB — com uso real de vários alunos enviando lotes de até 50 vídeos, o plano Pro do Supabase (100GB incluso)
+  praticamente vira necessário. Como os arquivos são apagados depois de 12h, o uso fica sempre "de passagem" e não
+  acumula, mas o pico de um dia de muito uso pode ser considerável.
+
+**Segurança**: assim como o Mestre das Legendas, os créditos só são debitados por uma função do banco (não dá pra
+burlar recarregando a página ou chamando a API direto). Uma observação separada, sem relação direta com esse
+recurso: a policy atual de update da tabela `profiles` (`"Aluno edita o próprio perfil"`) libera update em
+**qualquer coluna** da própria linha, não só nome/telefone/avatar — hoje nenhuma tela do app usa isso pra mexer em
+`video_credits`, `status`, `plan` ou `is_admin`, mas tecnicamente um aluno mais técnico poderia tentar alterar esses
+campos chamando a API do Supabase diretamente. Não mexi nisso agora pra não arriscar quebrar a edição de perfil (o
+app usa colunas como `nickname`/`avatar_path` que não estão nos arquivos `.sql` do repositório — parecem ter sido
+criadas direto no painel do Supabase). Se quiser, consigo te passar o SQL pra travar isso coluna a coluna — só
+preciso que você confirme antes, no painel do Supabase, a lista completa de colunas que a tela de perfil realmente
+usa.
+
 ### 5. Rodar localmente
 
 ```bash

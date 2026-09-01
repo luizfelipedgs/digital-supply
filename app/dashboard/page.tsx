@@ -81,6 +81,12 @@ export default async function DashboardPage() {
       description: "Envie um vídeo (até 5 por dia) e receba uma legenda pronta pra publicar, com contexto e headlines.",
     },
     {
+      href: "/dashboard/trilha",
+      icon: "music",
+      title: "Trilha em Massa",
+      description: "Envie vários vídeos de uma vez e coloque a mesma música em todos automaticamente — som mudo, música no volume cheio.",
+    },
+    {
       href: "/dashboard/faturamento",
       icon: "wallet",
       title: "Faturamento",

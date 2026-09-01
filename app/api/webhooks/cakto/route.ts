@@ -21,6 +21,24 @@ function resolvePlan(offerId: string | undefined): string | null {
   return null;
 }
 
+// Pacotes de crédito da Trilha em Massa (compra avulsa, não é assinatura).
+// Cada pacote é uma OFERTA diferente dentro do mesmo produto na Cakto —
+// mesmo padrão já usado acima pros planos mensal/trimestral/anual: o ID
+// depois da "/" no link de checkout é o mesmo ID que a Cakto manda em
+// data.offer.id no webhook.
+const CREDIT_PACKAGES: Record<string, number> = {
+  [process.env.CAKTO_OFFER_ID_CREDITS_BOOST ?? ""]: 200,
+  [process.env.CAKTO_OFFER_ID_CREDITS_TURBO ?? ""]: 600,
+  [process.env.CAKTO_OFFER_ID_CREDITS_PRO ?? ""]: 1300,
+  [process.env.CAKTO_OFFER_ID_CREDITS_ESCALA ?? ""]: 2500,
+};
+delete CREDIT_PACKAGES[""];
+
+function resolveCreditPackage(offerId: string | undefined): number | null {
+  if (!offerId) return null;
+  return CREDIT_PACKAGES[offerId] ?? null;
+}
+
 // Eventos que devem liberar/renovar o acesso do aluno.
 // Para assinaturas, o primeiro pagamento normalmente dispara "purchase_approved"
 // e as renovações mensais/trimestrais/anuais seguintes disparam "subscription_renewed".
@@ -64,6 +82,39 @@ export async function POST(req: NextRequest) {
     .single();
 
   if (GRANT_ACCESS_EVENTS.includes(event)) {
+    // Compra avulsa de créditos (Trilha em Massa) — não mexe em status/plano,
+    // só soma créditos no perfil do aluno.
+    const creditsAmount = resolveCreditPackage(offerId);
+    if (creditsAmount) {
+      if (!buyerEmail) {
+        return NextResponse.json({ ok: true, warning: "Evento de créditos registrado mas sem e-mail" });
+      }
+
+      const { data: profile } = await supabase
+        .from("profiles")
+        .select("id, video_credits")
+        .ilike("email", buyerEmail)
+        .maybeSingle();
+
+      if (!profile) {
+        return NextResponse.json({ ok: true, warning: "Nenhum aluno encontrado com esse e-mail (créditos)" });
+      }
+
+      await supabase
+        .from("profiles")
+        .update({ video_credits: (profile.video_credits ?? 0) + creditsAmount })
+        .eq("id", profile.id);
+
+      if (logRow) {
+        await supabase
+          .from("cakto_events")
+          .update({ matched_user_id: profile.id, processed: true })
+          .eq("id", logRow.id);
+      }
+
+      return NextResponse.json({ ok: true, creditsGranted: creditsAmount });
+    }
+
     const plan = resolvePlan(offerId);
 
     if (!buyerEmail || !plan) {

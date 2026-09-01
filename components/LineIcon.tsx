@@ -218,6 +218,21 @@ export function LineIcon({
           <circle cx="16.5" cy="16" r="2.5" />
         </svg>
       );
+    case "pause":
+      return (
+        <svg {...common}>
+          <rect x="6" y="4.5" width="4" height="15" rx="1" fill="currentColor" stroke="none" />
+          <rect x="14" y="4.5" width="4" height="15" rx="1" fill="currentColor" stroke="none" />
+        </svg>
+      );
+    case "download":
+      return (
+        <svg {...common}>
+          <path d="M12 3v12" />
+          <path d="M7 10l5 5 5-5" />
+          <path d="M4 20h16" />
+        </svg>
+      );
     default:
       return null;
   }
