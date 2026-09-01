@@ -43,7 +43,44 @@ function sanitizeAndNormalize(html: string): string {
     });
   });
 
+  // Converte quebras de linha "soltas" (texto puro com \n, comum quando se
+  // cola conteúdo de Word/Notion/WhatsApp) em <br> de verdade. Sem isso, o
+  // texto aparece espaçado certinho enquanto edita (por causa do CSS do
+  // editor), mas junta tudo quando é exibido pro aluno em outra tela.
+  function convertNewlines(node: Node) {
+    if (node.nodeType === Node.TEXT_NODE && node.textContent?.includes("\n")) {
+      const parts = node.textContent.split("\n");
+      const fragment = document.createDocumentFragment();
+      parts.forEach((part, i) => {
+        fragment.appendChild(document.createTextNode(part));
+        if (i < parts.length - 1) fragment.appendChild(document.createElement("br"));
+      });
+      node.parentNode?.replaceChild(fragment, node);
+    } else {
+      // Copia os filhos pra um array antes de iterar, já que a lista viva
+      // (childNodes) pode mudar durante a substituição acima.
+      [...node.childNodes].forEach(convertNewlines);
+    }
+  }
+  convertNewlines(container);
+
   return container.innerHTML;
+}
+
+// Ao colar, insere o texto já convertido (quebras de linha viram <br> de
+// verdade na hora, e não só texto puro) — assim o resultado fica correto
+// mesmo antes de salvar.
+function handlePasteAsPlainTextWithBreaks(e: React.ClipboardEvent<HTMLDivElement>) {
+  const text = e.clipboardData.getData("text/plain");
+  if (!text) return;
+  e.preventDefault();
+
+  const escaped = text
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;");
+  const html = escaped.split("\n").join("<br>");
+  document.execCommand("insertHTML", false, html);
 }
 
 export function RichTextEditor({
@@ -131,6 +168,7 @@ export function RichTextEditor({
         ref={editorRef}
         contentEditable
         onBlur={flush}
+        onPaste={handlePasteAsPlainTextWithBreaks}
         className="dgs-input min-h-[180px] leading-relaxed [&_blockquote]:border-l-2 [&_blockquote]:border-brand/50 [&_blockquote]:pl-3 [&_blockquote]:text-neutral-400 [&_blockquote]:italic [&_a]:text-brand [&_a]:underline"
         style={{ whiteSpace: "pre-wrap" }}
       />
