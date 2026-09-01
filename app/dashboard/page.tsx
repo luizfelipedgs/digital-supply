@@ -99,6 +99,12 @@ export default async function DashboardPage() {
       description: "Acesse o grupo exclusivo da comunidade e confira as regras antes de entrar.",
     },
     {
+      href: "/dashboard/ranking",
+      icon: "trophy",
+      title: "Ranking Geral",
+      description: "Top 20 em faturamento acumulado no mês — acompanhe sua posição na comunidade.",
+    },
+    {
       href: "/dashboard/indique",
       icon: "gift",
       title: "Indique e Ganhe",
