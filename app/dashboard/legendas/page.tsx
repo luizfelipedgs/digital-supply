@@ -31,11 +31,11 @@ export default async function LegendasPage() {
           </p>
         </div>
 
-        <div className="dgs-card border-brand/30 bg-brand/5 mb-3 flex items-start gap-3">
-          <div className="w-8 h-8 rounded-lg bg-brand/15 flex items-center justify-center text-brand shrink-0 mt-0.5">
-            <LineIcon name="warning" size={15} />
-          </div>
-          <p className="text-neutral-300 text-sm leading-relaxed">
+        <div className="rounded-lg border border-orange-700/30 bg-orange-700/5 px-4 py-3 mb-3 flex items-start gap-2.5">
+          <span className="shrink-0 mt-0.5 text-orange-500">
+            <LineIcon name="warning" size={14} />
+          </span>
+          <p className="text-neutral-400 text-xs leading-relaxed">
             Você pode enviar {DAILY_VIDEO_LIMIT} vídeos por dia. Use em vídeo que realmente valha a pena, com
             potencial de viralização. Depois de enviado, pode conversar à vontade em texto pra ajustar o resultado.
           </p>

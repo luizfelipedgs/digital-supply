@@ -20,9 +20,7 @@ type PendingVideo = {
 
 const WELCOME: DisplayMessage = {
   role: "assistant",
-  text:
-    "Manda um vídeo (com ou sem um texto explicando o que você quer) que eu devolvo uma legenda pronta pra " +
-    "publicar, com contexto e, quando fizer sentido, headlines.",
+  text: "Selecione um vídeo na galeria e me passe mais informações para ter um melhor resultado.",
 };
 
 function todaySaoPauloISO() {
@@ -366,7 +364,7 @@ export function LegendasClient({
           <textarea
             className="dgs-input resize-none flex-1 min-w-0"
             rows={1}
-            placeholder="Escreva sua legenda, ideia ou pergunta…"
+            placeholder="Explique seu vídeo aqui"
             value={inputText}
             onChange={(e) => setInputText(e.target.value)}
             onKeyDown={handleKeyDown}
