@@ -21,9 +21,8 @@ type PendingVideo = {
 const WELCOME: DisplayMessage = {
   role: "assistant",
   text:
-    "Sou o Mestre das Legendas. Manda um vídeo (com ou sem um texto explicando o que você quer) e eu devolvo uma legenda pronta pra publicar, com contexto e, quando fizer sentido, headlines.\n\n" +
-    `Você tem ${DAILY_VIDEO_LIMIT} análises de vídeo por dia — use em cima de um vídeo que realmente valha a pena, com potencial de viralização. Depois de enviado, pode conversar à vontade em texto pra ajustar o resultado (isso não gasta a cota).\n\n` +
-    "Obs: eu analiso frames extraídos automaticamente do vídeo — ainda não escuto áudio/narração.",
+    "Manda um vídeo (com ou sem um texto explicando o que você quer) que eu devolvo uma legenda pronta pra " +
+    "publicar, com contexto e, quando fizer sentido, headlines.",
 };
 
 function todaySaoPauloISO() {
@@ -122,21 +121,32 @@ function toApiMessages(conversation: DisplayMessage[]) {
   });
 }
 
-export function LegendasClient() {
+export function LegendasClient({
+  initialRemaining,
+  initialMessages,
+}: {
+  // usados só pra pré-visualização de layout — a tela real nunca passa isso,
+  // então o comportamento em produção (busca a cota real, começa só com o
+  // WELCOME) fica igual ao de antes.
+  initialRemaining?: number;
+  initialMessages?: DisplayMessage[];
+} = {}) {
   const supabase = createClient();
-  const [messages, setMessages] = useState<DisplayMessage[]>([WELCOME]);
+  const [messages, setMessages] = useState<DisplayMessage[]>(initialMessages ?? [WELCOME]);
   const [inputText, setInputText] = useState("");
   const [pendingVideo, setPendingVideo] = useState<PendingVideo | null>(null);
   const [processingVideo, setProcessingVideo] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [copiedIndex, setCopiedIndex] = useState<number | null>(null);
-  const [remaining, setRemaining] = useState<number | null>(null);
+  const [remaining, setRemaining] = useState<number | null>(initialRemaining ?? null);
 
   const videoInputRef = useRef<HTMLInputElement>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    if (initialRemaining !== undefined) return; // pré-visualização — não busca do Supabase
+
     async function loadQuota() {
       const { data: userData } = await supabase.auth.getUser();
       if (!userData.user) return;
@@ -252,8 +262,8 @@ export function LegendasClient() {
   const quotaExhausted = remaining !== null && remaining <= 0;
 
   return (
-    <div className="flex flex-col flex-1 min-h-0">
-      <div className="flex items-center justify-between mb-2">
+    <div className="dgs-card flex flex-col gap-3">
+      <div className="flex items-center justify-between">
         <div className="text-xs text-neutral-500">
           {remaining === null ? (
             "Carregando sua cota do dia…"
@@ -269,14 +279,18 @@ export function LegendasClient() {
         </button>
       </div>
 
-      <div ref={scrollRef} className="flex-1 min-h-0 overflow-y-auto flex flex-col gap-3 pb-3">
+      <div
+        ref={scrollRef}
+        className="flex flex-col gap-3 overflow-y-auto pr-0.5"
+        style={{ minHeight: 220, maxHeight: "52vh" }}
+      >
         {messages.map((m, i) => (
           <div key={i} className={`flex ${m.role === "user" ? "justify-end" : "justify-start"}`}>
             <div
               className={`max-w-[85%] rounded-2xl px-4 py-3 text-sm leading-relaxed whitespace-pre-wrap ${
                 m.role === "user"
                   ? "bg-brand/10 border border-brand/25 text-neutral-100"
-                  : "dgs-card text-neutral-200"
+                  : "bg-white/[0.03] border border-white/10 text-neutral-200"
               }`}
             >
               {m.images && m.images.length > 0 && (
@@ -306,20 +320,22 @@ export function LegendasClient() {
 
         {loading && (
           <div className="flex justify-start">
-            <div className="dgs-card text-neutral-500 text-sm px-4 py-3">Editando…</div>
+            <div className="bg-white/[0.03] border border-white/10 rounded-2xl text-neutral-500 text-sm px-4 py-3">
+              Editando…
+            </div>
           </div>
         )}
       </div>
 
       {error && (
-        <div className="text-red-400 text-xs mb-2 flex items-center gap-1.5">
+        <div className="text-red-400 text-xs flex items-center gap-1.5">
           <LineIcon name="warning" size={13} />
           {error}
         </div>
       )}
 
       {pendingVideo && (
-        <div className="flex items-center gap-2 mb-2 rounded-lg border border-white/10 bg-white/[0.03] px-3 py-2">
+        <div className="flex items-center gap-2 rounded-lg border border-white/10 bg-white/[0.03] px-3 py-2">
           <div className="flex gap-1">
             {pendingVideo.images.slice(0, 3).map((src, i) => (
               <img key={i} src={src} alt="" className="w-8 h-8 object-cover rounded border border-white/10" />
@@ -332,39 +348,36 @@ export function LegendasClient() {
         </div>
       )}
 
-      {processingVideo && <div className="text-neutral-500 text-xs mb-2">Processando vídeo…</div>}
+      {processingVideo && <div className="text-neutral-500 text-xs">Processando vídeo…</div>}
 
-      <div className="text-[11px] text-neutral-600 mb-2 leading-relaxed">
-        Você tem só {DAILY_VIDEO_LIMIT} análises de vídeo por dia — use em cima de um vídeo que realmente valha a
-        pena, com potencial real de viralização, não pra testar qualquer coisa.
-      </div>
+      <div className="flex flex-col gap-2 pt-1 border-t border-white/10">
+        <div className="flex items-center gap-2 pt-2">
+          <input ref={videoInputRef} type="file" accept="video/*" hidden onChange={onPickVideo} />
 
-      <div className="flex items-end gap-2">
-        <input ref={videoInputRef} type="file" accept="video/*" hidden onChange={onPickVideo} />
+          <button
+            onClick={() => videoInputRef.current?.click()}
+            disabled={busy || quotaExhausted}
+            title={quotaExhausted ? "Limite diário de vídeos atingido" : "Anexar vídeo"}
+            className="w-11 h-11 shrink-0 rounded-lg border border-white/10 bg-white/[0.03] flex items-center justify-center text-neutral-400 hover:text-brand hover:border-brand/30 transition-colors disabled:opacity-40 disabled:hover:text-neutral-400 disabled:hover:border-white/10"
+          >
+            <LineIcon name="video" size={18} />
+          </button>
 
-        <button
-          onClick={() => videoInputRef.current?.click()}
-          disabled={busy || quotaExhausted}
-          title={quotaExhausted ? "Limite diário de vídeos atingido" : "Anexar vídeo"}
-          className="w-10 h-10 shrink-0 rounded-lg border border-white/10 bg-white/[0.03] flex items-center justify-center text-neutral-400 hover:text-brand hover:border-brand/30 transition-colors disabled:opacity-40 disabled:hover:text-neutral-400 disabled:hover:border-white/10"
-        >
-          <LineIcon name="video" size={17} />
-        </button>
-
-        <textarea
-          className="dgs-input resize-none"
-          rows={1}
-          placeholder="Escreva sua legenda, ideia ou pergunta…"
-          value={inputText}
-          onChange={(e) => setInputText(e.target.value)}
-          onKeyDown={handleKeyDown}
-          disabled={busy}
-        />
+          <textarea
+            className="dgs-input resize-none flex-1 min-w-0"
+            rows={1}
+            placeholder="Escreva sua legenda, ideia ou pergunta…"
+            value={inputText}
+            onChange={(e) => setInputText(e.target.value)}
+            onKeyDown={handleKeyDown}
+            disabled={busy}
+          />
+        </div>
 
         <button
           onClick={handleSend}
           disabled={busy || (!inputText.trim() && !pendingVideo)}
-          className="dgs-btn-primary w-auto px-5 h-10 shrink-0"
+          className="dgs-btn-primary"
         >
           Enviar
         </button>
