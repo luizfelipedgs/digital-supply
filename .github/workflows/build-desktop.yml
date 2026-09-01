@@ -1,0 +1,66 @@
+name: Build desktop app (Trilha em Massa)
+
+# Builda o instalador Windows (.exe) da versão desktop da Trilha em Massa
+# toda vez que algo em desktop/trilha-desktop mudar na main, e publica o
+# resultado como artefato do GitHub Actions + no Storage do Supabase (de
+# onde o botão "Baixar programa" do site pega o arquivo).
+#
+# Precisa de 3 Secrets configurados em Settings > Secrets and variables >
+# Actions do repositório (veja desktop/trilha-desktop/README.md pros
+# detalhes de onde pegar cada valor):
+#   SUPABASE_URL              (mesmo valor de NEXT_PUBLIC_SUPABASE_URL)
+#   SUPABASE_ANON_KEY         (mesmo valor de NEXT_PUBLIC_SUPABASE_ANON_KEY)
+#   SUPABASE_SERVICE_ROLE_KEY (mesmo valor já usado na Vercel)
+on:
+  push:
+    branches: [main]
+    paths:
+      - "desktop/trilha-desktop/**"
+      - ".github/workflows/build-desktop.yml"
+  workflow_dispatch: {}
+
+jobs:
+  build:
+    runs-on: windows-latest
+    defaults:
+      run:
+        working-directory: desktop/trilha-desktop
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Instala dependências
+        run: npm install
+
+      - name: Gera src/env.js com as credenciais do Supabase
+        shell: bash
+        run: |
+          cat > src/env.js << EOF
+          module.exports = {
+            SUPABASE_URL: "${{ secrets.SUPABASE_URL }}",
+            SUPABASE_ANON_KEY: "${{ secrets.SUPABASE_ANON_KEY }}",
+          };
+          EOF
+
+      - name: Builda o instalador (.exe)
+        run: npm run dist
+
+      - name: Publica o instalador como artefato do GitHub Actions
+        uses: actions/upload-artifact@v4
+        with:
+          name: TrilhaEmMassa-Setup
+          path: desktop/trilha-desktop/dist/TrilhaEmMassa-Setup.exe
+          if-no-files-found: error
+
+      - name: Sobe o instalador pro Supabase Storage (link de download do site)
+        shell: bash
+        run: |
+          curl --fail --silent --show-error -X POST \
+            "${{ secrets.SUPABASE_URL }}/storage/v1/object/desktop-app/TrilhaEmMassa-Setup.exe" \
+            -H "Authorization: Bearer ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}" \
+            -H "x-upsert: true" \
+            -H "Content-Type: application/octet-stream" \
+            --data-binary "@dist/TrilhaEmMassa-Setup.exe"
