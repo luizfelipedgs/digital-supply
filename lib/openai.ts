@@ -32,7 +32,10 @@ export async function callOpenAIChat(messages: ChatMessage[]): Promise<string> {
       model,
       messages,
       temperature: 0.85,
-      max_tokens: 1500,
+      // Modelos atuais da OpenAI (gpt-5.6-*) não aceitam mais "max_tokens" —
+      // é "max_completion_tokens" agora. Se um dia trocar pra um modelo mais
+      // antigo que ainda use "max_tokens", ajuste aqui.
+      max_completion_tokens: 1500,
     }),
   });
 
