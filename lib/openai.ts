@@ -10,7 +10,9 @@ export type ChatMessage = {
   content: string | ChatContentPart[];
 };
 
-const DEFAULT_MODEL = "gpt-4o";
+// gpt-4o foi descontinuado — gpt-5.6-luna é o modelo atual mais barato da OpenAI
+// com suporte a imagem/vídeo (frames). Ajustável via OPENAI_MODEL sem mexer no código.
+const DEFAULT_MODEL = "gpt-5.6-luna";
 
 export async function callOpenAIChat(messages: ChatMessage[]): Promise<string> {
   const apiKey = process.env.OPENAI_API_KEY;

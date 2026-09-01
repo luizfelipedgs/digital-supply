@@ -1,26 +1,35 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { createClient } from "@/lib/supabase/client";
 import { LineIcon } from "@/components/LineIcon";
+import { DAILY_VIDEO_LIMIT } from "@/lib/legendas-config";
 
 type DisplayMessage = {
   role: "user" | "assistant";
   text: string;
-  images?: string[];
+  images?: string[]; // frames extraídos do vídeo, só presentes na mensagem que anexou o vídeo
   attachmentLabel?: string;
+  hasVideo?: boolean;
 };
 
-type PendingAttachment = {
-  kind: "image" | "video";
+type PendingVideo = {
   label: string;
-  images: string[]; // já comprimidas/extraídas, prontas pra enviar
+  images: string[]; // frames já extraídos, prontos pra enviar
 };
 
 const WELCOME: DisplayMessage = {
   role: "assistant",
   text:
-    "Sou o Mestre das Legendas. Me manda um vídeo, uma imagem, uma legenda pra revisar ou só uma pergunta — eu devolvo conteúdo pronto pra publicar no Instagram, com contexto e, quando fizer sentido, headlines.\n\nObs: em vídeos eu analiso frames extraídos automaticamente — ainda não escuto áudio/narração.",
+    "Sou o Mestre das Legendas. Manda um vídeo (com ou sem um texto explicando o que você quer) e eu devolvo uma legenda pronta pra publicar, com contexto e, quando fizer sentido, headlines.\n\n" +
+    `Você tem ${DAILY_VIDEO_LIMIT} análises de vídeo por dia — use em cima de um vídeo que realmente valha a pena, com potencial de viralização. Depois de enviado, pode conversar à vontade em texto pra ajustar o resultado (isso não gasta a cota).\n\n` +
+    "Obs: eu analiso frames extraídos automaticamente do vídeo — ainda não escuto áudio/narração.",
 };
+
+function todaySaoPauloISO() {
+  // yyyy-mm-dd no fuso de Brasília, independente do fuso do navegador do aluno
+  return new Date().toLocaleDateString("en-CA", { timeZone: "America/Sao_Paulo" });
+}
 
 function seekTo(video: HTMLVideoElement, time: number) {
   return new Promise<void>((resolve) => {
@@ -82,55 +91,66 @@ async function extractVideoFrames(file: File, frameCount = 6, maxWidth = 960): P
   }
 }
 
-async function fileToCompressedDataUrl(file: File, maxWidth = 1280, quality = 0.82): Promise<string> {
-  const url = URL.createObjectURL(file);
-  try {
-    const img = document.createElement("img");
-    await new Promise<void>((resolve, reject) => {
-      img.onload = () => resolve();
-      img.onerror = () => reject(new Error("Não foi possível ler essa imagem."));
-      img.src = url;
-    });
+// Monta as mensagens pra API. Só a mensagem MAIS RECENTE com vídeo mantém os
+// frames de fato — mensagens de vídeo mais antigas viram um texto curto, pra
+// não reenviar (e recobrar) as mesmas imagens em todo turno de uma conversa longa.
+function toApiMessages(conversation: DisplayMessage[]) {
+  const lastVideoIndex = (() => {
+    for (let i = conversation.length - 1; i >= 0; i--) {
+      if (conversation[i].images?.length) return i;
+    }
+    return -1;
+  })();
 
-    const scale = Math.min(1, maxWidth / (img.naturalWidth || maxWidth));
-    const canvas = document.createElement("canvas");
-    canvas.width = Math.max(1, Math.round((img.naturalWidth || maxWidth) * scale));
-    canvas.height = Math.max(1, Math.round((img.naturalHeight || maxWidth) * scale));
-    const ctx = canvas.getContext("2d");
-    if (!ctx) throw new Error("Canvas não suportado neste navegador.");
-    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-
-    return canvas.toDataURL("image/jpeg", quality);
-  } finally {
-    URL.revokeObjectURL(url);
-  }
-}
-
-function toApiMessage(m: DisplayMessage) {
-  if (m.images && m.images.length > 0) {
-    return {
-      role: m.role,
-      content: [
-        { type: "text", text: m.text || "Analise o conteúdo enviado e escreva a legenda." },
-        ...m.images.map((url) => ({ type: "image_url", image_url: { url } })),
-      ],
-    };
-  }
-  return { role: m.role, content: m.text };
+  return conversation.map((m, i) => {
+    if (m.images && m.images.length > 0) {
+      if (i === lastVideoIndex) {
+        return {
+          role: m.role,
+          content: [
+            { type: "text", text: m.text || "Analise este vídeo e escreva a legenda." },
+            ...m.images.map((url) => ({ type: "image_url", image_url: { url } })),
+          ],
+        };
+      }
+      return {
+        role: m.role,
+        content: `[vídeo enviado anteriormente nesta conversa — já analisado acima]${m.text ? " " + m.text : ""}`,
+      };
+    }
+    return { role: m.role, content: m.text };
+  });
 }
 
 export function LegendasClient() {
+  const supabase = createClient();
   const [messages, setMessages] = useState<DisplayMessage[]>([WELCOME]);
   const [inputText, setInputText] = useState("");
-  const [pendingAttachment, setPendingAttachment] = useState<PendingAttachment | null>(null);
-  const [processingAttachment, setProcessingAttachment] = useState(false);
+  const [pendingVideo, setPendingVideo] = useState<PendingVideo | null>(null);
+  const [processingVideo, setProcessingVideo] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [copiedIndex, setCopiedIndex] = useState<number | null>(null);
+  const [remaining, setRemaining] = useState<number | null>(null);
 
-  const imageInputRef = useRef<HTMLInputElement>(null);
   const videoInputRef = useRef<HTMLInputElement>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    async function loadQuota() {
+      const { data: userData } = await supabase.auth.getUser();
+      if (!userData.user) return;
+      const { data } = await supabase
+        .from("legendas_video_usage")
+        .select("count")
+        .eq("user_id", userData.user.id)
+        .eq("usage_date", todaySaoPauloISO())
+        .maybeSingle();
+      setRemaining(DAILY_VIDEO_LIMIT - (data?.count ?? 0));
+    }
+    loadQuota();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   function scrollToBottom() {
     requestAnimationFrame(() => {
@@ -138,77 +158,63 @@ export function LegendasClient() {
     });
   }
 
-  async function onPickImages(e: React.ChangeEvent<HTMLInputElement>) {
-    const files = Array.from(e.target.files ?? []);
-    e.target.value = "";
-    if (files.length === 0) return;
-    if (files.length > 6) {
-      setError("Selecione no máximo 6 imagens por vez.");
-      return;
-    }
-    setError(null);
-    setProcessingAttachment(true);
-    try {
-      const images = await Promise.all(files.map((f) => fileToCompressedDataUrl(f)));
-      setPendingAttachment({ kind: "image", label: `${files.length} imagem${files.length > 1 ? "ns" : ""}`, images });
-    } catch (err: any) {
-      setError(err?.message || "Não foi possível processar as imagens.");
-    } finally {
-      setProcessingAttachment(false);
-    }
-  }
-
   async function onPickVideo(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
     e.target.value = "";
     if (!file) return;
+    if (remaining !== null && remaining <= 0) {
+      setError(`Você já usou seus ${DAILY_VIDEO_LIMIT} vídeos de hoje. Volta amanhã!`);
+      return;
+    }
     if (file.size > 300 * 1024 * 1024) {
       setError("Vídeo muito grande (máx. 300MB).");
       return;
     }
     setError(null);
-    setProcessingAttachment(true);
+    setProcessingVideo(true);
     try {
       const images = await extractVideoFrames(file, 6);
-      setPendingAttachment({ kind: "video", label: `vídeo — ${images.length} frames extraídos`, images });
+      setPendingVideo({ label: `vídeo — ${images.length} frames extraídos`, images });
     } catch (err: any) {
       setError(err?.message || "Não foi possível processar o vídeo.");
     } finally {
-      setProcessingAttachment(false);
+      setProcessingVideo(false);
     }
   }
 
   async function handleSend() {
     const trimmed = inputText.trim();
-    if (!trimmed && !pendingAttachment) return;
-    if (loading || processingAttachment) return;
+    if (!trimmed && !pendingVideo) return;
+    if (loading || processingVideo) return;
 
     setError(null);
 
     const userMsg: DisplayMessage = {
       role: "user",
       text: trimmed,
-      images: pendingAttachment?.images,
-      attachmentLabel: pendingAttachment?.label,
+      images: pendingVideo?.images,
+      attachmentLabel: pendingVideo?.label,
+      hasVideo: !!pendingVideo,
     };
 
     const newMessages = [...messages, userMsg];
     setMessages(newMessages);
     setInputText("");
-    setPendingAttachment(null);
+    setPendingVideo(null);
     setLoading(true);
     scrollToBottom();
 
     try {
-      // primeira mensagem da lista é a boas-vindas local — não faz parte da conversa enviada
       const conversation = newMessages.filter((m) => m !== WELCOME);
       const res = await fetch("/api/legendas/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ messages: conversation.map(toApiMessage) }),
+        body: JSON.stringify({ messages: toApiMessages(conversation) }),
       });
       const data = await res.json().catch(() => ({}));
       if (!res.ok) throw new Error(data?.error || "Erro ao falar com o agente.");
+
+      if (typeof data.remaining === "number") setRemaining(data.remaining);
 
       setMessages((prev) => [...prev, { role: "assistant", text: data.reply }]);
       scrollToBottom();
@@ -238,15 +244,26 @@ export function LegendasClient() {
 
   function newConversation() {
     setMessages([WELCOME]);
-    setPendingAttachment(null);
+    setPendingVideo(null);
     setError(null);
   }
 
-  const busy = loading || processingAttachment;
+  const busy = loading || processingVideo;
+  const quotaExhausted = remaining !== null && remaining <= 0;
 
   return (
     <div className="flex flex-col flex-1 min-h-0">
-      <div className="flex justify-end mb-2">
+      <div className="flex items-center justify-between mb-2">
+        <div className="text-xs text-neutral-500">
+          {remaining === null ? (
+            "Carregando sua cota do dia…"
+          ) : (
+            <>
+              <span className={quotaExhausted ? "text-red-400" : "text-brand"}>{Math.max(remaining, 0)}</span> de{" "}
+              {DAILY_VIDEO_LIMIT} vídeos disponíveis hoje
+            </>
+          )}
+        </div>
         <button onClick={newConversation} className="text-neutral-500 text-xs hover:text-neutral-300 transition-colors">
           + nova conversa
         </button>
@@ -301,42 +318,35 @@ export function LegendasClient() {
         </div>
       )}
 
-      {pendingAttachment && (
+      {pendingVideo && (
         <div className="flex items-center gap-2 mb-2 rounded-lg border border-white/10 bg-white/[0.03] px-3 py-2">
           <div className="flex gap-1">
-            {pendingAttachment.images.slice(0, 3).map((src, i) => (
+            {pendingVideo.images.slice(0, 3).map((src, i) => (
               <img key={i} src={src} alt="" className="w-8 h-8 object-cover rounded border border-white/10" />
             ))}
           </div>
-          <div className="text-neutral-400 text-xs flex-1">{pendingAttachment.label}</div>
-          <button onClick={() => setPendingAttachment(null)} className="text-neutral-500 hover:text-neutral-300 text-xs">
+          <div className="text-neutral-400 text-xs flex-1">{pendingVideo.label}</div>
+          <button onClick={() => setPendingVideo(null)} className="text-neutral-500 hover:text-neutral-300 text-xs">
             remover
           </button>
         </div>
       )}
 
-      {processingAttachment && (
-        <div className="text-neutral-500 text-xs mb-2">Processando arquivo…</div>
-      )}
+      {processingVideo && <div className="text-neutral-500 text-xs mb-2">Processando vídeo…</div>}
+
+      <div className="text-[11px] text-neutral-600 mb-2 leading-relaxed">
+        Você tem só {DAILY_VIDEO_LIMIT} análises de vídeo por dia — use em cima de um vídeo que realmente valha a
+        pena, com potencial real de viralização, não pra testar qualquer coisa.
+      </div>
 
       <div className="flex items-end gap-2">
-        <input ref={imageInputRef} type="file" accept="image/*" multiple hidden onChange={onPickImages} />
         <input ref={videoInputRef} type="file" accept="video/*" hidden onChange={onPickVideo} />
 
         <button
-          onClick={() => imageInputRef.current?.click()}
-          disabled={busy}
-          title="Anexar imagem"
-          className="w-10 h-10 shrink-0 rounded-lg border border-white/10 bg-white/[0.03] flex items-center justify-center text-neutral-400 hover:text-brand hover:border-brand/30 transition-colors disabled:opacity-50"
-        >
-          <LineIcon name="image" size={17} />
-        </button>
-
-        <button
           onClick={() => videoInputRef.current?.click()}
-          disabled={busy}
-          title="Anexar vídeo"
-          className="w-10 h-10 shrink-0 rounded-lg border border-white/10 bg-white/[0.03] flex items-center justify-center text-neutral-400 hover:text-brand hover:border-brand/30 transition-colors disabled:opacity-50"
+          disabled={busy || quotaExhausted}
+          title={quotaExhausted ? "Limite diário de vídeos atingido" : "Anexar vídeo"}
+          className="w-10 h-10 shrink-0 rounded-lg border border-white/10 bg-white/[0.03] flex items-center justify-center text-neutral-400 hover:text-brand hover:border-brand/30 transition-colors disabled:opacity-40 disabled:hover:text-neutral-400 disabled:hover:border-white/10"
         >
           <LineIcon name="video" size={17} />
         </button>
@@ -353,7 +363,7 @@ export function LegendasClient() {
 
         <button
           onClick={handleSend}
-          disabled={busy || (!inputText.trim() && !pendingAttachment)}
+          disabled={busy || (!inputText.trim() && !pendingVideo)}
           className="dgs-btn-primary w-auto px-5 h-10 shrink-0"
         >
           Enviar

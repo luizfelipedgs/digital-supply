@@ -60,14 +60,27 @@ Depois, em **Integrações > Webhooks > Adicionar**:
 
 ### 4.1 Configurar o agente "Mestre das Legendas"
 
-A seção `/dashboard/legendas` é um chat de IA disponível pra qualquer aluno com assinatura ativa. Ele usa a API de
-chat completions da OpenAI (modelo `gpt-4o` por padrão, com suporte a texto e imagem).
+A seção `/dashboard/legendas` é um chat de IA disponível pra qualquer aluno com assinatura ativa. Ele aceita **vídeo
+e texto** (upload de foto avulsa foi removido de propósito, pra manter o uso focado e o custo previsível). Usa a API
+de chat completions da OpenAI (modelo `gpt-5.6-luna` por padrão — o mais barato da OpenAI atualmente, com suporte a
+texto e imagem/vídeo).
 
 1. Crie uma chave em [platform.openai.com](https://platform.openai.com/api-keys) e coloque em `OPENAI_API_KEY`
-   (no `.env.local` e depois nas variáveis de ambiente da Vercel).
-2. Opcional: defina `OPENAI_MODEL` pra trocar o modelo (ex: `gpt-4o-mini` pra reduzir custo).
+   (no `.env.local` e depois nas variáveis de ambiente da Vercel). **Não existe um plano gratuito permanente pra
+   API da OpenAI** — é pago por uso (algumas contas novas ganham um crédito inicial pequeno que expira em ~3
+   meses). Cadastre um cartão e, se quiser, defina um limite mensal de gastos em Billing pra evitar surpresa.
+2. Opcional: defina `OPENAI_MODEL` pra trocar o modelo (ex: `gpt-5.6-terra` pra mais qualidade, com custo maior).
 3. A personalidade e as regras editoriais do agente ficam em `lib/legendas-prompt.ts` — edite esse arquivo pra
    ajustar tom, regras ou estilo sem mexer no resto do código.
+4. **Rode `supabase/legendas_video_usage.sql` no SQL Editor do Supabase** (projeto já existente — não precisa rodar
+   o `schema.sql` inteiro de novo). Isso cria a tabela e a função que controlam o limite diário de vídeos por
+   aluno. Sem esse passo, qualquer envio de vídeo retorna erro.
+
+**Limite diário de vídeos**: cada aluno pode analisar até **5 vídeos por dia** (reseta à meia-noite no horário de
+Brasília). O limite é aplicado no servidor (não dá pra burlar recarregando a página) e é mostrado na tela antes de
+cada envio. Depois de enviar um vídeo, o aluno pode continuar a conversa em texto à vontade (pedir pra encurtar,
+mudar o tom, gerar variação) sem gastar cota — só o envio de um vídeo novo consome. Pra mudar o número 5, altere a
+constante `DAILY_VIDEO_LIMIT` em `lib/legendas-config.ts` (um único lugar, usado tanto pela rota quanto pela tela).
 
 Como funciona o envio de vídeo: o navegador extrai automaticamente ~6 frames (imagens) do vídeo selecionado e
 envia esses frames pro modelo — não há transcrição de áudio/narração nesta versão. Pra a maioria dos vídeos de
@@ -75,15 +88,17 @@ curiosidade/fato visual isso é suficiente, mas se o conteúdo depender de algo 
 agente avisa que não tem essa informação em vez de inventar. Se no futuro você quiser transcrição de áudio, dá pra
 acrescentar uma chamada à API de transcrição da OpenAI (Whisper) nesse mesmo fluxo.
 
-O histórico da conversa não é salvo no banco — cada aluno começa do zero ao recarregar a página. Se depois vocês
-quiserem manter histórico por aluno, dá pra criar uma tabela `legendas_messages` (padrão RLS igual às outras
-tabelas do schema) e persistir ali.
+O histórico da conversa não é salvo no banco — cada aluno começa do zero ao recarregar a página (só o *contador* de
+vídeos do dia é salvo, pra valer o limite). Se depois vocês quiserem manter histórico completo por aluno, dá pra
+criar uma tabela `legendas_messages` (mesmo padrão de RLS das outras tabelas do schema) e persistir ali.
 
-Sobre custo e limites: cada mensagem com imagem/vídeo custa mais tokens que uma mensagem só de texto (frames de
-vídeo geram 6 imagens por chamada). A rota já limita o tamanho da conversa e a quantidade de imagens por mensagem
-pra evitar abuso, mas vale acompanhar o consumo no painel da OpenAI nas primeiras semanas. Se estiver no plano
-Hobby da Vercel, respostas mais lentas (vídeo com muitos frames) podem esbarrar no limite de tempo de execução —
-o plano Pro permite functions mais longas (`maxDuration` já está configurado em 60s na rota).
+**Custo estimado**: com o limite de 5 vídeos/dia por aluno e o modelo `gpt-5.6-luna`, uma simulação com 20 alunos
+usando o máximo todo santo dia (incluindo conversa de ajuste por texto depois de cada vídeo) fica em torno de
+**US$ 3 a 15/mês** — algo como **R$ 15 a R$ 80/mês** no câmbio atual. Essa conta usa os preços públicos listados
+pela OpenAI no momento em que foi feita e uma estimativa de tokens por frame de vídeo; pode variar. Recomendado:
+cadastrar o cartão, definir um limite de gastos mensal em Billing bem acima disso como margem de segurança (ex:
+R$ 100–150), e depois de a primeira semana no ar, conferir o consumo real no painel da OpenAI e ajustar o limite
+pra baixo se quiser mais aperto.
 
 ### 5. Rodar localmente
 

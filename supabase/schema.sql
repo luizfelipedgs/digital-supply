@@ -145,3 +145,61 @@ create policy "Aluno gerencia as próprias tarefas"
   on public.tasks for all
   using (auth.uid() = user_id)
   with check (auth.uid() = user_id);
+
+-- ------------------------------------------------------------
+-- Uso diário do agente "Mestre das Legendas" (limite de vídeos/dia)
+-- ------------------------------------------------------------
+create table if not exists public.legendas_video_usage (
+  user_id uuid not null references auth.users(id) on delete cascade,
+  usage_date date not null,
+  count integer not null default 0,
+  primary key (user_id, usage_date)
+);
+
+alter table public.legendas_video_usage enable row level security;
+
+-- Aluno só pode LER a própria contagem (pra mostrar "restam X vídeos hoje" na tela).
+-- A escrita só acontece pela função abaixo (security definer) — nunca direto pelo cliente.
+create policy "Aluno vê o próprio uso do Mestre das Legendas"
+  on public.legendas_video_usage for select
+  using (auth.uid() = user_id);
+
+-- Consome 1 vídeo da cota diária do usuário autenticado, de forma atômica
+-- (usa "for update" pra travar a linha contra chamadas simultâneas).
+-- Retorna allowed=false quando o limite do dia já foi atingido (não incrementa nesse caso).
+-- O dia considerado é sempre o calendário de Brasília (America/Sao_Paulo), não UTC.
+create or replace function public.consume_legendas_video_quota(daily_limit integer default 5)
+returns table(allowed boolean, remaining integer)
+language plpgsql
+security definer
+as $$
+declare
+  v_user uuid := auth.uid();
+  v_date date := (timezone('America/Sao_Paulo', now()))::date;
+  v_count integer;
+begin
+  if v_user is null then
+    raise exception 'not authenticated';
+  end if;
+
+  insert into public.legendas_video_usage (user_id, usage_date, count)
+  values (v_user, v_date, 0)
+  on conflict (user_id, usage_date) do nothing;
+
+  select count into v_count
+    from public.legendas_video_usage
+    where user_id = v_user and usage_date = v_date
+    for update;
+
+  if v_count >= daily_limit then
+    return query select false, greatest(daily_limit - v_count, 0);
+  else
+    update public.legendas_video_usage
+      set count = count + 1
+      where user_id = v_user and usage_date = v_date;
+    return query select true, (daily_limit - (v_count + 1));
+  end if;
+end;
+$$;
+
+grant execute on function public.consume_legendas_video_quota(integer) to authenticated;

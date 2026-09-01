@@ -24,8 +24,8 @@ export default async function LegendasPage() {
         <div className="mb-4">
           <h1 className="text-neutral-100 text-xl font-medium">Mestre das Legendas</h1>
           <p className="text-neutral-500 text-sm mt-1">
-            Envie um vídeo, uma imagem, uma legenda pra revisar ou uma pergunta — ele devolve conteúdo pronto pra
-            publicar.
+            Envie um vídeo (limite de 5 por dia) ou converse em texto — legenda pra revisar, ideia ou pergunta — e
+            receba conteúdo pronto pra publicar.
           </p>
         </div>
 

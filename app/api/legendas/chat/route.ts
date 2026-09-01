@@ -2,14 +2,15 @@ import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { callOpenAIChat, type ChatContentPart, type ChatMessage } from "@/lib/openai";
 import { MESTRE_DAS_LEGENDAS_SYSTEM_PROMPT } from "@/lib/legendas-prompt";
+import { DAILY_VIDEO_LIMIT } from "@/lib/legendas-config";
 
-// Dá tempo suficiente pra respostas com imagem/frames de vídeo (ajuste no
-// plano da Vercel pode ser necessário — veja o README).
+// Dá tempo suficiente pra respostas com frames de vídeo (ajuste no plano da
+// Vercel pode ser necessário — veja o README).
 export const maxDuration = 60;
 
 const MAX_MESSAGES = 24; // ~12 idas e vindas de conversa
 const MAX_TEXT_CHARS = 6000;
-const MAX_IMAGES_PER_MESSAGE = 8;
+const MAX_IMAGES_PER_MESSAGE = 8; // frames de um único vídeo
 
 type IncomingPart = { type: "text"; text: string } | { type: "image_url"; image_url: { url: string } };
 type IncomingMessage = { role: "user" | "assistant"; content: string | IncomingPart[] };
@@ -40,7 +41,7 @@ function validateAndNormalize(messages: unknown): ChatMessage[] {
 
     const imageParts = m.content.filter((p) => p?.type === "image_url");
     if (imageParts.length > MAX_IMAGES_PER_MESSAGE) {
-      throw new Error(`No máximo ${MAX_IMAGES_PER_MESSAGE} imagens/frames por mensagem.`);
+      throw new Error(`No máximo ${MAX_IMAGES_PER_MESSAGE} frames de vídeo por mensagem.`);
     }
 
     const parts: ChatContentPart[] = m.content.map((p) => {
@@ -56,6 +57,12 @@ function validateAndNormalize(messages: unknown): ChatMessage[] {
 
     return { role: m.role, content: parts } satisfies ChatMessage;
   });
+}
+
+function lastMessageHasVideo(history: ChatMessage[]): boolean {
+  const last = history[history.length - 1];
+  if (!last || last.role !== "user" || !Array.isArray(last.content)) return false;
+  return last.content.some((p) => p.type === "image_url");
 }
 
 export async function POST(req: NextRequest) {
@@ -88,6 +95,39 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: validationError.message }, { status: 400 });
     }
 
+    // Só a mensagem MAIS RECENTE pode consumir a cota — mensagens antigas com
+    // frame de vídeo (de turnos anteriores da mesma conversa) não contam de novo,
+    // isso é decidido pelo cliente que só reenvia imagem na última mensagem.
+    let remaining: number | null = null;
+    if (lastMessageHasVideo(history)) {
+      const { data: quota, error: quotaError } = await supabase
+        .rpc("consume_legendas_video_quota", { daily_limit: DAILY_VIDEO_LIMIT })
+        .single();
+
+      if (quotaError) {
+        console.error("[/api/legendas/chat] quota error", quotaError);
+        return NextResponse.json(
+          {
+            error:
+              "Não consegui checar sua cota de vídeos hoje. Se o problema persistir, confirme se a função consume_legendas_video_quota foi criada no Supabase.",
+          },
+          { status: 500 }
+        );
+      }
+
+      const q = quota as { allowed: boolean; remaining: number } | null;
+      if (!q || !q.allowed) {
+        return NextResponse.json(
+          {
+            error: `Você já usou seus ${DAILY_VIDEO_LIMIT} vídeos de hoje. O limite reseta à meia-noite (horário de Brasília). Aproveite pra revisar o que já foi analisado, ou volte amanhã com o próximo vídeo.`,
+            remaining: 0,
+          },
+          { status: 429 }
+        );
+      }
+      remaining = q.remaining;
+    }
+
     const messages: ChatMessage[] = [
       { role: "system", content: MESTRE_DAS_LEGENDAS_SYSTEM_PROMPT },
       ...history,
@@ -95,7 +135,7 @@ export async function POST(req: NextRequest) {
 
     const reply = await callOpenAIChat(messages);
 
-    return NextResponse.json({ reply });
+    return NextResponse.json({ reply, remaining });
   } catch (err: any) {
     console.error("[/api/legendas/chat]", err);
     return NextResponse.json({ error: err?.message || "Erro inesperado ao falar com o agente." }, { status: 500 });
