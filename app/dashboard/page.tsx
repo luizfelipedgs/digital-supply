@@ -93,6 +93,12 @@ export default async function DashboardPage() {
       description: "Páginas em português e gringas pra buscar vídeos com potencial de viralização.",
     },
     {
+      href: "/dashboard/grupo",
+      icon: "users",
+      title: "Grupo DGS",
+      description: "Acesse o grupo exclusivo da comunidade e confira as regras antes de entrar.",
+    },
+    {
       href: "/dashboard/indique",
       icon: "gift",
       title: "Indique e Ganhe",
