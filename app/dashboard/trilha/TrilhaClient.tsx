@@ -96,12 +96,17 @@ export function TrilhaClient({
   }, [musicUrl]);
 
   function updateItem(id: string, patch: Partial<BatchItem>) {
-    setVideos((prev) => {
-      const next = prev.map((v) => (v.id === id ? { ...v, ...patch } : v));
-      const updated = next.find((v) => v.id === id);
-      if (updated) itemsRef.current[id] = updated;
-      return next;
-    });
+    // Atualiza a "fonte da verdade" (itemsRef) NA HORA, de forma síncrona —
+    // não dentro do callback do setState, porque o React pode adiar a
+    // execução desse callback pra depois do ponto em que o código de
+    // startBatch já foi ler itemsRef.current (ex: pra montar a lista de
+    // vídeos prontos pra processar), e aí um vídeo processado com sucesso
+    // podia "sumir" do lote por causa dessa corrida.
+    const current = itemsRef.current[id];
+    if (!current) return;
+    const updated = { ...current, ...patch };
+    itemsRef.current[id] = updated;
+    setVideos((prev) => prev.map((v) => (v.id === id ? updated : v)));
   }
 
   function handleMusicFile(f: File | null) {
@@ -158,11 +163,8 @@ export function TrilhaClient({
       setError(`${oversized} vídeo(s) passaram de ${MAX_VIDEO_SIZE_MB}MB e foram ignorados.`);
     }
 
-    setVideos((prev) => {
-      const next = [...prev, ...accepted];
-      accepted.forEach((a) => (itemsRef.current[a.id] = a));
-      return next;
-    });
+    accepted.forEach((a) => (itemsRef.current[a.id] = a));
+    setVideos((prev) => [...prev, ...accepted]);
   }
 
   function removeVideo(id: string) {
