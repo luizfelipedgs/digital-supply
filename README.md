@@ -127,9 +127,12 @@ cheio, cortada automaticamente no tamanho de cada vídeo, num único `.zip` pra 
    confira na tabela `cakto_events` do Supabase se `data.offer.id` realmente bateu com o ID que você colocou —
    assim confirma que o pagamento vai creditar certinho antes de divulgar pros alunos.
 3. **Defina `CRON_SECRET`** (qualquer texto secreto) no `.env.local` e na Vercel — protege a rota de limpeza
-   automática (`/api/cron/video-batch-cleanup`), que a Vercel Cron chama de hora em hora (configurado em
-   `vercel.json`) pra apagar vídeos, música e resultados com mais de 12h. O cron só é ativado depois que este
-   `vercel.json` for publicado — confirme em **Settings > Cron Jobs** no painel da Vercel depois do deploy.
+   automática (`/api/cron/video-batch-cleanup`), que a Vercel Cron chama **uma vez por dia** (configurado em
+   `vercel.json`) pra apagar vídeos, música e resultados com mais de 12h. É uma vez por dia porque o plano Hobby
+   (gratuito) da Vercel não permite cron com intervalo menor que isso — na prática, um arquivo pode ficar disponível
+   um pouco mais que as 12h prometidas (até a próxima passada do cron), nunca menos. Se quiser limpeza mais
+   frequente e precisa, isso exige o plano Pro da Vercel. O cron só é ativado depois que este `vercel.json` for
+   publicado — confirme em **Settings > Cron Jobs** no painel da Vercel depois do deploy.
 4. Pra mudar limites (vídeos por lote, tamanho máximo de arquivo, horas de retenção, créditos grátis iniciais),
    edite só `lib/video-batch-config.ts`. Pra mudar preço/quantidade dos pacotes, edite `lib/video-credits.ts`.
 
@@ -158,6 +161,32 @@ app usa colunas como `nickname`/`avatar_path` que não estão nos arquivos `.sql
 criadas direto no painel do Supabase). Se quiser, consigo te passar o SQL pra travar isso coluna a coluna — só
 preciso que você confirme antes, no painel do Supabase, a lista completa de colunas que a tela de perfil realmente
 usa.
+
+### 4.3 Configurar a "Trilha em Massa Desktop" (programa .exe, pagamento único)
+
+Versão desktop da Trilha em Massa: o aluno baixa um instalador Windows, faz login com a mesma conta do site, e o
+programa processa os vídeos usando o computador dele — sem servidor, sem créditos, sem limite. Vendida separada dos
+planos e dos créditos, num pagamento único. O código-fonte do programa fica em `desktop/trilha-desktop/` (um projeto
+Electron independente — não faz parte do site Next.js, o build da Vercel nunca mexe nessa pasta).
+
+1. **Rode `supabase/desktop_app.sql`** no SQL Editor do Supabase (uma vez só). Isso adiciona a coluna
+   `desktop_app_purchased` no perfil e cria o bucket **público** `desktop-app` (é de lá que o site serve o
+   instalador pra download — o arquivo em si não é sensível, quem protege o produto é o login + a checagem dentro
+   do programa).
+2. **Crie um produto NOVO na Cakto** especificamente pra esse programa (separado dos planos e separado do produto de
+   créditos) e copie o ID da oferta pra `CAKTO_OFFER_ID_DESKTOP_APP` no `.env.local` e na Vercel. Ainda não defini
+   preço/nome final — ajuste `DESKTOP_APP_PRICE_LABEL` e `DESKTOP_APP_CHECKOUT_URL` em `lib/desktop-app.ts` assim
+   que tiver o link de checkout real (hoje está com um placeholder).
+3. **Configure 3 Secrets no GitHub** (Settings > Secrets and variables > Actions), reaproveitando valores que você
+   já tem na Vercel — `SUPABASE_URL`, `SUPABASE_ANON_KEY` e `SUPABASE_SERVICE_ROLE_KEY`. Detalhes de onde pegar cada
+   um estão em `desktop/trilha-desktop/README.md`.
+4. A partir daí, todo push que mexer em `desktop/trilha-desktop/` builda o instalador sozinho (GitHub Actions, numa
+   máquina Windows do próprio GitHub) e publica ele automaticamente no bucket `desktop-app` — **você não precisa
+   ter Windows nem rodar nada manualmente**. Acompanhe em **Actions** no GitHub; um build demora alguns minutos.
+
+⚠️ O instalador não é assinado digitalmente (decisão consciente, pra não ter custo de certificado agora) — o
+Windows mostra um aviso na primeira abertura, que documentei na tela `/dashboard/desktop` pro aluno. Se no futuro
+quiser assinar, me avisa que ajusto o workflow.
 
 ### 5. Rodar localmente
 

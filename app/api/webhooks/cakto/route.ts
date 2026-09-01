@@ -39,6 +39,12 @@ function resolveCreditPackage(offerId: string | undefined): number | null {
   return CREDIT_PACKAGES[offerId] ?? null;
 }
 
+// Trilha em Massa Desktop — pagamento único (não é assinatura nem crédito),
+// libera o download + uso do programa desktop pra sempre.
+function isDesktopAppOffer(offerId: string | undefined): boolean {
+  return !!offerId && !!process.env.CAKTO_OFFER_ID_DESKTOP_APP && offerId === process.env.CAKTO_OFFER_ID_DESKTOP_APP;
+}
+
 // Eventos que devem liberar/renovar o acesso do aluno.
 // Para assinaturas, o primeiro pagamento normalmente dispara "purchase_approved"
 // e as renovações mensais/trimestrais/anuais seguintes disparam "subscription_renewed".
@@ -115,6 +121,38 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ ok: true, creditsGranted: creditsAmount });
     }
 
+    // Compra do programa desktop (pagamento único) — não mexe em
+    // status/plano/créditos, só libera o download + login dentro do programa.
+    if (isDesktopAppOffer(offerId)) {
+      if (!buyerEmail) {
+        return NextResponse.json({ ok: true, warning: "Evento do desktop registrado mas sem e-mail" });
+      }
+
+      const { data: profile } = await supabase
+        .from("profiles")
+        .select("id")
+        .ilike("email", buyerEmail)
+        .maybeSingle();
+
+      if (!profile) {
+        return NextResponse.json({ ok: true, warning: "Nenhum aluno encontrado com esse e-mail (desktop)" });
+      }
+
+      await supabase
+        .from("profiles")
+        .update({ desktop_app_purchased: true, desktop_app_purchased_at: new Date().toISOString() })
+        .eq("id", profile.id);
+
+      if (logRow) {
+        await supabase
+          .from("cakto_events")
+          .update({ matched_user_id: profile.id, processed: true })
+          .eq("id", logRow.id);
+      }
+
+      return NextResponse.json({ ok: true, desktopAppGranted: true });
+    }
+
     const plan = resolvePlan(offerId);
 
     if (!buyerEmail || !plan) {
@@ -168,7 +206,14 @@ export async function POST(req: NextRequest) {
       .maybeSingle();
 
     if (profile) {
-      await supabase.from("profiles").update({ status: "suspended" }).eq("id", profile.id);
+      // Estorno/chargeback de um produto separado (desktop) não deve
+      // suspender a assinatura da comunidade — só tira o acesso ao programa.
+      if (isDesktopAppOffer(offerId)) {
+        await supabase.from("profiles").update({ desktop_app_purchased: false }).eq("id", profile.id);
+      } else {
+        await supabase.from("profiles").update({ status: "suspended" }).eq("id", profile.id);
+      }
+
       if (logRow) {
         await supabase
           .from("cakto_events")

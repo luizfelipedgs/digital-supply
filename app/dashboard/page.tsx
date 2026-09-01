@@ -87,6 +87,12 @@ export default async function DashboardPage() {
       description: "Envie vários vídeos de uma vez e coloque a mesma música em todos automaticamente — som mudo, música no volume cheio.",
     },
     {
+      href: "/dashboard/desktop",
+      icon: "video",
+      title: "Trilha em Massa — Desktop",
+      description: "A versão pra instalar no seu computador: sem limite de vídeos e sem créditos, pagamento único.",
+    },
+    {
       href: "/dashboard/faturamento",
       icon: "wallet",
       title: "Faturamento",

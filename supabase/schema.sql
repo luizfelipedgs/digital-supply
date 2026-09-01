@@ -23,6 +23,8 @@ create table if not exists public.profiles (
   is_admin boolean not null default false,
   video_credits integer not null default 0,
   free_credits_granted boolean not null default false,
+  desktop_app_purchased boolean not null default false,
+  desktop_app_purchased_at timestamptz,
   created_at timestamptz not null default now()
 );
 
@@ -311,3 +313,10 @@ create policy "Aluno lê os próprios arquivos da trilha em massa"
 create policy "Aluno envia os próprios arquivos da trilha em massa"
   on storage.objects for insert
   with check (bucket_id = 'video-batch' and (storage.foldername(name))[1] = auth.uid()::text);
+
+-- ------------------------------------------------------------
+-- Trilha em Massa Desktop — bucket público do instalador (.exe)
+-- ------------------------------------------------------------
+insert into storage.buckets (id, name, public)
+values ('desktop-app', 'desktop-app', true)
+on conflict (id) do nothing;
