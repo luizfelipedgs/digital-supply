@@ -58,9 +58,17 @@ jobs:
       - name: Sobe o instalador pro Supabase Storage (link de download do site)
         shell: bash
         run: |
-          curl --fail --silent --show-error -X POST \
+          RESPONSE=$(curl --silent --show-error -w "\n%{http_code}" -X POST \
             "${{ secrets.SUPABASE_URL }}/storage/v1/object/desktop-app/TrilhaEmMassa-Setup.exe" \
             -H "Authorization: Bearer ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}" \
             -H "x-upsert: true" \
             -H "Content-Type: application/octet-stream" \
-            --data-binary "@dist/TrilhaEmMassa-Setup.exe"
+            --data-binary "@dist/TrilhaEmMassa-Setup.exe")
+          HTTP_STATUS=$(echo "$RESPONSE" | tail -n1)
+          BODY=$(echo "$RESPONSE" | sed '$d')
+          echo "Status HTTP: $HTTP_STATUS"
+          echo "Resposta do Supabase: $BODY"
+          if [ "$HTTP_STATUS" -lt 200 ] || [ "$HTTP_STATUS" -ge 300 ]; then
+            echo "::error::Falha ao subir pro Supabase Storage (status $HTTP_STATUS). Veja a resposta acima."
+            exit 1
+          fi
