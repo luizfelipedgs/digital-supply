@@ -2,15 +2,16 @@ name: Build desktop app (Trilha em Massa)
 
 # Builda o instalador Windows (.exe) da versão desktop da Trilha em Massa
 # toda vez que algo em desktop/trilha-desktop mudar na main, e publica o
-# resultado como artefato do GitHub Actions + no Storage do Supabase (de
-# onde o botão "Baixar programa" do site pega o arquivo).
+# resultado como artefato do GitHub Actions + como um GitHub Release (de
+# onde o botão "Baixar programa" do site pega o arquivo). Não usa o Supabase
+# Storage pra isso porque o instalador (~96 MB) passa do limite de 50 MB do
+# plano Free do Supabase — o GitHub Release não tem esse limite.
 #
-# Precisa de 3 Secrets configurados em Settings > Secrets and variables >
+# Precisa de 2 Secrets configurados em Settings > Secrets and variables >
 # Actions do repositório (veja desktop/trilha-desktop/README.md pros
 # detalhes de onde pegar cada valor):
-#   SUPABASE_URL              (mesmo valor de NEXT_PUBLIC_SUPABASE_URL)
-#   SUPABASE_ANON_KEY         (mesmo valor de NEXT_PUBLIC_SUPABASE_ANON_KEY)
-#   SUPABASE_SERVICE_ROLE_KEY (mesmo valor já usado na Vercel)
+#   SUPABASE_URL       (mesmo valor de NEXT_PUBLIC_SUPABASE_URL)
+#   SUPABASE_ANON_KEY  (mesmo valor de NEXT_PUBLIC_SUPABASE_ANON_KEY)
 on:
   push:
     branches: [main]
@@ -18,6 +19,9 @@ on:
       - "desktop/trilha-desktop/**"
       - ".github/workflows/build-desktop.yml"
   workflow_dispatch: {}
+
+permissions:
+  contents: write
 
 jobs:
   build:
@@ -55,20 +59,10 @@ jobs:
           path: desktop/trilha-desktop/dist/TrilhaEmMassa-Setup.exe
           if-no-files-found: error
 
-      - name: Sobe o instalador pro Supabase Storage (link de download do site)
-        shell: bash
-        run: |
-          RESPONSE=$(curl --silent --show-error -w "\n%{http_code}" -X POST \
-            "${{ secrets.SUPABASE_URL }}/storage/v1/object/desktop-app/TrilhaEmMassa-Setup.exe" \
-            -H "Authorization: Bearer ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}" \
-            -H "x-upsert: true" \
-            -H "Content-Type: application/octet-stream" \
-            --data-binary "@dist/TrilhaEmMassa-Setup.exe")
-          HTTP_STATUS=$(echo "$RESPONSE" | tail -n1)
-          BODY=$(echo "$RESPONSE" | sed '$d')
-          echo "Status HTTP: $HTTP_STATUS"
-          echo "Resposta do Supabase: $BODY"
-          if [ "$HTTP_STATUS" -lt 200 ] || [ "$HTTP_STATUS" -ge 300 ]; then
-            echo "::error::Falha ao subir pro Supabase Storage (status $HTTP_STATUS). Veja a resposta acima."
-            exit 1
-          fi
+      - name: Publica o instalador como GitHub Release (link de download do site)
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: desktop-latest
+          name: Trilha em Massa Desktop (build automático)
+          body: Instalador gerado automaticamente pelo GitHub Actions. Este link é sempre a versão mais recente.
+          files: desktop/trilha-desktop/dist/TrilhaEmMassa-Setup.exe
