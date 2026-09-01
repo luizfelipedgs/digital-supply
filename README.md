@@ -170,19 +170,23 @@ planos e dos créditos, num pagamento único. O código-fonte do programa fica e
 Electron independente — não faz parte do site Next.js, o build da Vercel nunca mexe nessa pasta).
 
 1. **Rode `supabase/desktop_app.sql`** no SQL Editor do Supabase (uma vez só). Isso adiciona a coluna
-   `desktop_app_purchased` no perfil e cria o bucket **público** `desktop-app` (é de lá que o site serve o
-   instalador pra download — o arquivo em si não é sensível, quem protege o produto é o login + a checagem dentro
-   do programa).
+   `desktop_app_purchased` no perfil (é ela que libera o download/uso do programa).
 2. **Crie um produto NOVO na Cakto** especificamente pra esse programa (separado dos planos e separado do produto de
    créditos) e copie o ID da oferta pra `CAKTO_OFFER_ID_DESKTOP_APP` no `.env.local` e na Vercel. Ainda não defini
    preço/nome final — ajuste `DESKTOP_APP_PRICE_LABEL` e `DESKTOP_APP_CHECKOUT_URL` em `lib/desktop-app.ts` assim
    que tiver o link de checkout real (hoje está com um placeholder).
-3. **Configure 3 Secrets no GitHub** (Settings > Secrets and variables > Actions), reaproveitando valores que você
-   já tem na Vercel — `SUPABASE_URL`, `SUPABASE_ANON_KEY` e `SUPABASE_SERVICE_ROLE_KEY`. Detalhes de onde pegar cada
-   um estão em `desktop/trilha-desktop/README.md`.
+3. **Configure 2 Secrets no GitHub** (Settings > Secrets and variables > Actions), reaproveitando valores que você
+   já tem na Vercel — `SUPABASE_URL` e `SUPABASE_ANON_KEY`. Detalhes de onde pegar cada um estão em
+   `desktop/trilha-desktop/README.md`.
 4. A partir daí, todo push que mexer em `desktop/trilha-desktop/` builda o instalador sozinho (GitHub Actions, numa
-   máquina Windows do próprio GitHub) e publica ele automaticamente no bucket `desktop-app` — **você não precisa
-   ter Windows nem rodar nada manualmente**. Acompanhe em **Actions** no GitHub; um build demora alguns minutos.
+   máquina Windows do próprio GitHub) e publica ele automaticamente como um **GitHub Release** (tag `desktop-latest`)
+   — **você não precisa ter Windows nem rodar nada manualmente**. Acompanhe em **Actions** no GitHub; um build
+   demora alguns minutos.
+
+   Não usamos o Supabase Storage pra guardar o instalador: o plano Free do Supabase limita arquivos a 50 MB e o
+   instalador tem uns 96 MB. Como o repositório é público, o GitHub Release serve como link de download direto e
+   sem custo — o link nunca muda (sempre `.../releases/download/desktop-latest/TrilhaEmMassa-Setup.exe`), mesmo
+   quando sai uma build nova.
 
 ⚠️ O instalador não é assinado digitalmente (decisão consciente, pra não ter custo de certificado agora) — o
 Windows mostra um aviso na primeira abertura, que documentei na tela `/dashboard/desktop` pro aluno. Se no futuro

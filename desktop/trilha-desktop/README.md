@@ -40,13 +40,12 @@ na branch `main`, usando uma máquina Windows do próprio GitHub.
 
 **Configuração única, antes do primeiro build** — no GitHub, vá em
 **Settings > Secrets and variables > Actions > New repository secret** e
-crie 3 segredos (os valores são os mesmos que você já usa na Vercel):
+crie 2 segredos (os valores são os mesmos que você já usa na Vercel):
 
 | Nome do Secret | Valor |
 |---|---|
 | `SUPABASE_URL` | mesmo valor de `NEXT_PUBLIC_SUPABASE_URL` |
 | `SUPABASE_ANON_KEY` | mesmo valor de `NEXT_PUBLIC_SUPABASE_ANON_KEY` |
-| `SUPABASE_SERVICE_ROLE_KEY` | mesmo valor já usado na Vercel |
 
 Depois disso, todo push que mexer nessa pasta (ou rodar manualmente em
 **Actions > Build desktop app (Trilha em Massa) > Run workflow**) builda o
@@ -55,9 +54,14 @@ Depois disso, todo push que mexer nessa pasta (ou rodar manualmente em
 1. deixa ele disponível como "artefato" do próprio GitHub Actions (aba
    **Actions**, dentro da execução, seção **Artifacts**) — útil pra você
    testar antes de divulgar;
-2. sobe automaticamente pro bucket `desktop-app` do Supabase Storage — é de
-   lá que o botão "Baixar programa" da página `/dashboard/desktop` do site
-   pega o arquivo. Não precisa fazer mais nada manual depois disso.
+2. publica automaticamente como um **GitHub Release** (aba **Releases** do
+   repositório, tag `desktop-latest`) — é de lá que o botão "Baixar
+   programa" da página `/dashboard/desktop` do site pega o arquivo. Não
+   precisa fazer mais nada manual depois disso.
+   (Não usamos o Supabase Storage pra isso: o plano Free do Supabase limita
+   arquivos a 50 MB e o instalador tem uns 96 MB. Como o repositório é
+   público, o GitHub Release funciona como link de download direto, sem
+   custo.)
 
 Um build no GitHub Actions demora alguns minutos (baixa o Electron, compila,
 empacota). Acompanhe em **Actions** no GitHub.

@@ -13,9 +13,11 @@ export function desktopAppCheckoutUrl(email?: string | null) {
   return `${DESKTOP_APP_CHECKOUT_URL}?${params.toString()}`;
 }
 
-// Bucket público no Supabase Storage — o GitHub Actions sobe o instalador
-// aqui automaticamente a cada build (veja .github/workflows/build-desktop.yml).
+// O instalador (96 MB) é grande demais pro limite de 50 MB do Supabase
+// Storage no plano Free, então ele é publicado como um GitHub Release
+// (repositório público) em vez de subir pro Supabase — veja
+// .github/workflows/build-desktop.yml. A tag "desktop-latest" é sempre
+// reaproveitada, então esse link nunca muda, mesmo quando sai uma build nova.
 export function desktopAppDownloadUrl() {
-  const base = process.env.NEXT_PUBLIC_SUPABASE_URL;
-  return `${base}/storage/v1/object/public/desktop-app/TrilhaEmMassa-Setup.exe`;
+  return "https://github.com/luizfelipedgs/digital-supply/releases/download/desktop-latest/TrilhaEmMassa-Setup.exe";
 }

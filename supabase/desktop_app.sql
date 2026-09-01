@@ -8,12 +8,11 @@
 alter table public.profiles add column if not exists desktop_app_purchased boolean not null default false;
 alter table public.profiles add column if not exists desktop_app_purchased_at timestamptz;
 
--- Bucket PÚBLICO (diferente do "video-batch", que é privado) — o instalador
--- não é um arquivo sensível, o que protege o produto é o login + a
--- checagem de "desktop_app_purchased" DENTRO do programa antes de deixar
--- processar qualquer vídeo. Ninguém escreve nesse bucket pelo app: só o
--- GitHub Actions, usando a service role key (veja
--- .github/workflows/build-desktop.yml).
-insert into storage.buckets (id, name, public)
-values ('desktop-app', 'desktop-app', true)
-on conflict (id) do nothing;
+-- Não é preciso criar bucket no Supabase Storage pro instalador: ele é
+-- publicado como GitHub Release (o plano Free do Supabase limita arquivos
+-- a 50 MB, e o instalador passa disso) — veja lib/desktop-app.ts e
+-- .github/workflows/build-desktop.yml.
+--
+-- Se você já rodou uma versão antiga deste script e criou o bucket
+-- "desktop-app", pode apagá-lo em Storage no painel do Supabase — ele não
+-- é mais usado (não tem problema deixá-lo lá também, só fica sem uso).

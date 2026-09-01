@@ -314,9 +314,7 @@ create policy "Aluno envia os próprios arquivos da trilha em massa"
   on storage.objects for insert
   with check (bucket_id = 'video-batch' and (storage.foldername(name))[1] = auth.uid()::text);
 
--- ------------------------------------------------------------
--- Trilha em Massa Desktop — bucket público do instalador (.exe)
--- ------------------------------------------------------------
-insert into storage.buckets (id, name, public)
-values ('desktop-app', 'desktop-app', true)
-on conflict (id) do nothing;
+-- Nota: o instalador da Trilha em Massa Desktop (.exe) NÃO fica no Supabase
+-- Storage (o plano Free tem limite de 50 MB e o instalador passa disso).
+-- Ele é publicado como GitHub Release — veja lib/desktop-app.ts e
+-- .github/workflows/build-desktop.yml.
