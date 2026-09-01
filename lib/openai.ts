@@ -31,10 +31,12 @@ export async function callOpenAIChat(messages: ChatMessage[]): Promise<string> {
     body: JSON.stringify({
       model,
       messages,
-      temperature: 0.85,
-      // Modelos atuais da OpenAI (gpt-5.6-*) não aceitam mais "max_tokens" —
-      // é "max_completion_tokens" agora. Se um dia trocar pra um modelo mais
-      // antigo que ainda use "max_tokens", ajuste aqui.
+      // Os modelos gpt-5.6-* só aceitam o "temperature" padrão (1) — passar
+      // qualquer outro valor dá erro 400, então nem mandamos esse campo.
+      //
+      // Também não aceitam mais "max_tokens": o nome atual é
+      // "max_completion_tokens". Se um dia trocar pra um modelo mais antigo,
+      // pode ser preciso reverter os dois ajustes.
       max_completion_tokens: 1500,
     }),
   });
