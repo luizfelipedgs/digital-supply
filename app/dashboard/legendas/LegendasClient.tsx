@@ -138,6 +138,7 @@ export function LegendasClient({
   const [error, setError] = useState<string | null>(null);
   const [copiedIndex, setCopiedIndex] = useState<number | null>(null);
   const [remaining, setRemaining] = useState<number | null>(initialRemaining ?? null);
+  const [unlimited, setUnlimited] = useState(false);
 
   const videoInputRef = useRef<HTMLInputElement>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -148,6 +149,18 @@ export function LegendasClient({
     async function loadQuota() {
       const { data: userData } = await supabase.auth.getUser();
       if (!userData.user) return;
+
+      const { data: profile } = await supabase
+        .from("profiles")
+        .select("is_admin")
+        .eq("id", userData.user.id)
+        .single();
+
+      if (profile?.is_admin) {
+        setUnlimited(true);
+        return;
+      }
+
       const { data } = await supabase
         .from("legendas_video_usage")
         .select("count")
@@ -170,7 +183,7 @@ export function LegendasClient({
     const file = e.target.files?.[0];
     e.target.value = "";
     if (!file) return;
-    if (remaining !== null && remaining <= 0) {
+    if (!unlimited && remaining !== null && remaining <= 0) {
       setError(`Você já usou seus ${DAILY_VIDEO_LIMIT} vídeos de hoje. Volta amanhã!`);
       return;
     }
@@ -222,7 +235,8 @@ export function LegendasClient({
       const data = await res.json().catch(() => ({}));
       if (!res.ok) throw new Error(data?.error || "Erro ao falar com o agente.");
 
-      if (typeof data.remaining === "number") setRemaining(data.remaining);
+      if (data.unlimited) setUnlimited(true);
+      else if (typeof data.remaining === "number") setRemaining(data.remaining);
 
       setMessages((prev) => [...prev, { role: "assistant", text: data.reply }]);
       scrollToBottom();
@@ -257,13 +271,15 @@ export function LegendasClient({
   }
 
   const busy = loading || processingVideo;
-  const quotaExhausted = remaining !== null && remaining <= 0;
+  const quotaExhausted = !unlimited && remaining !== null && remaining <= 0;
 
   return (
     <div className="dgs-card flex flex-col gap-3">
       <div className="flex items-center justify-between">
         <div className="text-xs text-neutral-500">
-          {remaining === null ? (
+          {unlimited ? (
+            <span className="text-brand">Vídeos ilimitados (admin)</span>
+          ) : remaining === null ? (
             "Carregando sua cota do dia…"
           ) : (
             <>

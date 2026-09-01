@@ -75,13 +75,15 @@ export async function POST(req: NextRequest) {
 
     const { data: profile } = await supabase
       .from("profiles")
-      .select("status")
+      .select("status, is_admin")
       .eq("id", userData.user.id)
       .single();
 
     if (!profile || profile.status !== "active") {
       return NextResponse.json({ error: "Assinatura inativa." }, { status: 403 });
     }
+
+    const isAdmin = !!profile.is_admin;
 
     const body = await req.json().catch(() => null);
     if (!body) {
@@ -98,8 +100,9 @@ export async function POST(req: NextRequest) {
     // Só a mensagem MAIS RECENTE pode consumir a cota — mensagens antigas com
     // frame de vídeo (de turnos anteriores da mesma conversa) não contam de novo,
     // isso é decidido pelo cliente que só reenvia imagem na última mensagem.
+    // Admin (profiles.is_admin = true) não tem limite diário.
     let remaining: number | null = null;
-    if (lastMessageHasVideo(history)) {
+    if (lastMessageHasVideo(history) && !isAdmin) {
       const { data: quota, error: quotaError } = await supabase
         .rpc("consume_legendas_video_quota", { daily_limit: DAILY_VIDEO_LIMIT })
         .single();
@@ -135,7 +138,7 @@ export async function POST(req: NextRequest) {
 
     const reply = await callOpenAIChat(messages);
 
-    return NextResponse.json({ reply, remaining });
+    return NextResponse.json({ reply, remaining, unlimited: isAdmin });
   } catch (err: any) {
     console.error("[/api/legendas/chat]", err);
     return NextResponse.json({ error: err?.message || "Erro inesperado ao falar com o agente." }, { status: 500 });
