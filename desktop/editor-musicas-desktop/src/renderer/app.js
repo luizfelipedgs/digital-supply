@@ -81,6 +81,21 @@
       })
       .catch(() => {});
 
+    window.editorMusicas
+      .getCoverUrl()
+      .then((url) => {
+        const banner = document.getElementById("cover-banner");
+        const img = document.getElementById("cover-banner-img");
+        if (!banner || !img) return;
+        if (url) {
+          img.src = url;
+          banner.hidden = false;
+        } else {
+          banner.hidden = true;
+        }
+      })
+      .catch(() => {});
+
     const state = await window.editorMusicas.authRestore();
     await applyAccountState(state);
   }
