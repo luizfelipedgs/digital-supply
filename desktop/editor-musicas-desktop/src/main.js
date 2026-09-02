@@ -145,6 +145,36 @@ ipcMain.handle("pick:music", async () => {
   return { path: filePath, url: pathToFileURL(filePath).href, name: path.basename(filePath) };
 });
 
+// ------------------------------------------------------------
+// Biblioteca de músicas (gerenciada pelo admin no painel do site)
+// ------------------------------------------------------------
+ipcMain.handle("library:list", async () => {
+  if (!supabase) return [];
+  const { data, error } = await supabase
+    .from("music_library")
+    .select("id, title, storage_path")
+    .order("order_index", { ascending: true });
+  if (error || !data) return [];
+  return data;
+});
+
+ipcMain.handle("library:pick", async (_evt, track) => {
+  if (!supabase || !track?.storage_path) return null;
+
+  const { data, error } = await supabase.storage.from("music-library").download(track.storage_path);
+  if (error || !data) return null;
+
+  const buffer = Buffer.from(await data.arrayBuffer());
+  const extMatch = /\.([a-zA-Z0-9]+)$/.exec(track.storage_path);
+  const ext = extMatch ? extMatch[1].toLowerCase() : "mp3";
+  const safeName = (track.title || "musica").replace(/[^a-zA-Z0-9._ -]/g, "_").trim() || "musica";
+  const tempPath = path.join(app.getPath("temp"), `dgs-biblioteca-${Date.now()}-${safeName}.${ext}`);
+
+  fs.writeFileSync(tempPath, buffer);
+
+  return { path: tempPath, url: pathToFileURL(tempPath).href, name: `${safeName}.${ext}` };
+});
+
 ipcMain.handle("pick:videos", async () => {
   const res = await dialog.showOpenDialog(mainWindow, {
     title: "Escolha os vídeos (pode selecionar vários)",
