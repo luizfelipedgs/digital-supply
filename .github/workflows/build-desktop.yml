@@ -60,6 +60,12 @@ jobs:
           path: desktop/editor-musicas-desktop/dist/EditorDeMusicas-Setup.exe
           if-no-files-found: error
 
+      - name: Remove o Release antigo (garante que o instalador novo substitui o antigo)
+        shell: bash
+        run: gh release delete desktop-latest --yes --cleanup-tag || true
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Publica o instalador como GitHub Release (link de download do site)
         uses: softprops/action-gh-release@v2
         with:
@@ -67,3 +73,4 @@ jobs:
           name: Editor de Músicas Desktop (build automático)
           body: Instalador gerado automaticamente pelo GitHub Actions. Este link é sempre a versão mais recente.
           files: desktop/editor-musicas-desktop/dist/EditorDeMusicas-Setup.exe
+          fail_on_unmatched_files: true
