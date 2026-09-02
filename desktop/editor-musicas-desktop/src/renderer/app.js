@@ -20,6 +20,31 @@
   }
 
   // ------------------------------------------------------------
+  // Auto-atualização
+  // ------------------------------------------------------------
+  const updateBanner = document.getElementById("update-banner");
+  const updateBannerText = document.getElementById("update-banner-text");
+  const updateRestartBtn = document.getElementById("update-restart");
+
+  window.editorMusicas.onUpdateStatus((data) => {
+    if (data.status === "available") {
+      updateBanner.hidden = false;
+      updateBannerText.textContent = "Baixando uma atualização em segundo plano…";
+      updateRestartBtn.hidden = true;
+    } else if (data.status === "downloaded") {
+      updateBanner.hidden = false;
+      updateBannerText.textContent = "Atualização pronta!";
+      updateRestartBtn.hidden = false;
+    } else if (data.status === "error") {
+      updateBanner.hidden = true;
+    }
+  });
+
+  updateRestartBtn.addEventListener("click", () => {
+    window.editorMusicas.installUpdate();
+  });
+
+  // ------------------------------------------------------------
   // Estado da conta
   // ------------------------------------------------------------
   async function applyAccountState(state) {
