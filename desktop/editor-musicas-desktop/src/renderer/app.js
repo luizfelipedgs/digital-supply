@@ -73,6 +73,14 @@
   }
 
   async function boot() {
+    window.editorMusicas
+      .getVersion()
+      .then((version) => {
+        const el = document.getElementById("app-version");
+        if (el && version) el.textContent = `v${version}`;
+      })
+      .catch(() => {});
+
     const state = await window.editorMusicas.authRestore();
     await applyAccountState(state);
   }
