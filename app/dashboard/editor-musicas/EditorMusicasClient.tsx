@@ -20,6 +20,8 @@ type BatchItem = {
 
 type Phase = "idle" | "running" | "done";
 
+type LibraryTrack = { id: string; title: string; storage_path: string };
+
 function formatTime(s: number) {
   if (!isFinite(s) || s < 0) s = 0;
   const m = Math.floor(s / 60);
@@ -75,6 +77,9 @@ export function EditorMusicasClient({
 
   const [musicFile, setMusicFile] = useState<File | null>(null);
   const [musicUrl, setMusicUrl] = useState<string | null>(null);
+  const [musicSource, setMusicSource] = useState<"upload" | "library">("upload");
+  const [libraryTracks, setLibraryTracks] = useState<LibraryTrack[]>([]);
+  const [pickingTrackId, setPickingTrackId] = useState<string | null>(null);
   const [musicDuration, setMusicDuration] = useState(0);
   const [musicCurrentTime, setMusicCurrentTime] = useState(0);
   const [musicStart, setMusicStart] = useState(0);
@@ -94,6 +99,15 @@ export function EditorMusicasClient({
       if (musicUrl) URL.revokeObjectURL(musicUrl);
     };
   }, [musicUrl]);
+
+  useEffect(() => {
+    supabase
+      .from("music_library")
+      .select("id, title, storage_path")
+      .order("order_index", { ascending: true })
+      .then(({ data }) => setLibraryTracks(data ?? []));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   function updateItem(id: string, patch: Partial<BatchItem>) {
     // Atualiza a "fonte da verdade" (itemsRef) NA HORA, de forma síncrona —
@@ -123,6 +137,24 @@ export function EditorMusicasClient({
     setMusicStart(0);
     setPlaying(false);
     setError(null);
+  }
+
+  async function pickTrack(track: LibraryTrack) {
+    setPickingTrackId(track.id);
+    setError(null);
+    try {
+      const url = supabase.storage.from("music-library").getPublicUrl(track.storage_path).data.publicUrl;
+      const res = await fetch(url);
+      if (!res.ok) throw new Error("download failed");
+      const blob = await res.blob();
+      const ext = extOf(track.storage_path) || "mp3";
+      const file = new File([blob], `${track.title}.${ext}`, { type: blob.type || "audio/mpeg" });
+      handleMusicFile(file);
+    } catch {
+      setError("Não consegui carregar essa música da biblioteca. Tente novamente.");
+    } finally {
+      setPickingTrackId(null);
+    }
   }
 
   function togglePlay() {
@@ -306,6 +338,7 @@ export function EditorMusicasClient({
     setPlaying(false);
     setVideos([]);
     itemsRef.current = {};
+    setMusicSource("upload");
     setPhase("idle");
     setError(null);
     setProcessedCount({ done: 0, failed: 0 });
@@ -323,7 +356,7 @@ export function EditorMusicasClient({
             <span className="text-brand font-medium">Créditos ilimitados (admin)</span>
           ) : (
             <span className="text-neutral-300">
-                            <span className="text-brand font-medium">{credits}</span> crédito{credits === 1 ? "" : "s"} disponíve
+              <span className="text-brand font-medium">{credits}</span> crédito{credits === 1 ? "" : "s"} disponíve
               {credits === 1 ? "l" : "is"}
             </span>
           )}
@@ -368,13 +401,61 @@ export function EditorMusicasClient({
         </div>
 
         {!musicFile ? (
-          <input
-            type="file"
-            accept="audio/*"
-            disabled={phase !== "idle"}
-            onChange={(e) => handleMusicFile(e.target.files?.[0] ?? null)}
-            className="dgs-file"
-          />
+          <div className="flex flex-col gap-3">
+            <div className="flex gap-2">
+              <button
+                onClick={() => setMusicSource("upload")}
+                className={`flex-1 rounded-lg py-2 text-xs font-medium transition-colors ${
+                  musicSource === "upload"
+                    ? "bg-brand/10 text-brand border border-brand/30"
+                    : "bg-white/[0.03] text-neutral-500 border border-white/10"
+                }`}
+              >
+                Enviar arquivo
+              </button>
+              <button
+                onClick={() => setMusicSource("library")}
+                className={`flex-1 rounded-lg py-2 text-xs font-medium transition-colors ${
+                  musicSource === "library"
+                    ? "bg-brand/10 text-brand border border-brand/30"
+                    : "bg-white/[0.03] text-neutral-500 border border-white/10"
+                }`}
+              >
+                Escolher da biblioteca
+              </button>
+            </div>
+
+            {musicSource === "upload" ? (
+              <input
+                type="file"
+                accept="audio/*"
+                disabled={phase !== "idle"}
+                onChange={(e) => handleMusicFile(e.target.files?.[0] ?? null)}
+                className="dgs-file"
+              />
+            ) : libraryTracks.length === 0 ? (
+              <div className="text-neutral-600 text-xs">
+                Nenhuma música na biblioteca ainda — envie um arquivo normalmente.
+              </div>
+            ) : (
+              <div className="flex flex-col gap-1.5 max-h-56 overflow-y-auto pr-1">
+                {libraryTracks.map((t) => (
+                  <button
+                    key={t.id}
+                    onClick={() => pickTrack(t)}
+                    disabled={pickingTrackId !== null}
+                    className="flex items-center gap-2 bg-white/[0.03] border border-white/10 rounded-lg px-3 py-2 text-xs text-left hover:bg-white/[0.06] transition-colors disabled:opacity-50"
+                  >
+                    <LineIcon name="music" size={13} className="text-brand shrink-0" />
+                    <span className="text-neutral-300 truncate flex-1">{t.title}</span>
+                    <span className="text-neutral-500 shrink-0">
+                      {pickingTrackId === t.id ? "carregando…" : "usar"}
+                    </span>
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
         ) : (
           <div className="flex flex-col gap-2.5">
             <div className="flex items-center gap-2 text-neutral-300 text-sm">
