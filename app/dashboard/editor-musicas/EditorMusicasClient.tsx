@@ -323,8 +323,8 @@ export function EditorMusicasClient({
             <span className="text-brand font-medium">Créditos ilimitados (admin)</span>
           ) : (
             <span className="text-neutral-300">
-              <span className="text-brand font-medium">{credits}</span> crédito{credits === 1 ? "" : "s"} disponível
-              {credits === 1 ? "" : "eis"}
+                            <span className="text-brand font-medium">{credits}</span> crédito{credits === 1 ? "" : "s"} disponíve
+              {credits === 1 ? "l" : "is"}
             </span>
           )}
         </div>
