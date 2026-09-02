@@ -75,46 +75,23 @@ export default async function DashboardPage() {
 
   const sections = [
     {
-      href: "/dashboard/legendas",
-      icon: "sparkles",
-      title: "Mestre das Legendas",
-      description: "Envie um vídeo (até 5 por dia) e receba uma legenda pronta pra publicar, com contexto e headlines.",
-    },
-    {
-      href: "/dashboard/editor-musicas",
-      icon: "music",
-      title: "Editor de Músicas",
-      description: "Envie vários vídeos de uma vez e coloque a mesma música em todos automaticamente — som mudo, música no volume cheio.",
-    },
-    {
-      href: "/dashboard/desktop",
-      icon: "video",
-      title: "Editor de Músicas — Desktop",
-      description: "A versão pra instalar no seu computador: sem limite de vídeos e sem créditos, pagamento único.",
-    },
-    {
       href: "/dashboard/faturamento",
       icon: "wallet",
       title: "Faturamento",
       description: "Lance seus ganhos por plataforma e acompanhe sua evolução com gráficos e comparativos.",
     },
     {
-      href: "/dashboard/templates",
-      icon: "play",
-      title: "Templates Prontos",
-      description: "Tenha acesso a mais de 1.000 vídeos no Canva para modelar e utilizar em suas páginas.",
+      href: "/dashboard/arsenal",
+      icon: "zap",
+      title: "Arsenal DGS",
+      description:
+        "As principais ferramentas e recursos para facilitar sua produção, acelerar processos e tornar a operação mais eficiente.",
     },
     {
-      href: "/dashboard/paginas",
-      icon: "search",
-      title: "Lista de Páginas",
-      description: "Páginas em português e gringas pra buscar vídeos com potencial de viralização.",
-    },
-    {
-      href: "/dashboard/grupo",
-      icon: "users",
-      title: "Grupo DGS",
-      description: "Acesse o grupo exclusivo da comunidade e confira as regras antes de entrar.",
+      href: "/dashboard/conteudos",
+      icon: "book",
+      title: "Conteúdos",
+      description: "Aulas em texto, áudio e vídeo, organizadas por módulo, com acompanhamento de progresso.",
     },
     {
       href: "/dashboard/ranking",
@@ -123,22 +100,16 @@ export default async function DashboardPage() {
       description: "Top 20 em faturamento acumulado no mês — acompanhe sua posição na comunidade.",
     },
     {
+      href: "/dashboard/grupo",
+      icon: "users",
+      title: "Grupo DGS",
+      description: "Acesse o grupo exclusivo da comunidade e confira as regras antes de entrar.",
+    },
+    {
       href: "/dashboard/indique",
       icon: "gift",
       title: "Indique e Ganhe",
       description: "Indique novos membros e receba comissão recorrente sobre cada assinatura.",
-    },
-    {
-      href: "/dashboard/produtividade",
-      icon: "target",
-      title: "Anotações, tarefas e metas",
-      description: "Organize sua rotina diária, defina metas de performance e guarde ideias e anotações.",
-    },
-    {
-      href: "/dashboard/conteudos",
-      icon: "book",
-      title: "Conteúdos",
-      description: "Aulas em texto, áudio e vídeo, organizadas por módulo, com acompanhamento de progresso.",
     },
   ];
 
