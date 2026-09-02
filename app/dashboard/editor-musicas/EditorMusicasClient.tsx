@@ -84,7 +84,9 @@ export function EditorMusicasClient({
   const [musicCurrentTime, setMusicCurrentTime] = useState(0);
   const [musicStart, setMusicStart] = useState(0);
   const [playing, setPlaying] = useState(false);
+  const [justMarkedStart, setJustMarkedStart] = useState(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  const markStartTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const [videos, setVideos] = useState<BatchItem[]>([]);
   const itemsRef = useRef<Record<string, BatchItem>>({});
@@ -99,6 +101,12 @@ export function EditorMusicasClient({
       if (musicUrl) URL.revokeObjectURL(musicUrl);
     };
   }, [musicUrl]);
+
+  useEffect(() => {
+    return () => {
+      if (markStartTimeoutRef.current) clearTimeout(markStartTimeoutRef.current);
+    };
+  }, []);
 
   useEffect(() => {
     supabase
@@ -136,6 +144,7 @@ export function EditorMusicasClient({
     setMusicCurrentTime(0);
     setMusicStart(0);
     setPlaying(false);
+    setJustMarkedStart(false);
     setError(null);
   }
 
@@ -336,6 +345,7 @@ export function EditorMusicasClient({
     setMusicCurrentTime(0);
     setMusicStart(0);
     setPlaying(false);
+    setJustMarkedStart(false);
     setVideos([]);
     itemsRef.current = {};
     setMusicSource("upload");
@@ -485,19 +495,28 @@ export function EditorMusicasClient({
               >
                 <LineIcon name={playing ? "pause" : "play"} size={16} />
               </button>
-              <input
-                type="range"
-                min={0}
-                max={musicDuration || 0}
-                step={0.1}
-                value={Math.min(musicCurrentTime, musicDuration || 0)}
-                onChange={(e) => {
-                  const t = Number(e.target.value);
-                  if (audioRef.current) audioRef.current.currentTime = t;
-                  setMusicCurrentTime(t);
-                }}
-                className="flex-1 accent-brand"
-              />
+              <div className="flex-1 relative flex items-center">
+                <input
+                  type="range"
+                  min={0}
+                  max={musicDuration || 0}
+                  step={0.1}
+                  value={Math.min(musicCurrentTime, musicDuration || 0)}
+                  onChange={(e) => {
+                    const t = Number(e.target.value);
+                    if (audioRef.current) audioRef.current.currentTime = t;
+                    setMusicCurrentTime(t);
+                  }}
+                  className="w-full accent-brand relative z-10"
+                />
+                {musicDuration > 0 && musicStart > 0 && (
+                  <div
+                    className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-[3px] h-3 bg-brand rounded-full pointer-events-none"
+                    style={{ left: `${Math.min(100, (musicStart / musicDuration) * 100)}%` }}
+                    title={`Início marcado em ${formatTime(musicStart)}`}
+                  />
+                )}
+              </div>
               <span className="text-neutral-500 text-xs shrink-0 w-20 text-right">
                 {formatTime(musicCurrentTime)} / {formatTime(musicDuration)}
               </span>
@@ -505,11 +524,27 @@ export function EditorMusicasClient({
 
             <div className="flex items-center gap-3 flex-wrap">
               <button
-                onClick={() => setMusicStart(musicCurrentTime)}
+                onClick={() => {
+                  setMusicStart(musicCurrentTime);
+                  setJustMarkedStart(true);
+                  if (markStartTimeoutRef.current) clearTimeout(markStartTimeoutRef.current);
+                  markStartTimeoutRef.current = setTimeout(() => setJustMarkedStart(false), 1600);
+                }}
                 disabled={phase !== "idle"}
-                className="dgs-btn-ghost w-auto"
+                className={
+                  justMarkedStart
+                    ? "flex items-center gap-1.5 text-xs font-medium rounded-lg border border-brand/40 bg-brand/10 text-brand px-3 py-1.5 transition-colors w-auto"
+                    : "dgs-btn-ghost w-auto"
+                }
               >
-                Marcar início aqui
+                {justMarkedStart ? (
+                  <>
+                    <LineIcon name="check" size={13} />
+                    Marcado!
+                  </>
+                ) : (
+                  "Marcar início aqui"
+                )}
               </button>
               <span className="text-neutral-500 text-xs">
                 Início escolhido: <span className="text-neutral-300">{formatTime(musicStart)}</span> — o refrão (ou a
