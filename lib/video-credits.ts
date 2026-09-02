@@ -3,7 +3,7 @@
 // abaixo vieram diretamente do painel da Cakto — se algum pacote for
 // alterado lá (preço, quantidade, link), atualize aqui também.
 
-export type CreditPackageId = "boost" | "turbo" | "pro" | "escala";
+export type CreditPackageId = "boost" | "turbo" | "pro";
 
 export const CREDIT_PACKAGES: {
   id: CreditPackageId;
@@ -34,13 +34,6 @@ export const CREDIT_PACKAGES: {
     credits: 1300,
     checkoutUrl: "https://pay.cakto.com.br/32cktrc",
     featured: true,
-  },
-  {
-    id: "escala",
-    label: "Escala",
-    price: "R$ 118,90",
-    credits: 2500,
-    checkoutUrl: "https://pay.cakto.com.br/jo8bokv",
   },
 ];
 
