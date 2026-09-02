@@ -1,8 +1,10 @@
+import Link from "next/link";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { DashboardHeader } from "@/components/DashboardHeader";
 import { LineIcon } from "@/components/LineIcon";
 import { desktopAppCheckoutUrl, desktopAppDownloadUrl, DESKTOP_APP_PRICE_LABEL } from "@/lib/desktop-app";
+import { toYoutubeEmbedUrl } from "@/lib/youtube";
 
 export default async function DesktopAppPage() {
   const supabase = createClient();
@@ -19,13 +21,28 @@ export default async function DesktopAppPage() {
 
   const hasAccess = !!profile.is_admin || !!profile.desktop_app_purchased;
 
+  const { data: settings } = await supabase
+    .from("desktop_app_settings")
+    .select("tutorial_video_url")
+    .eq("id", "main")
+    .maybeSingle();
+
+  const tutorialEmbedUrl = settings?.tutorial_video_url ? toYoutubeEmbedUrl(settings.tutorial_video_url) : null;
+
   return (
     <div className="min-h-screen bg-ink-900 p-6 sm:p-8">
       <div className="max-w-3xl mx-auto">
         <DashboardHeader backHref="/dashboard" />
 
         <div className="mb-6">
-          <h1 className="text-neutral-100 text-xl font-medium">Editor de Músicas — Desktop</h1>
+          <div className="flex items-center justify-between gap-3">
+            <h1 className="text-neutral-100 text-xl font-medium">Editor de Músicas — Desktop</h1>
+            {profile.is_admin && (
+              <Link href="/dashboard/admin/desktop" className="text-brand text-xs no-underline shrink-0">
+                + Editar vídeo tutorial
+              </Link>
+            )}
+          </div>
           <p className="text-neutral-500 text-sm mt-1">
             A versão pra instalar no seu computador — a mesma ferramenta de colocar música em lote nos vídeos, mas
             sem limite de vídeos por lote e sem gastar crédito nenhum, processando direto com o poder da sua própria
@@ -33,6 +50,17 @@ export default async function DesktopAppPage() {
             internet durante o processamento.
           </p>
         </div>
+
+        {tutorialEmbedUrl && (
+          <div className="aspect-video rounded-xl overflow-hidden border border-white/10 mb-6">
+            <iframe
+              src={tutorialEmbedUrl}
+              className="w-full h-full"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+            />
+          </div>
+        )}
 
         {hasAccess ? (
           <div className="dgs-card flex flex-col gap-4">
