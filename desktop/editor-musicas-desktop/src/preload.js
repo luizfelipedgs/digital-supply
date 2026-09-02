@@ -9,6 +9,8 @@ contextBridge.exposeInMainWorld("editorMusicas", {
   openCheckout: () => ipcRenderer.invoke("purchase:openCheckout"),
 
   pickMusic: () => ipcRenderer.invoke("pick:music"),
+  libraryList: () => ipcRenderer.invoke("library:list"),
+  libraryPick: (track) => ipcRenderer.invoke("library:pick", track),
   pickVideos: () => ipcRenderer.invoke("pick:videos"),
   getDefaultOutputFolder: () => ipcRenderer.invoke("app:getDefaultOutputFolder"),
   pickOutputFolder: (suggestedPath) => ipcRenderer.invoke("pick:outputFolder", suggestedPath),
