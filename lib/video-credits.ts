@@ -33,7 +33,6 @@ export const CREDIT_PACKAGES: {
     price: "R$ 64,90",
     credits: 1300,
     checkoutUrl: "https://pay.cakto.com.br/32cktrc",
-    featured: true,
   },
 ];
 
