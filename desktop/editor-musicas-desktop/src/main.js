@@ -173,6 +173,8 @@ ipcMain.handle("purchase:openCheckout", () => {
   shell.openExternal(CHECKOUT_URL);
 });
 
+ipcMain.handle("app:getVersion", () => app.getVersion());
+
 // ------------------------------------------------------------
 // Seletores de arquivo
 // ------------------------------------------------------------
