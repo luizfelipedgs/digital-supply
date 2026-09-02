@@ -44,7 +44,7 @@ export function CreditosClient({
             </div>
             <div className="text-neutral-100 text-2xl font-bold mb-1">{pkg.price}</div>
             <div className="text-neutral-400 text-sm mb-5">{pkg.credits} créditos</div>
-            
+            <a
               href={creditCheckoutUrl(pkg, email)}
               className={`text-center no-underline rounded-lg py-2.5 text-sm font-bold tracking-wide uppercase transition-all mt-auto ${
                 pkg.featured
