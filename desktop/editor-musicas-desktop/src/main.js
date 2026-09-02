@@ -3,6 +3,7 @@ const path = require("path");
 const fs = require("fs");
 const { pathToFileURL } = require("url");
 const { createClient } = require("@supabase/supabase-js");
+const WebSocketImpl = require("ws");
 
 const { fileStorage } = require("./sessionStorage");
 const { runFfmpeg, buildMusicOverlayArgs, uniqueOutputPath } = require("./ffmpeg");
@@ -31,6 +32,15 @@ if (!env || !env.SUPABASE_URL || env.SUPABASE_URL.includes("SEU-PROJETO")) {
       persistSession: true,
       autoRefreshToken: true,
       detectSessionInUrl: false,
+    },
+    // O supabase-js sempre monta um cliente de "realtime" internamente (mesmo
+    // sem a gente usar), e ele precisa de um WebSocket. No processo principal
+    // do Electron o Node não tem WebSocket nativo (só a partir do Node 22+, e
+    // o Electron usa uma versão mais antiga) — por isso passamos a
+    // implementação da lib "ws" aqui, senão o app trava ao iniciar com
+    // "Node.js detected but native WebSocket not found".
+    realtime: {
+      transport: WebSocketImpl,
     },
   });
 }
