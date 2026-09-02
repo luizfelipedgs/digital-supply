@@ -14,6 +14,7 @@ type Profile = {
   plan: string | null;
   plan_expires_at: string | null;
   created_at: string;
+  desktop_app_purchased: boolean;
 };
 
 const PLAN_DAYS: Record<string, number> = { mensal: 30, trimestral: 90, anual: 365 };
@@ -52,9 +53,23 @@ export function AlunosClient({
   async function refresh() {
     const { data } = await supabase
       .from("profiles")
-      .select("id, email, full_name, nickname, status, plan, plan_expires_at, created_at")
+      .select("id, email, full_name, nickname, status, plan, plan_expires_at, created_at, desktop_app_purchased")
       .order("created_at", { ascending: false });
     setProfiles(data ?? []);
+  }
+
+  async function toggleDesktopAccess(id: string, current: boolean) {
+    const next = !current;
+    const label = next ? "liberar" : "revogar";
+    if (!confirm(`Confirma ${label} o acesso ao Editor de Músicas Desktop pra esse aluno?`)) return;
+    await supabase
+      .from("profiles")
+      .update({
+        desktop_app_purchased: next,
+        desktop_app_purchased_at: next ? new Date().toISOString() : null,
+      })
+      .eq("id", id);
+    refresh();
   }
 
   async function approve(id: string) {
@@ -279,6 +294,21 @@ export function AlunosClient({
                     </button>
                   </div>
                 )}
+
+                <div className="border-t border-white/10 pt-3 flex items-center justify-between gap-3 flex-wrap">
+                  <span className="text-neutral-500 text-xs">
+                    Editor de Músicas Desktop:{" "}
+                    <span className={p.desktop_app_purchased ? "text-brand" : "text-neutral-500"}>
+                      {p.desktop_app_purchased ? "liberado" : "não liberado"}
+                    </span>
+                  </span>
+                  <button
+                    onClick={() => toggleDesktopAccess(p.id, p.desktop_app_purchased)}
+                    className={p.desktop_app_purchased ? "dgs-btn-danger w-auto px-4" : "dgs-btn-primary w-auto px-4"}
+                  >
+                    {p.desktop_app_purchased ? "Revogar acesso desktop" : "Liberar acesso desktop"}
+                  </button>
+                </div>
               </div>
             );
           })}
