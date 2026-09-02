@@ -22,4 +22,11 @@ contextBridge.exposeInMainWorld("editorMusicas", {
     ipcRenderer.on("process:progress", listener);
     return () => ipcRenderer.removeListener("process:progress", listener);
   },
+
+  installUpdate: () => ipcRenderer.invoke("update:install"),
+  onUpdateStatus: (callback) => {
+    const listener = (_evt, data) => callback(data);
+    ipcRenderer.on("update:status", listener);
+    return () => ipcRenderer.removeListener("update:status", listener);
+  },
 });
