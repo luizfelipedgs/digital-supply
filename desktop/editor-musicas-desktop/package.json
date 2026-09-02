@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.45.4",
+    "electron-updater": "^6.3.4",
     "ffmpeg-static": "^5.2.0",
     "ws": "^8.18.0"
   },
@@ -31,6 +32,11 @@
       "src/**/*",
       "assets/**/*"
     ],
+    "publish": {
+      "provider": "github",
+      "owner": "luizfelipedgs",
+      "repo": "digital-supply"
+    },
     "win": {
       "target": ["nsis"],
       "icon": "assets/icon.ico"
