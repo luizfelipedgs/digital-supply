@@ -171,9 +171,11 @@
   document.getElementById("pick-music").addEventListener("click", pickMusic);
   document.getElementById("change-music").addEventListener("click", () => {
     musicPath = null;
+    musicStartSeconds = 0;
     document.getElementById("music-empty").hidden = false;
     document.getElementById("music-chosen").hidden = true;
     audio.removeAttribute("src");
+    updateSeekMarker();
     showMusicTab("upload");
     updateStartButtonState();
   });
@@ -193,11 +195,26 @@
     audio.src = result.url;
     audio.currentTime = 0;
     document.getElementById("start-label").textContent = "0:00";
+    updateSeekMarker();
     updateStartButtonState();
+  }
+
+  const seekMarker = document.getElementById("seek-marker");
+
+  function updateSeekMarker() {
+    if (!seekMarker) return;
+    const duration = audio.duration || 0;
+    if (duration > 0 && musicStartSeconds > 0) {
+      seekMarker.style.left = `${Math.min(100, (musicStartSeconds / duration) * 100)}%`;
+      seekMarker.hidden = false;
+    } else {
+      seekMarker.hidden = true;
+    }
   }
 
   audio.addEventListener("loadedmetadata", () => {
     seek.max = String(audio.duration || 0);
+    updateSeekMarker();
   });
   audio.addEventListener("timeupdate", () => {
     seek.value = String(audio.currentTime);
@@ -216,9 +233,21 @@
     audio.currentTime = Number(seek.value);
   });
 
-  document.getElementById("mark-start").addEventListener("click", () => {
+  const markStartBtn = document.getElementById("mark-start");
+  let markStartTimeout = null;
+
+  markStartBtn.addEventListener("click", () => {
     musicStartSeconds = audio.currentTime || 0;
     document.getElementById("start-label").textContent = formatTime(musicStartSeconds);
+    updateSeekMarker();
+
+    markStartBtn.classList.add("btn-marked");
+    markStartBtn.textContent = "✓ Marcado!";
+    clearTimeout(markStartTimeout);
+    markStartTimeout = setTimeout(() => {
+      markStartBtn.classList.remove("btn-marked");
+      markStartBtn.textContent = "Marcar início aqui";
+    }, 1600);
   });
 
   // ------------------------------------------------------------
@@ -315,6 +344,7 @@
     document.getElementById("music-empty").hidden = false;
     document.getElementById("music-chosen").hidden = true;
     audio.removeAttribute("src");
+    updateSeekMarker();
     showMusicTab("upload");
     renderVideos();
     summary.hidden = true;
