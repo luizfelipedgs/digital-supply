@@ -27,8 +27,10 @@ export default async function DesktopAppPage() {
         <div className="mb-6">
           <h1 className="text-neutral-100 text-xl font-medium">Editor de Músicas — Desktop</h1>
           <p className="text-neutral-500 text-sm mt-1">
-            A mesma ferramenta de colocar música em lote nos seus vídeos, só que instalada no seu computador — sem
-            limite de vídeos, sem créditos, processando com o poder da sua própria máquina.
+            A versão pra instalar no seu computador — a mesma ferramenta de colocar música em lote nos vídeos, mas
+            sem limite de vídeos por lote e sem gastar crédito nenhum, processando direto com o poder da sua própria
+            máquina. Recomendado pra quem já usa computador no dia a dia: é mais rápido e você não depende de
+            internet durante o processamento.
           </p>
         </div>
 
@@ -68,6 +70,23 @@ export default async function DesktopAppPage() {
               <div className="text-neutral-100 text-2xl font-bold mb-1">{DESKTOP_APP_PRICE_LABEL}</div>
               <div className="text-neutral-500 text-sm">Pagamento único — acesso vitalício ao programa</div>
             </div>
+
+            <ul className="flex flex-col gap-2">
+              {[
+                "Pagamento único — sem mensalidade, sem assinatura",
+                "Acesso vitalício — pague uma vez, use pra sempre",
+                "Todas as atualizações futuras inclusas, sem nenhum custo extra",
+                "Sem limite de vídeos por lote e sem gastar créditos",
+              ].map((benefit) => (
+                <li key={benefit} className="flex items-start gap-2.5 text-neutral-300 text-sm">
+                  <span className="shrink-0 mt-0.5 text-brand">
+                    <LineIcon name="check" size={14} />
+                  </span>
+                  {benefit}
+                </li>
+              ))}
+            </ul>
+
             <a href={desktopAppCheckoutUrl(profile.email)} className="dgs-btn-primary no-underline text-center">
               Comprar acesso
             </a>
