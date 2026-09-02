@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { DashboardHeader } from "@/components/DashboardHeader";
@@ -27,7 +28,12 @@ export default async function EditorMusicasPage() {
           <h1 className="text-neutral-100 text-xl font-medium">Editor de Músicas</h1>
           <p className="text-neutral-500 text-sm mt-1">
             Envie vários vídeos de uma vez, escolha uma música e eu coloco ela em todos automaticamente — som
-            original mudo, música no volume cheio e cortada certinho no tamanho de cada vídeo.
+            original mudo, música no volume cheio e cortada certinho no tamanho de cada vídeo. Essa versão foi
+            pensada pra usar pelo celular. Se você já tem computador, a recomendação é usar o{" "}
+            <Link href="/dashboard/desktop" className="text-brand">
+              Editor de Músicas — Desktop
+            </Link>
+            : sem limite de vídeos e sem gastar crédito nenhum.
           </p>
         </div>
 
@@ -39,6 +45,18 @@ export default async function EditorMusicasPage() {
             Cada vídeo processado consome 1 crédito. Você pode enviar até {MAX_VIDEOS_PER_BATCH} vídeos por vez. Os
             arquivos ficam disponíveis pra download por {BATCH_RETENTION_HOURS} horas — depois disso são apagados
             automaticamente.
+          </p>
+        </div>
+
+        <div className="rounded-lg border border-brand/30 bg-brand/5 px-4 py-3 mb-3 flex items-start gap-2.5">
+          <span className="shrink-0 mt-0.5 text-brand">
+            <LineIcon name="zap" size={14} />
+          </span>
+          <p className="text-neutral-400 text-xs leading-relaxed">
+            <strong className="text-neutral-300">Por que cada vídeo consome 1 crédito?</strong> Pra ser transparente
+            com você: cada vídeo processado custa pra gente, em média, R$ 0,05 — entre o processamento em si e as
+            taxas cobradas pelas plataformas envolvidas. O valor dos créditos cobre exatamente esse custo, sem
+            markup em cima.
           </p>
         </div>
 
