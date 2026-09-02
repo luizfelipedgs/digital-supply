@@ -96,17 +96,95 @@
   // ------------------------------------------------------------
   let musicPath = null;
   let musicStartSeconds = 0;
+  let libraryTracks = null; // cache — só busca da 1ª vez que a aba é aberta
   const audio = document.getElementById("audio-preview");
   const seek = document.getElementById("seek");
   const timeLabel = document.getElementById("time-label");
   const playPauseBtn = document.getElementById("play-pause");
 
+  const tabUploadBtn = document.getElementById("tab-upload");
+  const tabLibraryBtn = document.getElementById("tab-library");
+  const uploadPanel = document.getElementById("music-upload-panel");
+  const libraryPanel = document.getElementById("music-library-panel");
+  const libraryListEl = document.getElementById("library-list");
+  const libraryEmptyEl = document.getElementById("library-empty");
+  const libraryLoadingEl = document.getElementById("library-loading");
+
+  tabUploadBtn.addEventListener("click", () => showMusicTab("upload"));
+  tabLibraryBtn.addEventListener("click", () => showMusicTab("library"));
+
+  function showMusicTab(tab) {
+    tabUploadBtn.classList.toggle("tab-active", tab === "upload");
+    tabLibraryBtn.classList.toggle("tab-active", tab === "library");
+    uploadPanel.hidden = tab !== "upload";
+    libraryPanel.hidden = tab !== "library";
+    if (tab === "library") loadLibraryTracks();
+  }
+
+  async function loadLibraryTracks() {
+    if (libraryTracks !== null) return;
+    libraryLoadingEl.hidden = false;
+    libraryEmptyEl.hidden = true;
+    const tracks = await window.editorMusicas.libraryList();
+    libraryTracks = tracks || [];
+    libraryLoadingEl.hidden = true;
+    renderLibraryList();
+  }
+
+  function renderLibraryList() {
+    libraryListEl.innerHTML = "";
+    if (!libraryTracks || libraryTracks.length === 0) {
+      libraryEmptyEl.hidden = false;
+      return;
+    }
+    libraryEmptyEl.hidden = true;
+
+    for (const track of libraryTracks) {
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "library-item";
+
+      const name = document.createElement("span");
+      name.className = "name";
+      name.textContent = track.title;
+      btn.appendChild(name);
+
+      const hint = document.createElement("span");
+      hint.className = "pick-hint";
+      hint.textContent = "usar";
+      btn.appendChild(hint);
+
+      btn.addEventListener("click", async () => {
+        btn.disabled = true;
+        hint.textContent = "carregando…";
+        const result = await window.editorMusicas.libraryPick(track);
+        btn.disabled = false;
+        hint.textContent = "usar";
+        if (!result) return;
+        applyMusicResult(result);
+      });
+
+      libraryListEl.appendChild(btn);
+    }
+  }
+
   document.getElementById("pick-music").addEventListener("click", pickMusic);
-  document.getElementById("change-music").addEventListener("click", pickMusic);
+  document.getElementById("change-music").addEventListener("click", () => {
+    musicPath = null;
+    document.getElementById("music-empty").hidden = false;
+    document.getElementById("music-chosen").hidden = true;
+    audio.removeAttribute("src");
+    showMusicTab("upload");
+    updateStartButtonState();
+  });
 
   async function pickMusic() {
     const result = await window.editorMusicas.pickMusic();
     if (!result) return;
+    applyMusicResult(result);
+  }
+
+  function applyMusicResult(result) {
     musicPath = result.path;
     musicStartSeconds = 0;
     document.getElementById("music-name").textContent = result.name;
@@ -237,6 +315,7 @@
     document.getElementById("music-empty").hidden = false;
     document.getElementById("music-chosen").hidden = true;
     audio.removeAttribute("src");
+    showMusicTab("upload");
     renderVideos();
     summary.hidden = true;
     runError.hidden = true;
