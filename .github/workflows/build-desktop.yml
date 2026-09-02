@@ -60,17 +60,22 @@ jobs:
           path: desktop/editor-musicas-desktop/dist/EditorDeMusicas-Setup.exe
           if-no-files-found: error
 
-      - name: Remove o Release antigo (garante que o instalador novo substitui o antigo)
+      - name: Publica o instalador como GitHub Release (link de download do site)
+        # Não apaga a release/tag "desktop-latest" pra recriar do zero (isso causava
+        # um erro intermitente de corrida: o GitHub às vezes ainda não tinha
+        # terminado de propagar a release recém-criada quando a gente tentava subir
+        # o arquivo nela, e dava "Not Found"). Em vez disso: se a release já existe,
+        # só substitui o arquivo nela (--clobber); se não existe (primeira vez),
+        # cria. A tag "desktop-latest" nunca é apagada, então não tem essa corrida.
         shell: bash
-        run: gh release delete desktop-latest --yes --cleanup-tag || true
+        run: |
+          set -e
+          if gh release view desktop-latest >/dev/null 2>&1; then
+            gh release upload desktop-latest dist/EditorDeMusicas-Setup.exe --clobber
+          else
+            gh release create desktop-latest dist/EditorDeMusicas-Setup.exe \
+              --title "Editor de Músicas Desktop (build automático)" \
+              --notes "Instalador gerado automaticamente pelo GitHub Actions. Este link é sempre a versão mais recente."
+          fi
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Publica o instalador como GitHub Release (link de download do site)
-        uses: softprops/action-gh-release@v2
-        with:
-          tag_name: desktop-latest
-          name: Editor de Músicas Desktop (build automático)
-          body: Instalador gerado automaticamente pelo GitHub Actions. Este link é sempre a versão mais recente.
-          files: desktop/editor-musicas-desktop/dist/EditorDeMusicas-Setup.exe
-          fail_on_unmatched_files: true
