@@ -63,7 +63,20 @@
         <section class="card">
           <h2>1. Escolha a música</h2>
           <div id="music-empty">
-            <button id="pick-music" class="btn-primary btn-auto">Selecionar música</button>
+            <div class="tab-row">
+              <button id="tab-upload" type="button" class="tab-btn tab-active">Enviar arquivo</button>
+              <button id="tab-library" type="button" class="tab-btn">Escolher da biblioteca</button>
+            </div>
+            <div id="music-upload-panel">
+              <button id="pick-music" class="btn-primary btn-auto">Selecionar música</button>
+            </div>
+            <div id="music-library-panel" hidden>
+              <div id="library-list" class="item-list"></div>
+              <p id="library-empty" class="muted small" hidden>
+                Nenhuma música na biblioteca ainda — envie um arquivo normalmente.
+              </p>
+              <p id="library-loading" class="muted small">Carregando…</p>
+            </div>
           </div>
           <div id="music-chosen" hidden>
             <div class="row-between">
