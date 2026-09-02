@@ -12,7 +12,7 @@ export default async function AdminAlunosPage() {
 
   const { data: profiles } = await supabase
     .from("profiles")
-    .select("id, email, full_name, nickname, status, plan, plan_expires_at, created_at")
+    .select("id, email, full_name, nickname, status, plan, plan_expires_at, created_at, desktop_app_purchased")
     .order("created_at", { ascending: false });
 
   // Receita real recebida este mês (calendário, fuso de Brasília), a partir
