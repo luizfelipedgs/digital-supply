@@ -211,7 +211,7 @@ $$;
 grant execute on function public.consume_legendas_video_quota(integer) to authenticated;
 
 -- ------------------------------------------------------------
--- Trilha em Massa — débito de créditos e lote de vídeos com música
+-- Editor de Músicas — débito de créditos e lote de vídeos com música
 -- ------------------------------------------------------------
 create or replace function public.consume_video_credit()
 returns table(allowed boolean, remaining integer)
@@ -306,15 +306,15 @@ insert into storage.buckets (id, name, public)
 values ('video-batch', 'video-batch', false)
 on conflict (id) do nothing;
 
-create policy "Aluno lê os próprios arquivos da trilha em massa"
+create policy "Aluno lê os próprios arquivos do editor de músicas"
   on storage.objects for select
   using (bucket_id = 'video-batch' and (storage.foldername(name))[1] = auth.uid()::text);
 
-create policy "Aluno envia os próprios arquivos da trilha em massa"
+create policy "Aluno envia os próprios arquivos do editor de músicas"
   on storage.objects for insert
   with check (bucket_id = 'video-batch' and (storage.foldername(name))[1] = auth.uid()::text);
 
--- Nota: o instalador da Trilha em Massa Desktop (.exe) NÃO fica no Supabase
+-- Nota: o instalador do Editor de Músicas Desktop (.exe) NÃO fica no Supabase
 -- Storage (o plano Free tem limite de 50 MB e o instalador passa disso).
 -- Ele é publicado como GitHub Release — veja lib/desktop-app.ts e
 -- .github/workflows/build-desktop.yml.

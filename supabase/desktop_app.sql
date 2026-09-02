@@ -1,5 +1,5 @@
 -- ============================================================
--- Trilha em Massa Desktop — acesso ao programa (pagamento único)
+-- Editor de Músicas Desktop — acesso ao programa (pagamento único)
 -- Rode isso no SQL Editor do Supabase (seu projeto já existente).
 -- Só precisa rodar uma vez. Não rode o schema.sql inteiro de novo —
 -- ele vai dar erro de "policy already exists" nas tabelas que já existem.

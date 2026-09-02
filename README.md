@@ -100,9 +100,9 @@ cadastrar o cartão, definir um limite de gastos mensal em Billing bem acima dis
 R$ 100–150), e depois de a primeira semana no ar, conferir o consumo real no painel da OpenAI e ajustar o limite
 pra baixo se quiser mais aperto.
 
-### 4.2 Configurar a "Trilha em Massa" (créditos + música em lote)
+### 4.2 Configurar o "Editor de Músicas" (créditos + música em lote)
 
-A seção `/dashboard/trilha` deixa o aluno subir vários vídeos de uma vez, escolher uma música (com play/pause e
+A seção `/dashboard/editor-musicas` deixa o aluno subir vários vídeos de uma vez, escolher uma música (com play/pause e
 escolha manual do início — ex: o refrão) e recebe todos de volta com o áudio original mudo e essa música no volume
 cheio, cortada automaticamente no tamanho de cada vídeo, num único `.zip` pra baixar. Cada vídeo processado consome
 **1 crédito** do aluno; o admin (`profiles.is_admin`) não consome créditos.
@@ -162,12 +162,12 @@ criadas direto no painel do Supabase). Se quiser, consigo te passar o SQL pra tr
 preciso que você confirme antes, no painel do Supabase, a lista completa de colunas que a tela de perfil realmente
 usa.
 
-### 4.3 Configurar a "Trilha em Massa Desktop" (programa .exe, pagamento único)
+### 4.3 Configurar o "Editor de Músicas Desktop" (programa .exe, pagamento único)
 
-Versão desktop da Trilha em Massa: o aluno baixa um instalador Windows, faz login com a mesma conta do site, e o
+Versão desktop do Editor de Músicas: o aluno baixa um instalador Windows, faz login com a mesma conta do site, e o
 programa processa os vídeos usando o computador dele — sem servidor, sem créditos, sem limite. Vendida separada dos
-planos e dos créditos, num pagamento único. O código-fonte do programa fica em `desktop/trilha-desktop/` (um projeto
-Electron independente — não faz parte do site Next.js, o build da Vercel nunca mexe nessa pasta).
+planos e dos créditos, num pagamento único. O código-fonte do programa fica em `desktop/editor-musicas-desktop/` (um
+projeto Electron independente — não faz parte do site Next.js, o build da Vercel nunca mexe nessa pasta).
 
 1. **Rode `supabase/desktop_app.sql`** no SQL Editor do Supabase (uma vez só). Isso adiciona a coluna
    `desktop_app_purchased` no perfil (é ela que libera o download/uso do programa).
@@ -177,15 +177,15 @@ Electron independente — não faz parte do site Next.js, o build da Vercel nunc
    que tiver o link de checkout real (hoje está com um placeholder).
 3. **Configure 2 Secrets no GitHub** (Settings > Secrets and variables > Actions), reaproveitando valores que você
    já tem na Vercel — `SUPABASE_URL` e `SUPABASE_ANON_KEY`. Detalhes de onde pegar cada um estão em
-   `desktop/trilha-desktop/README.md`.
-4. A partir daí, todo push que mexer em `desktop/trilha-desktop/` builda o instalador sozinho (GitHub Actions, numa
-   máquina Windows do próprio GitHub) e publica ele automaticamente como um **GitHub Release** (tag `desktop-latest`)
-   — **você não precisa ter Windows nem rodar nada manualmente**. Acompanhe em **Actions** no GitHub; um build
-   demora alguns minutos.
+   `desktop/editor-musicas-desktop/README.md`.
+4. A partir daí, todo push que mexer em `desktop/editor-musicas-desktop/` builda o instalador sozinho (GitHub Actions,
+   numa máquina Windows do próprio GitHub) e publica ele automaticamente como um **GitHub Release** (tag
+   `desktop-latest`) — **você não precisa ter Windows nem rodar nada manualmente**. Acompanhe em **Actions** no
+   GitHub; um build demora alguns minutos.
 
    Não usamos o Supabase Storage pra guardar o instalador: o plano Free do Supabase limita arquivos a 50 MB e o
    instalador tem uns 96 MB. Como o repositório é público, o GitHub Release serve como link de download direto e
-   sem custo — o link nunca muda (sempre `.../releases/download/desktop-latest/TrilhaEmMassa-Setup.exe`), mesmo
+   sem custo — o link nunca muda (sempre `.../releases/download/desktop-latest/EditorDeMusicas-Setup.exe`), mesmo
    quando sai uma build nova.
 
 ⚠️ O instalador não é assinado digitalmente (decisão consciente, pra não ter custo de certificado agora) — o

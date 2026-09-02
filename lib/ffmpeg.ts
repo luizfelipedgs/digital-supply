@@ -1,5 +1,5 @@
 // Wrapper mínimo pro ffmpeg (binário estático via "ffmpeg-static") — usado
-// pela Trilha em Massa pra trocar o áudio de cada vídeo pela música
+// pelo Editor de Músicas pra trocar o áudio de cada vídeo pela música
 // escolhida, sem reprocessar (recodificar) a imagem do vídeo.
 import { spawn } from "child_process";
 // @ts-ignore — ffmpeg-static não tem types próprios

@@ -1,4 +1,4 @@
-// Configuração da "Trilha em Massa" (adicionar música em lote nos vídeos).
+// Configuração do "Editor de Músicas" (adicionar música em lote nos vídeos).
 // Editar só este arquivo pra mudar os limites — não precisa mexer nas rotas
 // da API nem no componente do cliente.
 

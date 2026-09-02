@@ -90,7 +90,7 @@ export async function POST(req: NextRequest) {
     }
 
     // Baixa vídeo + música pra um diretório temporário local
-    const workDir = await fs.mkdtemp(path.join(os.tmpdir(), "trilha-"));
+    const workDir = await fs.mkdtemp(path.join(os.tmpdir(), "editor-musicas-"));
     const videoLocal = path.join(workDir, "input" + (path.extname(item.original_path) || ".mp4"));
     const musicLocal = path.join(workDir, "music" + (path.extname(job.music_path) || ".mp3"));
     const outputLocal = path.join(workDir, "output.mp4");

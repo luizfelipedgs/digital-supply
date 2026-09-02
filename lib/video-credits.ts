@@ -1,4 +1,4 @@
-// Pacotes de créditos de vídeo (Trilha em Massa), vendidos avulsos via Cakto.
+// Pacotes de créditos de vídeo (Editor de Músicas), vendidos avulsos via Cakto.
 // 1 crédito = 1 vídeo processado. Os links de checkout e os IDs de oferta
 // abaixo vieram diretamente do painel da Cakto — se algum pacote for
 // alterado lá (preço, quantidade, link), atualize aqui também.

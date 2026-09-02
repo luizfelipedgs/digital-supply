@@ -19,12 +19,12 @@ export default async function CreditosPage() {
   return (
     <div className="min-h-screen bg-ink-900 p-6 sm:p-8">
       <div className="max-w-3xl mx-auto">
-        <DashboardHeader backHref="/dashboard/trilha" />
+        <DashboardHeader backHref="/dashboard/editor-musicas" />
 
         <div className="mb-6">
           <h1 className="text-neutral-100 text-xl font-medium">Créditos de vídeo</h1>
           <p className="text-neutral-500 text-sm mt-1">
-            1 crédito = 1 vídeo processado na Trilha em Massa. Compre um pacote avulso — os créditos não expiram e
+            1 crédito = 1 vídeo processado no Editor de Músicas. Compre um pacote avulso — os créditos não expiram e
             somam com o que você já tem.
           </p>
         </div>

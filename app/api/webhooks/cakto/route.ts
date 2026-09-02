@@ -21,7 +21,7 @@ function resolvePlan(offerId: string | undefined): string | null {
   return null;
 }
 
-// Pacotes de crédito da Trilha em Massa (compra avulsa, não é assinatura).
+// Pacotes de crédito do Editor de Músicas (compra avulsa, não é assinatura).
 // Cada pacote é uma OFERTA diferente dentro do mesmo produto na Cakto —
 // mesmo padrão já usado acima pros planos mensal/trimestral/anual: o ID
 // depois da "/" no link de checkout é o mesmo ID que a Cakto manda em
@@ -39,7 +39,7 @@ function resolveCreditPackage(offerId: string | undefined): number | null {
   return CREDIT_PACKAGES[offerId] ?? null;
 }
 
-// Trilha em Massa Desktop — pagamento único (não é assinatura nem crédito),
+// Editor de Músicas Desktop — pagamento único (não é assinatura nem crédito),
 // libera o download + uso do programa desktop pra sempre.
 function isDesktopAppOffer(offerId: string | undefined): boolean {
   return !!offerId && !!process.env.CAKTO_OFFER_ID_DESKTOP_APP && offerId === process.env.CAKTO_OFFER_ID_DESKTOP_APP;
@@ -88,7 +88,7 @@ export async function POST(req: NextRequest) {
     .single();
 
   if (GRANT_ACCESS_EVENTS.includes(event)) {
-    // Compra avulsa de créditos (Trilha em Massa) — não mexe em status/plano,
+    // Compra avulsa de créditos (Editor de Músicas) — não mexe em status/plano,
     // só soma créditos no perfil do aluno.
     const creditsAmount = resolveCreditPackage(offerId);
     if (creditsAmount) {

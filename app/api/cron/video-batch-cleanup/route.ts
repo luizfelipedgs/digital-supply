@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createAdminClient } from "@/lib/supabase/server";
 
-// Rodado pela Vercel Cron (veja vercel.json) — apaga lotes da Trilha em
-// Massa (vídeos, música e resultados) depois de 12h, pra não acumular
+// Rodado pela Vercel Cron (veja vercel.json) — apaga lotes do Editor de
+// Músicas (vídeos, música e resultados) depois de 12h, pra não acumular
 // custo de Storage indefinidamente.
 export const maxDuration = 60;
 

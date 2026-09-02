@@ -25,7 +25,7 @@ export default async function DesktopAppPage() {
         <DashboardHeader backHref="/dashboard" />
 
         <div className="mb-6">
-          <h1 className="text-neutral-100 text-xl font-medium">Trilha em Massa — Desktop</h1>
+          <h1 className="text-neutral-100 text-xl font-medium">Editor de Músicas — Desktop</h1>
           <p className="text-neutral-500 text-sm mt-1">
             A mesma ferramenta de colocar música em lote nos seus vídeos, só que instalada no seu computador — sem
             limite de vídeos, sem créditos, processando com o poder da sua própria máquina.

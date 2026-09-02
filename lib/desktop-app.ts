@@ -1,4 +1,4 @@
-// Trilha em Massa Desktop — pagamento único, sem sistema de créditos (o
+// Editor de Músicas Desktop — pagamento único, sem sistema de créditos (o
 // processamento roda no computador do próprio aluno).
 //
 // ⚠️ PREENCHA depois de criar o produto/oferta na Cakto: o preço abaixo é só
@@ -19,5 +19,5 @@ export function desktopAppCheckoutUrl(email?: string | null) {
 // .github/workflows/build-desktop.yml. A tag "desktop-latest" é sempre
 // reaproveitada, então esse link nunca muda, mesmo quando sai uma build nova.
 export function desktopAppDownloadUrl() {
-  return "https://github.com/luizfelipedgs/digital-supply/releases/download/desktop-latest/TrilhaEmMassa-Setup.exe";
+  return "https://github.com/luizfelipedgs/digital-supply/releases/download/desktop-latest/EditorDeMusicas-Setup.exe";
 }

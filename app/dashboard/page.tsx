@@ -81,15 +81,15 @@ export default async function DashboardPage() {
       description: "Envie um vídeo (até 5 por dia) e receba uma legenda pronta pra publicar, com contexto e headlines.",
     },
     {
-      href: "/dashboard/trilha",
+      href: "/dashboard/editor-musicas",
       icon: "music",
-      title: "Trilha em Massa",
+      title: "Editor de Músicas",
       description: "Envie vários vídeos de uma vez e coloque a mesma música em todos automaticamente — som mudo, música no volume cheio.",
     },
     {
       href: "/dashboard/desktop",
       icon: "video",
-      title: "Trilha em Massa — Desktop",
+      title: "Editor de Músicas — Desktop",
       description: "A versão pra instalar no seu computador: sem limite de vídeos e sem créditos, pagamento único.",
     },
     {
