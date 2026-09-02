@@ -4,6 +4,7 @@ const fs = require("fs");
 const { pathToFileURL } = require("url");
 const { createClient } = require("@supabase/supabase-js");
 const WebSocketImpl = require("ws");
+const { autoUpdater } = require("electron-updater");
 
 const { fileStorage } = require("./sessionStorage");
 const { runFfmpeg, buildMusicOverlayArgs, uniqueOutputPath } = require("./ffmpeg");
@@ -67,10 +68,51 @@ function createWindow() {
   mainWindow.loadFile(path.join(__dirname, "renderer", "index.html"));
 }
 
-app.whenReady().then(createWindow);
+app.whenReady().then(() => {
+  createWindow();
+  // Espera a janela existir antes de checar — os eventos do autoUpdater
+  // avisam a tela via mainWindow.webContents.send.
+  autoUpdater.checkForUpdates().catch(() => {});
+});
 
 app.on("window-all-closed", () => {
   if (process.platform !== "darwin") app.quit();
+});
+
+// ------------------------------------------------------------
+// Auto-atualização
+// ------------------------------------------------------------
+// A cada build publicada pelo GitHub Actions (.github/workflows/build-desktop.yml),
+// o programa passa a se atualizar sozinho: baixa a versão nova em segundo
+// plano assim que abre, e instala quando o aluno reinicia (ou clica em
+// "Reiniciar e atualizar" no aviso que aparece). Sem isso, toda mudança de
+// código (mesmo um texto ou aviso) só chegava a quem já tinha o programa
+// instalado se a pessoa baixasse e reinstalasse manualmente de novo.
+autoUpdater.autoDownload = true;
+autoUpdater.autoInstallOnAppQuit = true;
+
+function sendUpdateStatus(status, extra = {}) {
+  if (mainWindow && !mainWindow.isDestroyed()) {
+    mainWindow.webContents.send("update:status", { status, ...extra });
+  }
+}
+
+autoUpdater.on("update-available", (info) => {
+  sendUpdateStatus("available", { version: info?.version });
+});
+
+autoUpdater.on("update-downloaded", (info) => {
+  sendUpdateStatus("downloaded", { version: info?.version });
+});
+
+autoUpdater.on("error", (err) => {
+  // Silencioso de propósito — não interrompe o uso do programa por causa
+  // de uma falha ao checar atualização (ex: sem internet no momento).
+  sendUpdateStatus("error", { message: err?.message || String(err) });
+});
+
+ipcMain.handle("update:install", () => {
+  autoUpdater.quitAndInstall();
 });
 
 // ------------------------------------------------------------
