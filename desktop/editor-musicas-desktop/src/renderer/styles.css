@@ -226,9 +226,33 @@ button {
   margin-top: 12px;
 }
 
-.player-row input[type="range"] {
+.seek-wrap {
+  position: relative;
   flex: 1;
+  display: flex;
+  align-items: center;
+}
+
+.seek-wrap input[type="range"] {
+  width: 100%;
   accent-color: var(--brand);
+}
+
+.seek-marker {
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 3px;
+  height: 12px;
+  border-radius: 2px;
+  background: var(--brand);
+  pointer-events: none;
+}
+
+.btn-ghost.btn-marked {
+  color: var(--brand);
+  border-color: rgba(154, 205, 50, 0.4);
+  background: rgba(154, 205, 50, 0.12);
 }
 
 .time-label {
