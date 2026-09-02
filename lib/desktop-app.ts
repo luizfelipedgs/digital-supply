@@ -1,11 +1,7 @@
 // Editor de Músicas Desktop — pagamento único, sem sistema de créditos (o
 // processamento roda no computador do próprio aluno).
-//
-// ⚠️ PREENCHA depois de criar o produto/oferta na Cakto: o preço abaixo é só
-// um placeholder e o link de checkout precisa ser trocado pelo real, senão a
-// página de compra vai levar pra um link que não existe.
-export const DESKTOP_APP_PRICE_LABEL = "R$ 118,90";
-export const DESKTOP_APP_CHECKOUT_URL = "https://pay.cakto.com.br/SEU-LINK-AQUI";
+export const DESKTOP_APP_PRICE_LABEL = "R$ 127,90";
+export const DESKTOP_APP_CHECKOUT_URL = "https://pay.cakto.com.br/365g7ht_1079049";
 
 export function desktopAppCheckoutUrl(email?: string | null) {
   if (!email) return DESKTOP_APP_CHECKOUT_URL;
