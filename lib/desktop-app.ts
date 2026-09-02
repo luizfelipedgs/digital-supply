@@ -12,8 +12,11 @@ export function desktopAppCheckoutUrl(email?: string | null) {
 // O instalador (96 MB) é grande demais pro limite de 50 MB do Supabase
 // Storage no plano Free, então ele é publicado como um GitHub Release
 // (repositório público) em vez de subir pro Supabase — veja
-// .github/workflows/build-desktop.yml. A tag "desktop-latest" é sempre
-// reaproveitada, então esse link nunca muda, mesmo quando sai uma build nova.
+// .github/workflows/build-desktop.yml. Cada build gera uma release NOVA e
+// versionada (necessário pro auto-update do programa funcionar), então em
+// vez de apontar pra uma tag fixa, usamos o link "/releases/latest/..." do
+// GitHub — ele redireciona sozinho pra release mais recente automaticamente,
+// sem precisar gerenciar tag nenhuma aqui.
 export function desktopAppDownloadUrl() {
-  return "https://github.com/luizfelipedgs/digital-supply/releases/download/desktop-latest/EditorDeMusicas-Setup.exe";
+  return "https://github.com/luizfelipedgs/digital-supply/releases/latest/download/EditorDeMusicas-Setup.exe";
 }
