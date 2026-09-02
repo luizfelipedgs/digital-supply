@@ -65,9 +65,18 @@
         </div>
       </header>
 
+      <div id="cover-banner" class="cover-banner" hidden>
+        <img id="cover-banner-img" src="" alt="" />
+      </div>
+
       <main class="content">
+        <div class="content-grid">
         <section class="card">
           <h2>1. Escolha a música</h2>
+          <p class="section-desc muted small">
+            Aceita os formatos de áudio mais comuns — MP3, WAV, M4A, AAC, OGG e FLAC. Pode enviar um arquivo do seu
+            computador ou escolher direto de uma música já disponibilizada aqui na biblioteca.
+          </p>
           <div id="music-empty">
             <div class="tab-row">
               <button id="tab-upload" type="button" class="tab-btn tab-active">Enviar arquivo</button>
@@ -107,12 +116,21 @@
 
         <section class="card">
           <h2>2. Escolha os vídeos <span id="video-count" class="muted small"></span></h2>
+          <p class="section-desc muted small">
+            Não tem limite de quantidade por lote, mas recomendamos até 100 vídeos de cada vez — lotes muito grandes
+            deixam o processamento mais lento e aumentam a chance de erro.
+          </p>
           <button id="pick-videos" class="btn-primary btn-auto">Adicionar vídeos</button>
           <div id="video-list" class="item-list"></div>
         </section>
+        </div>
 
         <section class="card">
           <h2>3. Pasta de destino</h2>
+          <p class="section-desc muted small">
+            É aqui que os vídeos prontos, já com a música nova, vão ficar salvos no seu computador assim que o
+            processamento terminar.
+          </p>
           <div class="row-between">
             <span id="output-folder" class="truncate muted"></span>
             <button id="pick-output" class="btn-ghost small">escolher</button>
