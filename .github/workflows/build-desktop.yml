@@ -1,14 +1,15 @@
-name: Build desktop app (Trilha em Massa)
+name: Build desktop app (Editor de Músicas)
 
-# Builda o instalador Windows (.exe) da versão desktop da Trilha em Massa
-# toda vez que algo em desktop/trilha-desktop mudar na main, e publica o
-# resultado como artefato do GitHub Actions + como um GitHub Release (de
-# onde o botão "Baixar programa" do site pega o arquivo). Não usa o Supabase
-# Storage pra isso porque o instalador (~96 MB) passa do limite de 50 MB do
-# plano Free do Supabase — o GitHub Release não tem esse limite.
+# Builda o instalador Windows (.exe) da versão desktop do Editor de Músicas
+# toda vez que algo em desktop/editor-musicas-desktop mudar na main, e
+# publica o resultado como artefato do GitHub Actions + como um GitHub
+# Release (de onde o botão "Baixar programa" do site pega o arquivo). Não
+# usa o Supabase Storage pra isso porque o instalador (~96 MB) passa do
+# limite de 50 MB do plano Free do Supabase — o GitHub Release não tem esse
+# limite.
 #
 # Precisa de 2 Secrets configurados em Settings > Secrets and variables >
-# Actions do repositório (veja desktop/trilha-desktop/README.md pros
+# Actions do repositório (veja desktop/editor-musicas-desktop/README.md pros
 # detalhes de onde pegar cada valor):
 #   SUPABASE_URL       (mesmo valor de NEXT_PUBLIC_SUPABASE_URL)
 #   SUPABASE_ANON_KEY  (mesmo valor de NEXT_PUBLIC_SUPABASE_ANON_KEY)
@@ -16,7 +17,7 @@ on:
   push:
     branches: [main]
     paths:
-      - "desktop/trilha-desktop/**"
+      - "desktop/editor-musicas-desktop/**"
       - ".github/workflows/build-desktop.yml"
   workflow_dispatch: {}
 
@@ -28,7 +29,7 @@ jobs:
     runs-on: windows-latest
     defaults:
       run:
-        working-directory: desktop/trilha-desktop
+        working-directory: desktop/editor-musicas-desktop
     steps:
       - uses: actions/checkout@v4
 
@@ -55,14 +56,14 @@ jobs:
       - name: Publica o instalador como artefato do GitHub Actions
         uses: actions/upload-artifact@v4
         with:
-          name: TrilhaEmMassa-Setup
-          path: desktop/trilha-desktop/dist/TrilhaEmMassa-Setup.exe
+          name: EditorDeMusicas-Setup
+          path: desktop/editor-musicas-desktop/dist/EditorDeMusicas-Setup.exe
           if-no-files-found: error
 
       - name: Publica o instalador como GitHub Release (link de download do site)
         uses: softprops/action-gh-release@v2
         with:
           tag_name: desktop-latest
-          name: Trilha em Massa Desktop (build automático)
+          name: Editor de Músicas Desktop (build automático)
           body: Instalador gerado automaticamente pelo GitHub Actions. Este link é sempre a versão mais recente.
-          files: desktop/trilha-desktop/dist/TrilhaEmMassa-Setup.exe
+          files: desktop/editor-musicas-desktop/dist/EditorDeMusicas-Setup.exe
