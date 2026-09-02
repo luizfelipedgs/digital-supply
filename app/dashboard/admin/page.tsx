@@ -20,6 +20,7 @@ export default async function AdminHubPage() {
     { href: "/dashboard/admin/conteudos", icon: "book", title: "Conteúdos", description: "Módulos, aulas e capas." },
     { href: "/dashboard/admin/templates", icon: "play", title: "Templates Prontos", description: "Vídeo tutorial e links do Canva." },
     { href: "/dashboard/admin/musicas", icon: "music", title: "Biblioteca de Músicas", description: "Músicas prontas pra todos os alunos escolherem no Editor de Músicas." },
+    { href: "/dashboard/admin/desktop", icon: "play", title: "Tutorial do Desktop", description: "Vídeo de como baixar e usar o Editor de Músicas Desktop." },
     { href: "/dashboard/admin/paginas", icon: "search", title: "Lista de Páginas", description: "Páginas BR e gringas pra reciclar vídeos." },
     { href: "/dashboard/admin/grupo", icon: "users", title: "Grupo DGS", description: "Link do grupo e regras da comunidade." },
     { href: "/dashboard/admin/indique", icon: "gift", title: "Indique e Ganhe", description: "Link de afiliado e comissão." },
