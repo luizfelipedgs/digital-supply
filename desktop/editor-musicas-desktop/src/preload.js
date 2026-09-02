@@ -8,6 +8,7 @@ contextBridge.exposeInMainWorld("editorMusicas", {
   authLogout: () => ipcRenderer.invoke("auth:logout"),
   openCheckout: () => ipcRenderer.invoke("purchase:openCheckout"),
   getVersion: () => ipcRenderer.invoke("app:getVersion"),
+  getCoverUrl: () => ipcRenderer.invoke("app:getCoverUrl"),
 
   pickMusic: () => ipcRenderer.invoke("pick:music"),
   libraryList: () => ipcRenderer.invoke("library:list"),
