@@ -287,3 +287,62 @@ button {
 .item-remove:hover {
   color: var(--danger);
 }
+
+.tab-row {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.tab-btn {
+  flex: 1;
+  background: rgba(255, 255, 255, 0.03);
+  border: 0.5px solid var(--border);
+  color: var(--muted);
+  border-radius: 8px;
+  padding: 8px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.tab-btn.tab-active {
+  background: rgba(154, 205, 50, 0.1);
+  border-color: rgba(154, 205, 50, 0.35);
+  color: var(--brand);
+}
+
+.library-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  background: rgba(255, 255, 255, 0.03);
+  border: 0.5px solid var(--border);
+  border-radius: 8px;
+  padding: 8px 12px;
+  font-size: 13px;
+  color: var(--text);
+  text-align: left;
+}
+
+.library-item:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.library-item:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.library-item .name {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.library-item .pick-hint {
+  color: var(--muted);
+  font-size: 12px;
+  flex-shrink: 0;
+}
