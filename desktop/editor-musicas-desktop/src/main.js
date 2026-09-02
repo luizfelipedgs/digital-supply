@@ -175,6 +175,17 @@ ipcMain.handle("purchase:openCheckout", () => {
 
 ipcMain.handle("app:getVersion", () => app.getVersion());
 
+ipcMain.handle("app:getCoverUrl", async () => {
+  if (!supabase) return null;
+  try {
+    const { data } = await supabase.from("site_settings").select("cover_path").eq("id", "main").maybeSingle();
+    if (!data?.cover_path) return null;
+    return supabase.storage.from("content-covers").getPublicUrl(data.cover_path).data.publicUrl;
+  } catch {
+    return null;
+  }
+});
+
 // ------------------------------------------------------------
 // Seletores de arquivo
 // ------------------------------------------------------------
