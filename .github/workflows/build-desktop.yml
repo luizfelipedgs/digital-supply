@@ -3,10 +3,19 @@ name: Build desktop app (Editor de Músicas)
 # Builda o instalador Windows (.exe) da versão desktop do Editor de Músicas
 # toda vez que algo em desktop/editor-musicas-desktop mudar na main, e
 # publica o resultado como artefato do GitHub Actions + como um GitHub
-# Release (de onde o botão "Baixar programa" do site pega o arquivo). Não
+# Release novo (versionado — veja o passo "Builda e publica" abaixo). Não
 # usa o Supabase Storage pra isso porque o instalador (~96 MB) passa do
 # limite de 50 MB do plano Free do Supabase — o GitHub Release não tem esse
 # limite.
+#
+# O programa instalado se atualiza sozinho a partir dessa release (usa
+# electron-updater) — por isso cada build precisa ser uma release NOVA com
+# uma versão maior que a anterior, em vez de sobrescrever sempre a mesma
+# (é o próprio electron-builder que cria a release e o manifesto que o
+# autoUpdater lê, com "--publish always"). O botão "Baixar programa" do
+# site sempre aponta pra release marcada como "latest" no GitHub, que o
+# GitHub atualiza sozinho pra release mais recente automaticamente — não
+# precisa mais gerenciar tag nenhuma na mão.
 #
 # Precisa de 2 Secrets configurados em Settings > Secrets and variables >
 # Actions do repositório (veja desktop/editor-musicas-desktop/README.md pros
@@ -50,8 +59,16 @@ jobs:
           };
           EOF
 
-      - name: Builda o instalador (.exe)
-        run: npm run dist
+      - name: Builda e publica o instalador (.exe) como GitHub Release nova
+        # "--publish always" faz o próprio electron-builder criar uma release nova
+        # no GitHub (versionada) e subir o instalador + o manifesto que o
+        # autoUpdater usa pra saber que tem versão nova disponível. A versão é
+        # sempre "1.0.<número da execução do workflow>" — cresce sozinha a cada
+        # build, sem precisar commitar bump de versão no repositório.
+        shell: bash
+        run: npx electron-builder --win nsis --publish always --config.extraMetadata.version=1.0.${{ github.run_number }}
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Publica o instalador como artefato do GitHub Actions
         uses: actions/upload-artifact@v4
@@ -59,23 +76,3 @@ jobs:
           name: EditorDeMusicas-Setup
           path: desktop/editor-musicas-desktop/dist/EditorDeMusicas-Setup.exe
           if-no-files-found: error
-
-      - name: Publica o instalador como GitHub Release (link de download do site)
-        # Não apaga a release/tag "desktop-latest" pra recriar do zero (isso causava
-        # um erro intermitente de corrida: o GitHub às vezes ainda não tinha
-        # terminado de propagar a release recém-criada quando a gente tentava subir
-        # o arquivo nela, e dava "Not Found"). Em vez disso: se a release já existe,
-        # só substitui o arquivo nela (--clobber); se não existe (primeira vez),
-        # cria. A tag "desktop-latest" nunca é apagada, então não tem essa corrida.
-        shell: bash
-        run: |
-          set -e
-          if gh release view desktop-latest >/dev/null 2>&1; then
-            gh release upload desktop-latest dist/EditorDeMusicas-Setup.exe --clobber
-          else
-            gh release create desktop-latest dist/EditorDeMusicas-Setup.exe \
-              --title "Editor de Músicas Desktop (build automático)" \
-              --notes "Instalador gerado automaticamente pelo GitHub Actions. Este link é sempre a versão mais recente."
-          fi
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
