@@ -14,6 +14,7 @@ const RESULTS = [
   "/resultados/r12.jpg",
   "/resultados/r13.jpg",
   "/resultados/r14.jpg",
+  "/resultados/r15.jpg",
 ];
 
 // Duplica a lista uma vez — permite um loop contínuo de verdade: quando o
