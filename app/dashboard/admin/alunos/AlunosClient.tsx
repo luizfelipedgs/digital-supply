@@ -49,6 +49,7 @@ export function AlunosClient({
   const [approvingId, setApprovingId] = useState<string | null>(null);
   const [selectedPlan, setSelectedPlan] = useState<"mensal" | "trimestral" | "anual">("mensal");
   const [saving, setSaving] = useState(false);
+  const [removingId, setRemovingId] = useState<string | null>(null);
 
   async function refresh() {
     const { data } = await supabase
@@ -94,6 +95,34 @@ export function AlunosClient({
     if (!confirm(`Confirma mudar o status pra "${STATUS_LABEL[status]}"?`)) return;
     await supabase.from("profiles").update({ status }).eq("id", id);
     refresh();
+  }
+
+  async function removeStudent(id: string, label: string) {
+    if (
+      !confirm(
+        `Remover o cadastro de "${label}" por completo?\n\nIsso apaga a conta (login, e-mail e todos os dados) e não pode ser desfeito. Use isso só quando a pessoa digitou algo errado ou travou no meio do cadastro/compra e nunca vai usar essa conta.`
+      )
+    )
+      return;
+
+    setRemovingId(id);
+    try {
+      const res = await fetch("/api/admin/delete-student", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id }),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        alert(data?.error || "Não consegui remover o cadastro.");
+        return;
+      }
+      setProfiles((prev) => prev.filter((p) => p.id !== id));
+    } catch {
+      alert("Não consegui conectar pra remover o cadastro. Tenta de novo.");
+    } finally {
+      setRemovingId(null);
+    }
   }
 
   const activeProfiles = useMemo(() => profiles.filter((p) => p.status === "active"), [profiles]);
@@ -307,6 +336,19 @@ export function AlunosClient({
                     className={p.desktop_app_purchased ? "dgs-btn-danger w-auto px-4" : "dgs-btn-primary w-auto px-4"}
                   >
                     {p.desktop_app_purchased ? "Revogar acesso desktop" : "Liberar acesso desktop"}
+                  </button>
+                </div>
+
+                <div className="border-t border-white/10 pt-3 flex items-center justify-between gap-3 flex-wrap">
+                  <span className="text-neutral-600 text-xs">
+                    Cadastro digitado errado ou travado na etapa de compra/login?
+                  </span>
+                  <button
+                    onClick={() => removeStudent(p.id, p.nickname || p.full_name || p.email)}
+                    disabled={removingId === p.id}
+                    className="dgs-btn-danger w-auto px-4 disabled:opacity-50"
+                  >
+                    {removingId === p.id ? "Removendo…" : "Remover cadastro"}
                   </button>
                 </div>
               </div>
