@@ -244,13 +244,13 @@ export default function LandingPage() {
           <span className="text-brand/60">→</span>
           <span className="text-neutral-400 whitespace-nowrap">estrutura sua página</span>
           <span className="text-brand/60">→</span>
-          <span className="text-neutral-400 whitespace-nowrap">aquece o conteúdo</span>
+          <span className="text-neutral-400 whitespace-nowrap">compartilha o conteúdo</span>
           <span className="text-brand/60">→</span>
           <span className="text-brand font-semibold whitespace-nowrap">fatura por performance</span>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           <BrandCard icon="video" title="Aulas ao vivo" description="Aprenda direto com quem já vive disso, em encontros práticos dentro da comunidade." />
-          <BrandCard icon="sparkles" title="Templates e ferramentas prontas" description="Mais de 1.000 vídeos prontos pra modelar, e uma ferramenta própria de edição em massa pra acelerar sua produção." />
+          <BrandCard icon="sparkles" title="Templates e ferramentas prontas" description="Mais de 1.000 vídeos prontos pra iniciar, e uma ferramenta própria de edição em massa pra acelerar sua produção." />
           <BrandCard icon="wallet" title="Pago por performance" description="Campanhas musicais remuneram de acordo com o volume de visualizações que o seu conteúdo gera." />
         </div>
       </section>
@@ -260,7 +260,7 @@ export default function LandingPage() {
         <SectionEyebrow num="03" label="RAZÃO" />
         <SectionHead title="Por que funciona" hint="Estratégia, comunidade e transparência." />
         <p className="text-neutral-400 text-[15px] leading-relaxed max-w-xl mb-3">
-          <strong className="text-neutral-100">Pra sua página:</strong> aprender a estruturar e aquecer o conteúdo do
+          <strong className="text-neutral-100">Pra sua página:</strong> aprender a estruturar e postar o conteúdo do
           jeito certo é o que separa um perfil que estagna de um que cresce de forma consistente — não depende de
           sorte, nem de viralizar uma vez só.
         </p>
@@ -271,7 +271,7 @@ export default function LandingPage() {
         </p>
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           <BrandCard icon="book" title="Aprendizado prático" description="Aulas e conteúdos direto ao ponto, sem enrolação, pensados pra quem quer aplicar e ver resultado." />
-          <BrandCard icon="users" title="Comunidade ativa" description="Trocar com quem já passou pelos mesmos desafios acelera muito mais do que aprender sozinho." />
+          <BrandCard icon="users" title="Comunidade ativa" description="Networking com quem já passou pelos mesmos desafios acelera muito mais do que aprender sozinho." />
           <BrandCard icon="chart" title="Acompanhamento em tempo real" description="Dashboard próprio pra lançar e acompanhar seu faturamento por plataforma." />
         </div>
       </section>
@@ -321,14 +321,23 @@ export default function LandingPage() {
 
       {/* CTA final */}
       <section className="max-w-2xl mx-auto px-6 py-12 text-center">
-        <h2 className="text-2xl font-bold mb-3">Pronto pra começar?</h2>
+        <h2 className="text-2xl font-bold mb-3">Pronto pra dar o próximo passo?</h2>
         <p className="text-neutral-500 text-sm mb-6">
-          Cadastre-se e escolha o plano que faz mais sentido pro seu momento — o acesso é liberado automaticamente
-          assim que o pagamento é confirmado.
+          Se já sabe que quer profissionalizar seus resultados, cadastre-se e escolha seu plano — o acesso é liberado
+          automaticamente assim que o pagamento é confirmado. Quer conhecer por dentro antes de assinar? Entre no
+          grupo gratuito da comunidade no WhatsApp e participe das reuniões no Discord pra tirar suas dúvidas.
         </p>
         <Link href="/cadastro" className="dgs-btn-primary w-auto px-8 py-3.5 no-underline inline-block">
           Quero fazer parte →
         </Link>
+        <a
+          href="https://cakto.app/532Xkmt/"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="block mt-4 text-neutral-400 text-xs hover:text-brand transition-colors no-underline"
+        >
+          Prefiro entrar no grupo gratuito primeiro →
+        </a>
       </section>
 
       {/* FAQ */}
