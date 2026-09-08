@@ -93,6 +93,14 @@ export default function LandingPage() {
             <a href="#faq" className="hover:text-neutral-100 transition-colors">
               Dúvidas
             </a>
+            <a
+              href="https://cakto.app/532Xkmt/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:text-neutral-100 transition-colors"
+            >
+              Grupo gratuito
+            </a>
           </nav>
           <div className="flex items-center gap-3">
             <Link href="/login" className="text-neutral-400 text-sm no-underline hover:text-neutral-100 transition-colors">
