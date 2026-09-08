@@ -11,6 +11,83 @@ export const metadata: Metadata = {
     "Aprenda a transformar visualizações em receita através de campanhas musicais. Dashboard de faturamento, templates prontos, ranking semanal e muito mais.",
 };
 
+// Etiqueta numerada usada no topo de cada seção da landing (ex: "01 — CONTEXTO"),
+// inspirada em decks de apresentação — deixa a página mais fácil de escanear.
+function SectionEyebrow({ num, label }: { num: string; label: string }) {
+  return (
+    <div className="flex items-center gap-2.5 text-xs tracking-widest text-neutral-500 font-medium mb-3">
+      <span className="text-brand tabular-nums">{num}</span>
+      <span className="w-5 h-px bg-white/20" />
+      {label}
+    </div>
+  );
+}
+
+// Título da seção à esquerda + uma frase curta de contexto à direita (só aparece em telas maiores).
+function SectionHead({ title, hint }: { title: string; hint: string }) {
+  return (
+    <div className="flex items-end justify-between gap-6 flex-wrap mb-7">
+      <h2 className="text-2xl sm:text-[28px] font-bold tracking-tight max-w-lg">{title}</h2>
+      <div className="hidden sm:block text-neutral-500 text-xs text-right max-w-[220px]">{hint}</div>
+    </div>
+  );
+}
+
+// Card neutro (cinza) usado na seção de Contexto/problema — de propósito sem o
+// verde da marca, pra diferenciar visualmente do que é "solução" nas seções seguintes.
+function ContextCard({ icon, title, description }: { icon: string; title: string; description: string }) {
+  return (
+    <div className="dgs-card">
+      <div className="w-10 h-10 rounded-lg bg-white/5 flex items-center justify-center text-neutral-400 mb-3.5">
+        <LineIcon name={icon} size={18} />
+      </div>
+      <div className="font-medium text-[14.5px] mb-1.5">{title}</div>
+      <div className="text-neutral-500 text-[13.5px] leading-relaxed">{description}</div>
+    </div>
+  );
+}
+
+// Card com o verde da marca — usado nas seções que apresentam a solução (O Modelo, Razão).
+function BrandCard({ icon, title, description }: { icon: string; title: string; description: string }) {
+  return (
+    <div className="dgs-card">
+      <div className="w-10 h-10 rounded-lg bg-brand/10 flex items-center justify-center text-brand mb-3.5">
+        <LineIcon name={icon} size={18} />
+      </div>
+      <div className="font-medium text-[14.5px] mb-1.5">{title}</div>
+      <div className="text-neutral-500 text-[13.5px] leading-relaxed">{description}</div>
+    </div>
+  );
+}
+
+// Os 4 passos da jornada real de um membro — do cadastro ao primeiro faturamento.
+const HOW_IT_WORKS = [
+  {
+    num: "01",
+    icon: "person",
+    title: "Cadastro e acesso",
+    description: "Você se cadastra, escolhe o plano e o acesso à comunidade é liberado automaticamente.",
+  },
+  {
+    num: "02",
+    icon: "edit",
+    title: "Estrutura e aquecimento da página",
+    description: "Aprende a estruturar a página do jeito certo e aplica as técnicas de aquecimento pra gerar alcance recorrente.",
+  },
+  {
+    num: "03",
+    icon: "megaphone",
+    title: "Entra nas campanhas musicais",
+    description: "Com a página pronta e aquecida, você acessa as campanhas de remuneração disponíveis na comunidade.",
+  },
+  {
+    num: "04",
+    icon: "wallet",
+    title: "Fatura por performance",
+    description: "Publica o conteúdo com a música da campanha e recebe de acordo com o volume gerado no período.",
+  },
+];
+
 const BENEFITS = [
   {
     icon: "video",
@@ -124,11 +201,11 @@ export default function LandingPage() {
             className="text-neutral-100 text-3xl sm:text-5xl font-bold leading-tight mb-6 dgs-fade-up"
             style={{ animationDelay: "0.5s" }}
           >
-            Seu próximo passo para viver do digital começa com uma página dark
+            Aprenda a transformar suas redes sociais em uma fonte de renda com campanhas musicais
           </h1>
           <p className="text-neutral-400 text-base sm:text-lg mb-9 max-w-lg dgs-fade-up" style={{ animationDelay: "0.8s" }}>
-            Aprenda a transformar visualizações em receita através de campanhas musicais — e acompanhe tudo dentro de
-            uma plataforma feita sob medida pra isso.
+            Aulas ao vivo, templates prontos e ferramentas de edição — tudo dentro de uma plataforma feita pra
+            acompanhar sua evolução do primeiro clipe ao primeiro milhão de views.
           </p>
           <div className="flex flex-col sm:flex-row gap-3 dgs-fade-up" style={{ animationDelay: "1.1s" }}>
             <Link href="/cadastro" className="dgs-btn-primary w-auto px-8 py-3.5 no-underline">
@@ -138,25 +215,96 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* Resultados da comunidade */}
-      <section id="resultados" className="max-w-4xl mx-auto px-6 py-10">
-        <div className="text-center mb-6">
-          <h2 className="text-2xl sm:text-3xl font-bold mb-2">Resultados da comunidade</h2>
-          <p className="text-neutral-500 text-sm max-w-md mx-auto">
-            Prints reais compartilhados pelos próprios membros, direto do grupo da comunidade.
-          </p>
+      {/* 01 — Contexto */}
+      <section className="max-w-4xl mx-auto px-6 py-10 sm:py-12">
+        <SectionEyebrow num="01" label="CONTEXTO" />
+        <SectionHead title="Fazer conteúdo sozinho, sem direção, não paga as contas" hint="O desafio de quem tenta crescer sozinho hoje." />
+        <p className="text-neutral-400 text-[15px] leading-relaxed max-w-xl mb-7">
+          Postar todo dia sem estratégia cansa e não converte. Descobrir sozinho como aparecer pro algoritmo — e
+          ainda transformar isso em dinheiro — leva meses, quando não trava de vez no meio do caminho.
+        </p>
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <ContextCard icon="warning" title="Conteúdo sem direção" description="Postar sem saber o que funciona é tentativa e erro caro — em tempo e em oportunidade perdida." />
+          <ContextCard icon="wallet" title="Views que não viram receita" description="Ter alcance é só metade do caminho. Sem acesso a campanhas de monetização, as visualizações não geram retorno." />
+          <ContextCard icon="person" title="Tentando sozinho" description="Sem repertório nem comunidade, cada erro custa mais caro e cada acerto demora mais pra acontecer." />
         </div>
+      </section>
+
+      {/* 02 — O modelo */}
+      <section className="max-w-4xl mx-auto px-6 py-10 sm:py-12">
+        <SectionEyebrow num="02" label="O MODELO" />
+        <SectionHead title="O que é a Comunidade DGS" hint="Aprendizado, ferramentas e monetização." />
+        <p className="text-neutral-400 text-[15px] leading-relaxed max-w-xl mb-7">
+          Uma comunidade que ensina como estruturar e crescer uma página do zero, e conecta você a campanhas musicais
+          que pagam de acordo com as visualizações que você gera — tudo acompanhado dentro de uma plataforma própria.
+        </p>
+        <div className="dgs-card flex items-center justify-between flex-wrap gap-3 text-sm mb-7">
+          <span className="text-neutral-400 whitespace-nowrap">você aprende</span>
+          <span className="text-brand/60">→</span>
+          <span className="text-neutral-400 whitespace-nowrap">estrutura sua página</span>
+          <span className="text-brand/60">→</span>
+          <span className="text-neutral-400 whitespace-nowrap">aquece o conteúdo</span>
+          <span className="text-brand/60">→</span>
+          <span className="text-brand font-semibold whitespace-nowrap">fatura por performance</span>
+        </div>
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <BrandCard icon="video" title="Aulas ao vivo" description="Aprenda direto com quem já vive disso, em encontros práticos dentro da comunidade." />
+          <BrandCard icon="sparkles" title="Templates e ferramentas prontas" description="Mais de 1.000 vídeos prontos pra modelar, e uma ferramenta própria de edição em massa pra acelerar sua produção." />
+          <BrandCard icon="wallet" title="Pago por performance" description="Campanhas musicais remuneram de acordo com o volume de visualizações que o seu conteúdo gera." />
+        </div>
+      </section>
+
+      {/* 03 — Razão */}
+      <section className="max-w-4xl mx-auto px-6 py-10 sm:py-12">
+        <SectionEyebrow num="03" label="RAZÃO" />
+        <SectionHead title="Por que funciona" hint="Estratégia, comunidade e transparência." />
+        <p className="text-neutral-400 text-[15px] leading-relaxed max-w-xl mb-3">
+          <strong className="text-neutral-100">Pra sua página:</strong> aprender a estruturar e aquecer o conteúdo do
+          jeito certo é o que separa um perfil que estagna de um que cresce de forma consistente — não depende de
+          sorte, nem de viralizar uma vez só.
+        </p>
+        <p className="text-neutral-400 text-[15px] leading-relaxed max-w-xl mb-7">
+          <strong className="text-neutral-100">Pra sua renda:</strong> em vez de esperar parcerias ou pagar por
+          anúncio, você entra direto nas campanhas musicais disponíveis e fatura de acordo com o volume que gerar,
+          com total transparência no seu dashboard.
+        </p>
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <BrandCard icon="book" title="Aprendizado prático" description="Aulas e conteúdos direto ao ponto, sem enrolação, pensados pra quem quer aplicar e ver resultado." />
+          <BrandCard icon="users" title="Comunidade ativa" description="Trocar com quem já passou pelos mesmos desafios acelera muito mais do que aprender sozinho." />
+          <BrandCard icon="chart" title="Acompanhamento em tempo real" description="Dashboard próprio pra lançar e acompanhar seu faturamento por plataforma." />
+        </div>
+      </section>
+
+      {/* 04 — Como funciona */}
+      <section className="max-w-4xl mx-auto px-6 py-10 sm:py-12">
+        <SectionEyebrow num="04" label="COMO FUNCIONA" />
+        <SectionHead title="Como funciona" hint="Do cadastro ao seu primeiro faturamento." />
+        <div className="grid grid-cols-1 sm:grid-cols-4 gap-6 relative">
+          <div className="hidden sm:block absolute top-[26px] left-[12.5%] right-[12.5%] h-px bg-brand/25" />
+          {HOW_IT_WORKS.map((step) => (
+            <div key={step.num} className="relative">
+              <div className="w-[52px] h-[52px] rounded-full border border-brand/40 bg-ink-900 flex items-center justify-center text-brand mb-4 relative z-10">
+                <LineIcon name={step.icon} />
+              </div>
+              <div className="text-brand text-xs font-semibold mb-1.5">{step.num}</div>
+              <div className="text-sm font-semibold mb-1.5">{step.title}</div>
+              <div className="text-neutral-500 text-[13.5px] leading-relaxed">{step.description}</div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* 05 — Resultados da comunidade */}
+      <section id="resultados" className="max-w-4xl mx-auto px-6 py-10 sm:py-12">
+        <SectionEyebrow num="05" label="RESULTADOS" />
+        <SectionHead title="Resultados da comunidade" hint="Prints reais compartilhados pelos membros." />
         <ResultsCarousel />
       </section>
 
-      {/* Benefícios */}
-      <section id="beneficios" className="max-w-5xl mx-auto px-6 py-12">
-        <div className="text-center mb-8">
-          <h2 className="text-2xl sm:text-3xl font-bold mb-2">Tudo o que você precisa está dentro da comunidade</h2>
-          <p className="text-neutral-500 text-sm max-w-md mx-auto">
-            Uma plataforma própria, feita pra acompanhar sua evolução do primeiro clipe ao primeiro milhão de views.
-          </p>
-        </div>
+      {/* 06 — Benefícios */}
+      <section id="beneficios" className="max-w-5xl mx-auto px-6 py-10 sm:py-12">
+        <SectionEyebrow num="06" label="BENEFÍCIOS" />
+        <SectionHead title="Tudo o que você precisa está dentro da comunidade" hint="Do primeiro clipe ao primeiro milhão de views." />
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
           {BENEFITS.map((b) => (
             <div key={b.title} className="dgs-card dgs-hover-card">
