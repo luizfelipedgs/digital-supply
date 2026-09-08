@@ -204,8 +204,9 @@ export default function LandingPage() {
             Aprenda a transformar suas redes sociais em uma fonte de renda com campanhas musicais
           </h1>
           <p className="text-neutral-400 text-base sm:text-lg mb-9 max-w-lg dgs-fade-up" style={{ animationDelay: "0.8s" }}>
-            Aulas ao vivo, templates prontos e ferramentas de edição — tudo dentro de uma plataforma feita pra
-            acompanhar sua evolução do primeiro clipe ao primeiro milhão de views.
+            Reuniões ao vivo diariamente no Discord, ferramentas exclusivas pra produção de vídeos em massa e
+            estratégias de viralização orgânica — tudo dentro de um ecossistema feito pra acompanhar sua evolução do
+            primeiro post ao primeiro milhão de views.
           </p>
           <div className="flex flex-col sm:flex-row gap-3 dgs-fade-up" style={{ animationDelay: "1.1s" }}>
             <Link href="/cadastro" className="dgs-btn-primary w-auto px-8 py-3.5 no-underline">
