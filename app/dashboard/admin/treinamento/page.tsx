@@ -1,11 +1,8 @@
-import Link from "next/link";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
-import { DashboardHeader } from "@/components/DashboardHeader";
-import { LineIcon } from "@/components/LineIcon";
-import { CoverUploader } from "./CoverUploader";
+import { AdminTreinamentoClient } from "./AdminTreinamentoClient";
 
-export default async function AdminHubPage() {
+export default async function AdminTreinamentoPage() {
   const supabase = createClient();
   const { data: userData } = await supabase.auth.getUser();
   if (!userData.user) redirect("/login");
@@ -13,43 +10,10 @@ export default async function AdminHubPage() {
   const { data: profile } = await supabase.from("profiles").select("is_admin").eq("id", userData.user.id).single();
   if (!profile?.is_admin) redirect("/dashboard");
 
-  const { data: settings } = await supabase.from("site_settings").select("cover_path").eq("id", "main").maybeSingle();
+  const { data: licoes } = await supabase
+    .from("treinamento_licoes")
+    .select("id, title, subtitle, content_type, body_text, video_url, is_bonus, order_index")
+    .order("order_index", { ascending: true });
 
-  const items = [
-    { href: "/dashboard/admin/alunos", icon: "person", title: "Alunos", description: "Aprovação manual e gestão de acesso." },
-    { href: "/dashboard/admin/conteudos", icon: "book", title: "Conteúdos", description: "Módulos, aulas e capas." },
-    { href: "/dashboard/admin/treinamento", icon: "target", title: "Treinamento Gratuito", description: "Aulas públicas de captação em /treinamento, sem login." },
-    { href: "/dashboard/admin/templates", icon: "play", title: "Templates Prontos", description: "Vídeo tutorial e links do Canva." },
-    { href: "/dashboard/admin/musicas", icon: "music", title: "Biblioteca de Músicas", description: "Músicas prontas pra todos os alunos escolherem no Editor de Músicas." },
-    { href: "/dashboard/admin/desktop", icon: "play", title: "Tutorial do Desktop", description: "Vídeo de como baixar e usar o Editor de Músicas Desktop." },
-    { href: "/dashboard/admin/paginas", icon: "search", title: "Lista de Páginas", description: "Páginas BR e gringas pra reciclar vídeos." },
-    { href: "/dashboard/admin/grupo", icon: "users", title: "Grupo DGS", description: "Link do grupo e regras da comunidade." },
-    { href: "/dashboard/admin/indique", icon: "gift", title: "Indique e Ganhe", description: "Link de afiliado e comissão." },
-    { href: "/dashboard/admin/avisos", icon: "megaphone", title: "Avisos", description: "Notificações pros alunos." },
-  ];
-
-  return (
-    <div className="min-h-screen bg-ink-900 p-6 sm:p-8">
-      <div className="max-w-xl mx-auto">
-        <DashboardHeader backHref="/dashboard" />
-        <h1 className="text-neutral-100 text-xl font-medium mb-6">Painel admin</h1>
-
-        <CoverUploader initialCoverPath={settings?.cover_path ?? null} />
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          {items.map((item) => (
-            <Link key={item.href} href={item.href} className="dgs-card dgs-hover-card no-underline flex flex-col gap-3">
-              <div className="w-10 h-10 rounded-xl bg-brand/10 flex items-center justify-center text-brand">
-                <LineIcon name={item.icon} size={18} />
-              </div>
-              <div>
-                <div className="text-neutral-100 font-medium text-sm mb-1">{item.title}</div>
-                <div className="text-neutral-500 text-xs">{item.description}</div>
-              </div>
-            </Link>
-          ))}
-        </div>
-      </div>
-    </div>
-  );
+  return <AdminTreinamentoClient initialLessons={licoes ?? []} />;
 }
