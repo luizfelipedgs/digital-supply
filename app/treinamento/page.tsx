@@ -102,15 +102,16 @@ export default async function TreinamentoPage() {
             className="text-neutral-100 text-3xl sm:text-[42px] font-bold leading-tight mb-6 dgs-fade-up"
             style={{ animationDelay: "0.5s" }}
           >
-            Do zero à sua primeira página: o treinamento teórico completo pra começar
+            Do zero à sua primeira página: construindo uma base forte de engajamento e monetização
           </h1>
           <p className="text-neutral-400 text-base mb-6 max-w-lg dgs-fade-up" style={{ animationDelay: "0.8s" }}>
-            Eu sou Luiz Felipe, fundador da Digital Supply. Reuni nesse treinamento tudo que eu queria ter aprendido
-            antes de começar no mercado de páginas darks: como escolher nicho, estruturar uma página do jeito certo,
-            aquecer a conta e viralizar de forma recorrente — sem depender de sorte.
+            Esse treinamento reúne o essencial pra quem está começando no mercado de páginas darks: como escolher
+            nicho, estruturar uma página do jeito certo, aquecer a conta e viralizar de forma recorrente — sem
+            depender de sorte.
           </p>
           <p className="text-neutral-500 text-sm mb-9 max-w-lg dgs-fade-up" style={{ animationDelay: "1s" }}>
-            É 100% gratuito e teórico. Na última aula, você aplica tudo em um projeto prático, do zero.
+            Rápido e sem enrolação — você avança pela trilha toda em pouco tempo e fecha com uma aula prática
+            completa, aplicando do zero tudo o que foi ensinado.
           </p>
         </div>
       </section>
