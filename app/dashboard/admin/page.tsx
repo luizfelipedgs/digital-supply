@@ -18,6 +18,7 @@ export default async function AdminHubPage() {
   const items = [
     { href: "/dashboard/admin/alunos", icon: "person", title: "Alunos", description: "Aprovação manual e gestão de acesso." },
     { href: "/dashboard/admin/conteudos", icon: "book", title: "Conteúdos", description: "Módulos, aulas e capas." },
+    { href: "/dashboard/admin/treinamento", icon: "target", title: "Treinamento Gratuito", description: "Aulas públicas de captação em /treinamento, sem login." },
     { href: "/dashboard/admin/templates", icon: "play", title: "Templates Prontos", description: "Vídeo tutorial e links do Canva." },
     { href: "/dashboard/admin/musicas", icon: "music", title: "Biblioteca de Músicas", description: "Músicas prontas pra todos os alunos escolherem no Editor de Músicas." },
     { href: "/dashboard/admin/desktop", icon: "play", title: "Tutorial do Desktop", description: "Vídeo de como baixar e usar o Editor de Músicas Desktop." },
