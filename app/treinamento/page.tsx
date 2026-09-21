@@ -161,10 +161,10 @@ export default async function TreinamentoPage() {
       <section className="max-w-2xl mx-auto px-6 py-10 sm:py-12 text-center">
         <div className="dgs-card !bg-transparent !border-0 !p-0">
           <p className="text-neutral-300 text-lg sm:text-xl leading-relaxed italic border-l-2 border-brand/50 pl-5 text-left max-w-xl mx-auto">
-            "Quem espera o momento perfeito pra começar, nunca começa. O aprendizado vem de aplicar, errar e ajustar
-            no caminho — não de esperar se sentir 100% pronto."
+            "Você só não realizou seus sonhos porque são metas para você, porque se fosse tarefa para os outros, você
+            já teria entregue antes do prazo."
           </p>
-          <p className="text-neutral-500 text-xs mt-3 pl-5 text-left max-w-xl mx-auto">— Luiz Felipe, fundador da Digital Supply</p>
+          <p className="text-neutral-500 text-xs mt-3 pl-5 text-left max-w-xl mx-auto">— Luiz Felipe, fundador da DGS</p>
         </div>
       </section>
 
