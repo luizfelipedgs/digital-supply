@@ -181,6 +181,10 @@ export async function POST(req: NextRequest) {
         plan,
         plan_activated_at: new Date().toISOString(),
         plan_expires_at: expiresAt,
+        // Renovou a assinatura da comunidade → se em algum momento o acesso
+        // ao Editor de Músicas Desktop tinha sido suspenso junto (por causa
+        // do vencimento), volta junto também.
+        desktop_app_suspended: false,
       })
       .eq("id", profile.id);
 
@@ -211,7 +215,13 @@ export async function POST(req: NextRequest) {
       if (isDesktopAppOffer(offerId)) {
         await supabase.from("profiles").update({ desktop_app_purchased: false }).eq("id", profile.id);
       } else {
-        await supabase.from("profiles").update({ status: "suspended" }).eq("id", profile.id);
+        // Suspende o acesso ao site e, junto, ao Editor de Músicas Desktop
+        // (quem comprou mantém o registro da compra — só fica escondido
+        // enquanto a assinatura estiver suspensa/vencida).
+        await supabase
+          .from("profiles")
+          .update({ status: "suspended", desktop_app_suspended: true })
+          .eq("id", profile.id);
       }
 
       if (logRow) {
