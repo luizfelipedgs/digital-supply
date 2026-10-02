@@ -15,6 +15,7 @@ type Profile = {
   plan_expires_at: string | null;
   created_at: string;
   desktop_app_purchased: boolean;
+  desktop_app_suspended: boolean;
 };
 
 const PLAN_DAYS: Record<string, number> = { mensal: 30, trimestral: 90, anual: 365 };
@@ -54,7 +55,7 @@ export function AlunosClient({
   async function refresh() {
     const { data } = await supabase
       .from("profiles")
-      .select("id, email, full_name, nickname, status, plan, plan_expires_at, created_at, desktop_app_purchased")
+      .select("id, email, full_name, nickname, status, plan, plan_expires_at, created_at, desktop_app_purchased, desktop_app_suspended")
       .order("created_at", { ascending: false });
     setProfiles(data ?? []);
   }
@@ -68,6 +69,9 @@ export function AlunosClient({
       .update({
         desktop_app_purchased: next,
         desktop_app_purchased_at: next ? new Date().toISOString() : null,
+        // Ao liberar manualmente, garante que não fique escondido por causa
+        // de uma suspensão automática antiga (ex: assinatura já vencida).
+        ...(next ? { desktop_app_suspended: false } : {}),
       })
       .eq("id", id);
     refresh();
@@ -93,7 +97,17 @@ export function AlunosClient({
 
   async function setStatus(id: string, status: string) {
     if (!confirm(`Confirma mudar o status pra "${STATUS_LABEL[status]}"?`)) return;
-    await supabase.from("profiles").update({ status }).eq("id", id);
+    await supabase
+      .from("profiles")
+      .update({
+        status,
+        // Suspender/reativar a assinatura manualmente aqui também leva
+        // junto o acesso ao Editor de Músicas Desktop — mesmo comportamento
+        // da suspensão automática por vencimento, pra não precisar mais
+        // mexer nos dois lugares separados.
+        desktop_app_suspended: status === "suspended",
+      })
+      .eq("id", id);
     refresh();
   }
 
@@ -327,9 +341,13 @@ export function AlunosClient({
                 <div className="border-t border-white/10 pt-3 flex items-center justify-between gap-3 flex-wrap">
                   <span className="text-neutral-500 text-xs">
                     Editor de Músicas Desktop:{" "}
-                    <span className={p.desktop_app_purchased ? "text-brand" : "text-neutral-500"}>
-                      {p.desktop_app_purchased ? "liberado" : "não liberado"}
-                    </span>
+                    {!p.desktop_app_purchased ? (
+                      <span className="text-neutral-500">não liberado</span>
+                    ) : p.desktop_app_suspended ? (
+                      <span className="text-yellow-400">comprou, mas suspenso (assinatura vencida)</span>
+                    ) : (
+                      <span className="text-brand">liberado</span>
+                    )}
                   </span>
                   <button
                     onClick={() => toggleDesktopAccess(p.id, p.desktop_app_purchased)}
