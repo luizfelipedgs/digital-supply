@@ -13,13 +13,13 @@ export default async function DesktopAppPage() {
 
   const { data: profile } = await supabase
     .from("profiles")
-    .select("status, is_admin, desktop_app_purchased, email")
+    .select("status, is_admin, desktop_app_purchased, desktop_app_suspended, email")
     .eq("id", userData.user.id)
     .single();
 
   if (!profile || profile.status !== "active") redirect("/aguardando");
 
-  const hasAccess = !!profile.is_admin || !!profile.desktop_app_purchased;
+  const hasAccess = !!profile.is_admin || (!!profile.desktop_app_purchased && !profile.desktop_app_suspended);
 
   const { data: settings } = await supabase
     .from("desktop_app_settings")
