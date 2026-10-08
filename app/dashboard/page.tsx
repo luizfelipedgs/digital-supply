@@ -68,7 +68,7 @@ export default async function DashboardPage() {
       href: "/dashboard/campanhas",
       icon: "sparkles",
       title: "Campanhas exclusivas",
-      description: "Participe de campanhas selecionadas pela DGS e concorra a premiações extras.",
+      description: "Participe de competições privadas em plataformas parceiras da comunidade.",
     },
     {
       href: "/dashboard/arsenal",
