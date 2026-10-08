@@ -100,6 +100,12 @@ export default async function DashboardPage() {
       description: "Top 20 em faturamento acumulado no mês — acompanhe sua posição na comunidade.",
     },
     {
+      href: "/dashboard/campanhas",
+      icon: "sparkles",
+      title: "Campanhas exclusivas",
+      description: "Participe de campanhas selecionadas pela DGS e concorra a premiações extras.",
+    },
+    {
       href: "/dashboard/grupo",
       icon: "users",
       title: "Grupo DGS",
