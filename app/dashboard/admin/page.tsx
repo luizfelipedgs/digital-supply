@@ -25,6 +25,7 @@ export default async function AdminHubPage() {
     { href: "/dashboard/admin/paginas", icon: "search", title: "Lista de Páginas", description: "Páginas BR e gringas pra reciclar vídeos." },
     { href: "/dashboard/admin/grupo", icon: "users", title: "Grupo DGS", description: "Link do grupo e regras da comunidade." },
     { href: "/dashboard/admin/indique", icon: "gift", title: "Indique e Ganhe", description: "Link de afiliado e comissão." },
+    { href: "/dashboard/admin/campanhas", icon: "sparkles", title: "Campanhas exclusivas", description: "Capa, nome, período e premiação das campanhas." },
     { href: "/dashboard/admin/avisos", icon: "megaphone", title: "Avisos", description: "Notificações pros alunos." },
   ];
 
