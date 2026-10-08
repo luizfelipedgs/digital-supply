@@ -68,14 +68,14 @@ export function CampanhasList({ campaigns }: { campaigns: Campaign[] }) {
                       <LineIcon name="sparkles" size={28} />
                     </div>
                   )}
-                  <span
-                    className={`absolute top-3 right-3 text-[10.5px] font-semibold px-2.5 py-1 rounded-full ${STATUS_PILL_CLASS[c.status]}`}
-                  >
-                    {CAMPAIGN_STATUS_LABEL[c.status]}
-                  </span>
                 </div>
                 <div className="p-4 flex flex-col gap-3">
                   <div className="text-neutral-100 text-sm font-semibold leading-snug">{c.title}</div>
+                  <span
+                    className={`self-start text-[10.5px] font-semibold px-2.5 py-1 rounded-full ${STATUS_PILL_CLASS[c.status]}`}
+                  >
+                    {CAMPAIGN_STATUS_LABEL[c.status]}
+                  </span>
                   <div className="flex flex-wrap gap-3 text-xs text-neutral-500">
                     <span>
                       📅 {formatDateBR(c.start_date)} — {formatDateBR(c.end_date)}
