@@ -28,7 +28,7 @@ export default async function CampanhasPage() {
         <DashboardHeader backHref="/dashboard" />
         <h1 className="text-neutral-100 text-xl font-medium mb-1">Campanhas exclusivas</h1>
         <p className="text-neutral-500 text-sm mb-6">
-          Participe de campanhas selecionadas pela DGS e concorra a premiações extras.
+          Participe de competições privadas em plataformas parceiras da comunidade.
         </p>
         <CampanhasList campaigns={campaigns} />
       </div>
