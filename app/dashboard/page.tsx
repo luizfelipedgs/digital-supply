@@ -4,7 +4,6 @@ import { createClient } from "@/lib/supabase/server";
 import { Logo } from "@/components/Logo";
 import { DashboardHeader } from "@/components/DashboardHeader";
 import { TodayEarningsCard } from "./TodayEarningsCard";
-import { RankingCard } from "./RankingCard";
 import { PLAN_LABEL, checkoutUrl } from "@/lib/plans";
 import { dailySeries, sumInRange, subtractDays, todayISO } from "@/lib/earnings";
 import { LineIcon } from "@/components/LineIcon";
@@ -64,21 +63,12 @@ export default async function DashboardPage() {
     label: WEEKDAY_LABEL[new Date(d.date + "T00:00:00Z").getUTCDay()],
   }));
 
-  // Top 3 da semana (ranking da comunidade)
-  const { data: rankingRaw } = await supabase.rpc("weekly_ranking", { top_n: 3 });
-  const rankingEntries = (rankingRaw ?? []).map((r: any) => ({
-    user_id: r.user_id,
-    display_name: r.display_name,
-    total: Number(r.total),
-    avatarUrl: r.avatar_path ? supabase.storage.from("avatars").getPublicUrl(r.avatar_path).data.publicUrl : null,
-  }));
-
   const sections = [
     {
-      href: "/dashboard/faturamento",
-      icon: "wallet",
-      title: "Faturamento",
-      description: "Lance seus ganhos por plataforma e acompanhe sua evolução com gráficos e comparativos.",
+      href: "/dashboard/campanhas",
+      icon: "sparkles",
+      title: "Campanhas exclusivas",
+      description: "Participe de campanhas selecionadas pela DGS e concorra a premiações extras.",
     },
     {
       href: "/dashboard/arsenal",
@@ -86,6 +76,12 @@ export default async function DashboardPage() {
       title: "Arsenal DGS",
       description:
         "As principais ferramentas e recursos para facilitar sua produção, acelerar processos e tornar a operação mais eficiente.",
+    },
+    {
+      href: "/dashboard/faturamento",
+      icon: "wallet",
+      title: "Faturamento",
+      description: "Lance seus ganhos por plataforma e acompanhe sua evolução com gráficos e comparativos.",
     },
     {
       href: "/dashboard/conteudos",
@@ -98,12 +94,6 @@ export default async function DashboardPage() {
       icon: "trophy",
       title: "Ranking Geral",
       description: "Top 20 em faturamento acumulado no mês — acompanhe sua posição na comunidade.",
-    },
-    {
-      href: "/dashboard/campanhas",
-      icon: "sparkles",
-      title: "Campanhas exclusivas",
-      description: "Participe de campanhas selecionadas pela DGS e concorra a premiações extras.",
     },
     {
       href: "/dashboard/grupo",
@@ -174,8 +164,6 @@ export default async function DashboardPage() {
         )}
 
         <TodayEarningsCard series={weekSeries} todayTotal={todayTotal} className="mt-6" />
-
-        <RankingCard entries={rankingEntries} />
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
           {sections.map((s) => (
