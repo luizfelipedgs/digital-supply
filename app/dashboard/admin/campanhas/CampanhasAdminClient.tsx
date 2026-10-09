@@ -2,11 +2,13 @@
 
 import { useState } from "react";
 import { createClient } from "@/lib/supabase/client";
+import { RichTextEditor } from "@/components/RichTextEditor";
 import { campaignStatus, CAMPAIGN_STATUS_LABEL, formatDateBR, type CampaignStatus } from "@/lib/campaigns";
 
 type Campaign = {
   id: string;
   title: string;
+  description: string | null;
   cover_path: string | null;
   coverUrl: string | null;
   start_date: string;
@@ -20,6 +22,7 @@ type Campaign = {
 type Draft = {
   id: string | null;
   title: string;
+  description: string;
   start_date: string;
   end_date: string;
   prize_label: string;
@@ -31,6 +34,7 @@ type Draft = {
 const EMPTY_DRAFT: Draft = {
   id: null,
   title: "",
+  description: "",
   start_date: "",
   end_date: "",
   prize_label: "",
@@ -57,7 +61,7 @@ export function CampanhasAdminClient({ initialCampaigns, userId }: { initialCamp
   async function refresh() {
     const { data } = await supabase
       .from("campaigns")
-      .select("id, title, cover_path, start_date, end_date, prize_label, link_url, featured, created_at")
+      .select("id, title, description, cover_path, start_date, end_date, prize_label, link_url, featured, created_at")
       .order("start_date", { ascending: false });
     const withUrls = (data ?? []).map((c) => ({
       ...c,
@@ -77,6 +81,7 @@ export function CampanhasAdminClient({ initialCampaigns, userId }: { initialCamp
     setDraft({
       id: c.id,
       title: c.title,
+      description: c.description ?? "",
       start_date: c.start_date,
       end_date: c.end_date,
       prize_label: c.prize_label ?? "",
@@ -124,6 +129,7 @@ export function CampanhasAdminClient({ initialCampaigns, userId }: { initialCamp
 
     const payload = {
       title: draft.title.trim(),
+      description: draft.description.trim() || null,
       cover_path: coverPath,
       start_date: draft.start_date,
       end_date: draft.end_date,
@@ -234,6 +240,18 @@ export function CampanhasAdminClient({ initialCampaigns, userId }: { initialCamp
                 onChange={(e) => setDraft((d) => ({ ...d, link_url: e.target.value }))}
               />
             </div>
+          </div>
+
+          <div>
+            <label className="text-xs text-neutral-500 mb-1.5 block">Descrição / dicas / modelos aceitos (opcional)</label>
+            <RichTextEditor
+              initialValue={draft.description}
+              onSave={(html) => setDraft((d) => ({ ...d, description: html }))}
+            />
+            <p className="text-neutral-600 text-xs mt-1.5">
+              Aparece pro aluno na tela "Mais informações" da campanha, antes do botão de participar — use pra
+              explicar como participar, dar dicas e colar links de exemplo.
+            </p>
           </div>
 
           {error && <p className="text-red-400 text-xs">{error}</p>}
