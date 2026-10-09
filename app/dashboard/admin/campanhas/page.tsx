@@ -13,7 +13,7 @@ export default async function AdminCampanhasPage() {
 
   const { data: campaignsRaw } = await supabase
     .from("campaigns")
-    .select("id, title, cover_path, start_date, end_date, prize_label, link_url, created_at")
+    .select("id, title, cover_path, start_date, end_date, prize_label, link_url, featured, created_at")
     .order("start_date", { ascending: false });
 
   const campaigns = (campaignsRaw ?? []).map((c) => ({
