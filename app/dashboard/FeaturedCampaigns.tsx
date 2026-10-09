@@ -50,14 +50,9 @@ export function FeaturedCampaigns({ campaigns }: { campaigns: FeaturedCampaign[]
                   📅 {formatDateBR(c.start_date)} — {formatDateBR(c.end_date)}
                   {c.prize_label && <span className="text-[#c3e67a]"> · 🏆 {c.prize_label}</span>}
                 </div>
-                <a
-                  href={c.link_url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="dgs-btn-primary no-underline text-center mt-auto"
-                >
-                  Participar →
-                </a>
+                <Link href={`/dashboard/campanhas/${c.id}`} className="dgs-btn-primary no-underline text-center mt-auto">
+                  Mais informações →
+                </Link>
               </div>
             </div>
           );
