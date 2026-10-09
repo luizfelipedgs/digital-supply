@@ -36,7 +36,7 @@ export function FeaturedCampaigns({ campaigns }: { campaigns: FeaturedCampaign[]
           const status = campaignStatus(c.start_date, c.end_date);
           return (
             <div key={c.id} className="dgs-card p-0 overflow-hidden flex flex-col">
-              <div className="h-[72px] bg-gradient-to-br from-brand/10 via-white/[0.02] to-transparent">
+              <div className="h-36 bg-gradient-to-br from-brand/10 via-white/[0.02] to-transparent">
                 {c.coverUrl && <img src={c.coverUrl} alt="" className="w-full h-full object-cover" />}
               </div>
               <div className="p-3 flex flex-col gap-1.5 flex-1">
