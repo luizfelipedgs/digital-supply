@@ -13,6 +13,7 @@ type Campaign = {
   end_date: string;
   prize_label: string | null;
   link_url: string;
+  featured: boolean;
   created_at: string;
 };
 
@@ -56,7 +57,7 @@ export function CampanhasAdminClient({ initialCampaigns, userId }: { initialCamp
   async function refresh() {
     const { data } = await supabase
       .from("campaigns")
-      .select("id, title, cover_path, start_date, end_date, prize_label, link_url, created_at")
+      .select("id, title, cover_path, start_date, end_date, prize_label, link_url, featured, created_at")
       .order("start_date", { ascending: false });
     const withUrls = (data ?? []).map((c) => ({
       ...c,
@@ -151,6 +152,12 @@ export function CampanhasAdminClient({ initialCampaigns, userId }: { initialCamp
     refresh();
   }
 
+  async function toggleFeatured(c: Campaign) {
+    setCampaigns((prev) => prev.map((x) => (x.id === c.id ? { ...x, featured: !x.featured } : x)));
+    const { error: toggleError } = await supabase.from("campaigns").update({ featured: !c.featured }).eq("id", c.id);
+    if (toggleError) refresh();
+  }
+
   return (
     <div className="flex flex-col gap-6">
       <div className="flex items-start justify-between gap-4 flex-wrap">
@@ -242,6 +249,13 @@ export function CampanhasAdminClient({ initialCampaigns, userId }: { initialCamp
         </div>
       )}
 
+      {campaigns.length > 0 && (
+        <div className="text-xs text-neutral-500 -mb-2">
+          <b className="text-[#c3e67a]">{campaigns.filter((c) => c.featured).length}</b> campanha(s) marcada(s) como
+          destaque na home — se forem menos de 3 ativas, o sistema completa sozinho com as próximas a começar.
+        </div>
+      )}
+
       <div className="flex flex-col gap-2">
         {campaigns.length === 0 && !formOpen && (
           <div className="dgs-card text-neutral-500 text-sm text-center py-10">Nenhuma campanha cadastrada ainda.</div>
@@ -266,6 +280,12 @@ export function CampanhasAdminClient({ initialCampaigns, userId }: { initialCamp
                 {CAMPAIGN_STATUS_LABEL[status]}
               </span>
               <div className="flex gap-2 shrink-0">
+                <button
+                  onClick={() => toggleFeatured(c)}
+                  className={c.featured ? "dgs-btn-primary w-auto px-3 py-1.5 text-xs" : "dgs-btn-ghost"}
+                >
+                  {c.featured ? "★ destaque" : "☆ destacar"}
+                </button>
                 <button onClick={() => openEdit(c)} className="dgs-btn-ghost">
                   editar
                 </button>
