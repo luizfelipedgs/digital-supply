@@ -4,8 +4,10 @@ import { createClient } from "@/lib/supabase/server";
 import { Logo } from "@/components/Logo";
 import { DashboardHeader } from "@/components/DashboardHeader";
 import { TodayEarningsCard } from "./TodayEarningsCard";
+import { FeaturedCampaigns } from "./FeaturedCampaigns";
 import { PLAN_LABEL, checkoutUrl } from "@/lib/plans";
 import { dailySeries, sumInRange, subtractDays, todayISO } from "@/lib/earnings";
+import { pickFeaturedCampaigns } from "@/lib/campaigns";
 import { LineIcon } from "@/components/LineIcon";
 
 const WEEKDAY_LABEL = ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"];
@@ -61,6 +63,18 @@ export default async function DashboardPage() {
   const weekSeries = dailySeries(earningsEntries, weekStart, today).map((d) => ({
     ...d,
     label: WEEKDAY_LABEL[new Date(d.date + "T00:00:00Z").getUTCDay()],
+  }));
+
+  // Campanhas em destaque na home — as marcadas pelo admin, completadas
+  // automaticamente até um mínimo de 3 (ver pickFeaturedCampaigns).
+  const { data: campaignsRaw } = await supabase
+    .from("campaigns")
+    .select("id, title, cover_path, start_date, end_date, prize_label, link_url, featured")
+    .order("start_date", { ascending: true });
+
+  const featuredCampaigns = pickFeaturedCampaigns(campaignsRaw ?? [], 3).map((c) => ({
+    ...c,
+    coverUrl: c.cover_path ? supabase.storage.from("content-covers").getPublicUrl(c.cover_path).data.publicUrl : null,
   }));
 
   const sections = [
@@ -149,6 +163,8 @@ export default async function DashboardPage() {
       </div>
 
       <div className="max-w-5xl w-full mx-auto">
+        <FeaturedCampaigns campaigns={featuredCampaigns} />
+
         {showRenewalWarning && renewUrl && (
           <div className="dgs-card border-brand/30 bg-brand/5 flex items-center justify-between gap-4 mb-8 mt-6 flex-wrap">
             <div>
