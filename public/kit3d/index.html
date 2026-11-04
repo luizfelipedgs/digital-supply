@@ -68,6 +68,19 @@ a{color:inherit}
 .hero + section{padding-top:16px}
 .karaoke .w{transition:color .15s}
 .karaoke .w.dita{color:var(--ink)} .karaoke .w.agora{color:var(--red)} .karaoke .w.prox{color:color-mix(in srgb,var(--ink) 38%,var(--bg))}
+.vsl{position:relative;margin:22px 0 24px;border-radius:18px;overflow:hidden;aspect-ratio:16/9;background:#0c160f;box-shadow:0 18px 44px rgba(0,0,0,.28)}
+.vsl video{width:100%;height:100%;display:block;object-fit:cover}
+.vsl .play{position:absolute;inset:0;display:grid;place-items:center;border:0;padding:0;background:linear-gradient(180deg,transparent 40%,rgba(0,0,0,.35));cursor:pointer}
+.vsl .play span{display:inline-flex;align-items:center;gap:12px;font:800 18px/1 var(--display);color:#fff;background:var(--red);padding:16px 24px;border-radius:99px;box-shadow:0 10px 26px rgba(0,0,0,.35);align-self:end;margin-bottom:4%}
+@media (max-width:600px){.vsl .play span{font-size:14px;padding:10px 16px;gap:9px;margin-bottom:3%}.vsl .play span::before{border-left-width:10px;border-top-width:7px;border-bottom-width:7px}}
+.vsl .play span::before{content:"";border-left:14px solid #fff;border-top:9px solid transparent;border-bottom:9px solid transparent}
+.vsl .pp{position:absolute;left:14px;bottom:16px;width:46px;height:46px;border-radius:50%;border:0;background:rgba(0,0,0,.55);cursor:pointer;display:grid;place-items:center;opacity:0;transition:opacity .2s}
+.vsl:hover .pp,.vsl.pausado .pp{opacity:1}
+.vsl .pp i{width:14px;height:16px;border-left:5px solid #fff;border-right:5px solid #fff}
+.vsl.pausado .pp i{width:0;height:0;border-right:0;border-left:15px solid #fff;border-top:9px solid transparent;border-bottom:9px solid transparent;margin-left:4px}
+.vsl .barra-vsl{position:absolute;left:0;right:0;bottom:0;height:5px;background:rgba(255,255,255,.25)}
+.vsl .barra-vsl i{display:block;height:100%;width:0;background:var(--red)}
+.vsl video{cursor:pointer}
 .preco-linha{display:flex;flex-wrap:wrap;align-items:center;gap:16px 22px;margin-top:6px}
 .preco{font:800 34px/1 var(--display);letter-spacing:-.02em}
 .preco small{display:block;font:500 14px var(--body);color:var(--soft);letter-spacing:0;margin-top:6px}
@@ -187,7 +200,7 @@ footer .wrap{display:grid;gap:8px}
       <span class="eyebrow">Kit pronto + passo a passo em vídeo</span>
       <h1 id="titulo">Crie o seu próprio projeto em 3D, um dia por vídeo.</h1>
       <p class="lead">Do roteiro ao vídeo pronto: o Claude monta cenas, legenda e sons, e você só aprova, narra e posta.</p>
-      <div class="nots"><span>sem editar vídeo</span><span>sem programar</span><span>sem aparecer</span></div>
+      <div class="vsl" id="vsl"><video id="vslv" src="vsl-kit3d.mp4" poster="vsl-capa.jpg" playsinline preload="metadata" controlslist="nodownload noplaybackrate noremoteplayback" disablepictureinpicture disableremoteplayback></video><button class="pp" id="vslpp" type="button" aria-label="Pausar" hidden><i></i></button><div class="barra-vsl"><i id="vslbar"></i></div><button class="play" id="vslp" type="button" aria-label="Assistir ao vídeo"><span>Assista: 1 minuto</span></button></div>
       <div class="preco-linha">
         <a class="btn" data-checkout href="#oferta">Quero o kit</a>
       </div>
@@ -353,6 +366,16 @@ const CHECKOUT = "https://pay.cakto.com.br/3caut9c_1279825";                 // 
 // =====================================
 
 if (CHECKOUT) document.querySelectorAll('[data-checkout]').forEach(a => { a.href = CHECKOUT; a.rel = 'noopener'; });
+
+// VSL: toca com som ao clicar
+(function () { const v = document.getElementById('vslv'), b = document.getElementById('vslp'), pp = document.getElementById('vslpp'), box = document.getElementById('vsl'), bar = document.getElementById('vslbar'); if (!v || !b) return;
+  const alterna = () => { if (v.paused) v.play().catch(() => {}); else v.pause(); };
+  b.addEventListener('click', () => { b.hidden = true; pp.hidden = false; v.play().catch(() => {}); });
+  pp.addEventListener('click', alterna); v.addEventListener('click', () => { if (b.hidden) alterna(); });
+  v.addEventListener('play', () => { box.classList.remove('pausado'); pp.setAttribute('aria-label', 'Pausar'); });
+  v.addEventListener('pause', () => { box.classList.add('pausado'); pp.setAttribute('aria-label', 'Continuar'); });
+  v.addEventListener('timeupdate', () => { if (v.duration) bar.style.width = (v.currentTime / v.duration * 100) + '%'; });
+  box.addEventListener('contextmenu', e => e.preventDefault()); })();
 
 // barra fixa no celular depois do topo
 (function () {
