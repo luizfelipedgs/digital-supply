@@ -185,8 +185,8 @@ footer .wrap{display:grid;gap:8px}
   <div class="wrap hero">
     <div class="stack">
       <span class="eyebrow">Kit pronto + passo a passo em vídeo</span>
-      <h1 class="karaoke" id="titulo">Crie o seu próprio projeto em 3D, um dia por vídeo.</h1>
-      <p class="lead">Você aprova o roteiro e grava a narração. O Claude monta as cenas em 3D, a câmera, a legenda e os sons. No final sai um MP4 vertical, pronto para o Instagram.</p>
+      <h1 id="titulo">Crie o seu próprio projeto em 3D, um dia por vídeo.</h1>
+      <p class="lead">Do roteiro ao vídeo pronto: o Claude monta cenas, legenda e sons, e você só aprova, narra e posta.</p>
       <div class="nots"><span>sem editar vídeo</span><span>sem programar</span><span>sem aparecer</span></div>
       <div class="preco-linha">
         <a class="btn" data-checkout href="#oferta">Quero o kit</a>
@@ -353,21 +353,6 @@ const CHECKOUT = "https://pay.cakto.com.br/3caut9c_1279825";                 // 
 // =====================================
 
 if (CHECKOUT) document.querySelectorAll('[data-checkout]').forEach(a => { a.href = CHECKOUT; a.rel = 'noopener'; });
-
-// título no estilo das legendas: a palavra falada fica vermelha
-(function () {
-  const h = document.getElementById('titulo'); const ws = h.textContent.trim().split(/\s+/);
-  h.innerHTML = ws.map(w => '<span class="w dita">' + w + '</span>').join(' ');
-  if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-  const sp = h.querySelectorAll('.w'); let i = 0;
-  function passo() {
-    sp.forEach((s, k) => s.className = 'w ' + (k < i ? 'dita' : k === i ? 'agora' : 'prox'));
-    i++;
-    if (i <= sp.length) setTimeout(passo, i === sp.length ? 900 : 330);
-    else { sp.forEach(s => s.className = 'w dita'); setTimeout(() => { i = 0; passo(); }, 4200); }
-  }
-  setTimeout(passo, 700);
-})();
 
 // barra fixa no celular depois do topo
 (function () {
