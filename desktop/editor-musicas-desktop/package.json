@@ -9,7 +9,8 @@
   "private": true,
   "scripts": {
     "start": "electron .",
-    "dist": "electron-builder --win nsis"
+    "dist": "electron-builder --win nsis",
+    "dist:mac": "electron-builder --mac dmg"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.45.4",
@@ -48,6 +49,17 @@
       "createDesktopShortcut": true,
       "createStartMenuShortcut": true,
       "artifactName": "EditorDeMusicas-Setup.exe"
+    },
+    "mac": {
+      "target": [
+        { "target": "dmg", "arch": ["x64", "arm64"] }
+      ],
+      "icon": "assets/icon.png",
+      "category": "public.app-category.video",
+      "identity": null
+    },
+    "dmg": {
+      "artifactName": "EditorDeMusicas-Mac-${arch}.dmg"
     }
   }
 }
