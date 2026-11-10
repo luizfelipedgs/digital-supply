@@ -3,7 +3,13 @@ import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { DashboardHeader } from "@/components/DashboardHeader";
 import { LineIcon } from "@/components/LineIcon";
-import { desktopAppCheckoutUrl, desktopAppDownloadUrl, DESKTOP_APP_PRICE_LABEL } from "@/lib/desktop-app";
+import {
+  desktopAppCheckoutUrl,
+  desktopAppDownloadUrl,
+  desktopAppDownloadUrlMacAppleSilicon,
+  desktopAppDownloadUrlMacIntel,
+  DESKTOP_APP_PRICE_LABEL,
+} from "@/lib/desktop-app";
 import { toYoutubeEmbedUrl } from "@/lib/youtube";
 
 export default async function DesktopAppPage() {
@@ -72,25 +78,55 @@ export default async function DesktopAppPage() {
                 <div className="text-neutral-100 font-medium text-sm">
                   {profile.is_admin && !profile.desktop_app_purchased ? "Acesso liberado (admin)" : "Você já tem acesso"}
                 </div>
-                <div className="text-neutral-500 text-xs mt-0.5">Windows — instalador (.exe)</div>
+                <div className="text-neutral-500 text-xs mt-0.5">Escolha o sistema do seu computador</div>
               </div>
             </div>
 
-            <a href={desktopAppDownloadUrl()} className="dgs-btn-primary no-underline text-center">
-              Baixar programa
-            </a>
-
-            <div className="rounded-lg border border-orange-700/30 bg-orange-700/5 px-4 py-3 flex items-start gap-2.5">
-              <span className="shrink-0 mt-0.5 text-orange-500">
-                <LineIcon name="warning" size={14} />
-              </span>
-              <p className="text-neutral-400 text-xs leading-relaxed">
-                O instalador não é assinado digitalmente, então o Windows pode mostrar um aviso ("Windows protegeu
-                seu PC") na primeira abertura — isso é normal, clique em <strong>Mais informações</strong> e depois
-                em <strong>Executar assim mesmo</strong>. Depois de instalado, abra o programa e faça login com o
-                mesmo e-mail e senha que você usa aqui no site.
-              </p>
+            <div className="rounded-lg border border-white/10 p-4 flex flex-col gap-2.5">
+              <div className="text-neutral-200 text-xs font-semibold">Windows</div>
+              <a href={desktopAppDownloadUrl()} className="dgs-btn-primary no-underline text-center">
+                Baixar programa (.exe)
+              </a>
+              <div className="rounded-lg border border-orange-700/30 bg-orange-700/5 px-4 py-3 flex items-start gap-2.5">
+                <span className="shrink-0 mt-0.5 text-orange-500">
+                  <LineIcon name="warning" size={14} />
+                </span>
+                <p className="text-neutral-400 text-xs leading-relaxed">
+                  O instalador não é assinado digitalmente, então o Windows pode mostrar um aviso ("Windows protegeu
+                  seu PC") na primeira abertura — clique em <strong>Mais informações</strong> e depois em{" "}
+                  <strong>Executar assim mesmo</strong>.
+                </p>
+              </div>
             </div>
+
+            <div className="rounded-lg border border-white/10 p-4 flex flex-col gap-2.5">
+              <div className="text-neutral-200 text-xs font-semibold">Mac</div>
+              <a href={desktopAppDownloadUrlMacAppleSilicon()} className="dgs-btn-primary no-underline text-center">
+                Baixar programa (.dmg) — Apple Silicon
+              </a>
+              <a href={desktopAppDownloadUrlMacIntel()} className="dgs-btn-ghost no-underline text-center">
+                Baixar pra Mac Intel (mais antigo)
+              </a>
+              <p className="text-neutral-600 text-[11px] leading-relaxed">
+                Não sabe qual é o seu? Menu  (canto superior esquerdo) → Sobre Este Mac. Se aparecer "Chip Apple
+                M1/M2/M3/M4...", é Apple Silicon.
+              </p>
+              <div className="rounded-lg border border-blue-700/30 bg-blue-700/5 px-4 py-3 flex items-start gap-2.5">
+                <span className="shrink-0 mt-0.5 text-blue-400">
+                  <LineIcon name="warning" size={14} />
+                </span>
+                <p className="text-neutral-400 text-xs leading-relaxed">
+                  O app também não é assinado pela Apple, então na primeira abertura o Mac vai bloquear com
+                  "desenvolvedor não identificado" — clique com o <strong>botão direito</strong> no app, escolha{" "}
+                  <strong>Abrir</strong> e confirme. Só precisa fazer isso uma vez.
+                </p>
+              </div>
+            </div>
+
+            <p className="text-neutral-600 text-xs leading-relaxed">
+              Depois de instalado, abra o programa e faça login com o mesmo e-mail e senha que você usa aqui no
+              site.
+            </p>
           </div>
         ) : (
           <div className="dgs-card flex flex-col gap-4">
