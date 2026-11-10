@@ -1,21 +1,36 @@
 name: Build desktop app (Editor de Músicas)
 
-# Builda o instalador Windows (.exe) da versão desktop do Editor de Músicas
-# toda vez que algo em desktop/editor-musicas-desktop mudar na main, e
-# publica o resultado como artefato do GitHub Actions + como um GitHub
-# Release novo (versionado — veja o passo "Builda e publica" abaixo). Não
-# usa o Supabase Storage pra isso porque o instalador (~96 MB) passa do
-# limite de 50 MB do plano Free do Supabase — o GitHub Release não tem esse
-# limite.
+# Builda o instalador Windows (.exe) E o instalador Mac (.dmg, Intel e Apple
+# Silicon) da versão desktop do Editor de Músicas toda vez que algo em
+# desktop/editor-musicas-desktop mudar na main, e publica os dois como
+# artefato do GitHub Actions + como assets da MESMA GitHub Release
+# (versionada — veja o passo "Builda e publica" de cada job). Não usa o
+# Supabase Storage pra isso porque os instaladores (~90-100 MB cada) passam
+# do limite de 50 MB do plano Free do Supabase — o GitHub Release não tem
+# esse limite.
 #
-# O programa instalado se atualiza sozinho a partir dessa release (usa
-# electron-updater) — por isso cada build precisa ser uma release NOVA com
-# uma versão maior que a anterior, em vez de sobrescrever sempre a mesma
-# (é o próprio electron-builder que cria a release e o manifesto que o
-# autoUpdater lê, com "--publish always"). O botão "Baixar programa" do
-# site sempre aponta pra release marcada como "latest" no GitHub, que o
-# GitHub atualiza sozinho pra release mais recente automaticamente — não
-# precisa mais gerenciar tag nenhuma na mão.
+# O job do Mac (build-mac) espera o job do Windows (build) terminar primeiro
+# ("needs: build"), pra ele já ter criado a Release daquela versão — o job do
+# Mac só entra depois e sobe os .dmg como assets extras na mesma Release, em
+# vez de arriscar os dois criarem releases conflitantes ao mesmo tempo.
+#
+# O Windows se atualiza sozinho a partir dessa release (usa electron-updater)
+# — por isso cada build precisa ser uma release NOVA com uma versão maior
+# que a anterior, em vez de sobrescrever sempre a mesma (é o próprio
+# electron-builder que cria a release e o manifesto que o autoUpdater lê,
+# com "--publish always"). O Mac NÃO tem auto-atualização por enquanto (veja
+# src/main.js) — sem o app assinado/notarizado pela Apple, ela esbarraria no
+# Gatekeeper a cada versão nova. O botão "Baixar programa" do site sempre
+# aponta pra release marcada como "latest" no GitHub, que o GitHub atualiza
+# sozinho pra release mais recente automaticamente — não precisa mais
+# gerenciar tag nenhuma na mão.
+#
+# O instalador Mac não é assinado nem notarizado pela Apple (decisão
+# consciente, pra não depender de uma conta Apple Developer Program paga por
+# enquanto) — então o aluno vai precisar clicar com o botão direito no app
+# e escolher "Abrir" na primeira vez, por causa do aviso do Gatekeeper
+# ("desenvolvedor não identificado"). Mesma ideia do aviso do Windows
+# SmartScreen que já existia.
 #
 # Precisa de 2 Secrets configurados em Settings > Secrets and variables >
 # Actions do repositório (veja desktop/editor-musicas-desktop/README.md pros
@@ -75,4 +90,52 @@ jobs:
         with:
           name: EditorDeMusicas-Setup
           path: desktop/editor-musicas-desktop/dist/EditorDeMusicas-Setup.exe
+          if-no-files-found: error
+
+  build-mac:
+    needs: build
+    runs-on: macos-latest
+    defaults:
+      run:
+        working-directory: desktop/editor-musicas-desktop
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Instala dependências
+        run: npm install
+
+      - name: Gera src/env.js com as credenciais do Supabase
+        shell: bash
+        run: |
+          cat > src/env.js << EOF
+          module.exports = {
+            SUPABASE_URL: "${{ secrets.SUPABASE_URL }}",
+            SUPABASE_ANON_KEY: "${{ secrets.SUPABASE_ANON_KEY }}",
+          };
+          EOF
+
+      - name: Builda e publica os instaladores (.dmg Intel + Apple Silicon) na mesma Release
+        # Mesma versão do job do Windows (github.run_number é igual pros dois
+        # jobs dentro da mesma execução do workflow), então o electron-builder
+        # sobe os .dmg como assets extras na Release que o job "build" já
+        # criou, em vez de criar uma release nova.
+        # CSC_IDENTITY_AUTO_DISCOVERY=false + "identity": null no package.json
+        # garantem que o electron-builder nem tenta assinar/notarizar — sem
+        # isso ele ficaria procurando um certificado Apple que não existe
+        # nesse runner e o build falharia.
+        shell: bash
+        run: npx electron-builder --mac dmg --publish always --config.extraMetadata.version=1.0.${{ github.run_number }}
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          CSC_IDENTITY_AUTO_DISCOVERY: false
+
+      - name: Publica os instaladores Mac como artefato do GitHub Actions
+        uses: actions/upload-artifact@v4
+        with:
+          name: EditorDeMusicas-Mac
+          path: desktop/editor-musicas-desktop/dist/*.dmg
           if-no-files-found: error
