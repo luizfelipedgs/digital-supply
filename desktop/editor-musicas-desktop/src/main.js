@@ -72,7 +72,13 @@ app.whenReady().then(() => {
   createWindow();
   // Espera a janela existir antes de checar — os eventos do autoUpdater
   // avisam a tela via mainWindow.webContents.send.
-  autoUpdater.checkForUpdates().catch(() => {});
+  // No Mac fica desativado por enquanto: sem o app assinado/notarizado pela
+  // Apple, a auto-atualização esbarraria no Gatekeeper a cada versão nova —
+  // melhor o aluno baixar o instalador mais novo manualmente quando a gente
+  // avisar de uma atualização, até decidirmos assinar o app.
+  if (process.platform !== "darwin") {
+    autoUpdater.checkForUpdates().catch(() => {});
+  }
 });
 
 app.on("window-all-closed", () => {
