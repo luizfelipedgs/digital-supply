@@ -40,8 +40,8 @@ const TOOLS = [
   {
     href: "/dashboard/desktop",
     icon: "video",
-    title: "Editor de Músicas — Desktop",
-    description: "A versão pra instalar no seu computador: sem limite de vídeos e sem créditos, pagamento único.",
+    title: "Central DGS — Hub Desktop Unificado",
+    description: "Agendador automático em 3 redes (Instagram, TikTok, YouTube), Editor de Músicas FFmpeg em lote e métodos práticos.",
   },
 ];
 
