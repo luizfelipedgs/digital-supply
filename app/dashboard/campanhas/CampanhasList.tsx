@@ -77,11 +77,17 @@ export function CampanhasList({ campaigns }: { campaigns: Campaign[] }) {
                   >
                     {CAMPAIGN_STATUS_LABEL[c.status]}
                   </span>
-                  <div className="flex flex-wrap gap-3 text-xs text-neutral-500">
-                    <span>
-                      📅 {formatDateBR(c.start_date)} — {formatDateBR(c.end_date)}
+                  <div className="flex flex-wrap gap-3 text-xs text-neutral-500 items-center">
+                    <span className="flex items-center gap-1.5">
+                      <LineIcon name="calendar" size={14} className="text-neutral-400 shrink-0" />
+                      <span>{formatDateBR(c.start_date)} — {formatDateBR(c.end_date)}</span>
                     </span>
-                    {c.prize_label && <span className="text-[#c3e67a] font-medium">🏆 {c.prize_label}</span>}
+                    {c.prize_label && (
+                      <span className="text-[#c3e67a] font-medium flex items-center gap-1.5">
+                        <LineIcon name="trophy" size={14} className="text-[#c3e67a] shrink-0" />
+                        <span>{c.prize_label}</span>
+                      </span>
+                    )}
                   </div>
                   <Link href={`/dashboard/campanhas/${c.id}`} className="dgs-btn-primary no-underline text-center">
                     Mais informações →

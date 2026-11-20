@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { LineIcon } from "@/components/LineIcon";
 import { CAMPAIGN_STATUS_LABEL, campaignStatus, formatDateBR, type CampaignStatus } from "@/lib/campaigns";
 
 type FeaturedCampaign = {
@@ -24,7 +25,8 @@ export function FeaturedCampaigns({ campaigns }: { campaigns: FeaturedCampaign[]
     <div className="mb-6">
       <div className="flex items-center justify-between gap-3 mb-3">
         <div className="text-neutral-100 text-sm font-semibold flex items-center gap-2">
-          <span className="text-brand">✨</span> Campanhas em destaque
+          <LineIcon name="sparkles" size={16} className="text-brand shrink-0" />
+          <span>Campanhas em destaque</span>
         </div>
         <Link href="/dashboard/campanhas" className="text-brand text-xs no-underline shrink-0">
           Ver todas →
@@ -46,9 +48,18 @@ export function FeaturedCampaigns({ campaigns }: { campaigns: FeaturedCampaign[]
                 >
                   {CAMPAIGN_STATUS_LABEL[status]}
                 </span>
-                <div className="text-neutral-500 text-[10.5px] leading-snug">
-                  📅 {formatDateBR(c.start_date)} — {formatDateBR(c.end_date)}
-                  {c.prize_label && <span className="text-[#c3e67a]"> · 🏆 {c.prize_label}</span>}
+                <div className="text-neutral-500 text-[10.5px] leading-snug flex items-center gap-1.5 flex-wrap">
+                  <span className="flex items-center gap-1">
+                    <LineIcon name="calendar" size={12} className="text-neutral-400 shrink-0" />
+                    <span>{formatDateBR(c.start_date)} — {formatDateBR(c.end_date)}</span>
+                  </span>
+                  {c.prize_label && (
+                    <span className="text-[#c3e67a] flex items-center gap-1">
+                      <span>·</span>
+                      <LineIcon name="trophy" size={12} className="text-[#c3e67a] shrink-0" />
+                      <span>{c.prize_label}</span>
+                    </span>
+                  )}
                 </div>
                 <Link href={`/dashboard/campanhas/${c.id}`} className="dgs-btn-primary no-underline text-center mt-auto">
                   Mais informações →
