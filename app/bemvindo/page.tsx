@@ -4,9 +4,7 @@ import { createClient } from "@/lib/supabase/server";
 import { Logo } from "@/components/Logo";
 import { LineIcon } from "@/components/LineIcon";
 import { desktopAppDownloadUrl } from "@/lib/desktop-app";
-import { toYoutubeEmbedUrl } from "@/lib/youtube";
 import { LogoutButton } from "./LogoutButton";
-import { TutorialViewer } from "./TutorialViewer";
 
 export const metadata: Metadata = {
   title: "Bem-vindo à Central DGS | Digital Supply",
@@ -38,21 +36,12 @@ export default async function BemVindoPage() {
     redirect("/assinatura-expirada");
   }
 
-  // Busca configurações em tempo real do Supabase
-  const { data: desktopSettings } = await supabase
-    .from("desktop_app_settings")
-    .select("tutorial_video_url")
-    .eq("id", "main")
-    .maybeSingle();
-
   const { data: grupoSettings } = await supabase
     .from("grupo_settings")
     .select("group_link")
     .eq("id", "main")
     .maybeSingle();
 
-  const rawVideoUrl = desktopSettings?.tutorial_video_url || "https://youtu.be/m3JFaMjhTis";
-  const tutorialEmbedUrl = toYoutubeEmbedUrl(rawVideoUrl);
   const whatsappUrl = grupoSettings?.group_link || "https://chat.whatsapp.com/I4h3zQRr1869hsC0rRzTQ7";
 
   return (
@@ -103,7 +92,7 @@ export default async function BemVindoPage() {
           </p>
         </section>
 
-        {/* Card do Vídeo Tutorial + Botão de Download Imediatamente Abaixo */}
+        {/* Card do Vídeo Ilustrativo + Botão de Download Imediatamente Abaixo */}
         <section className="dgs-card rounded-2xl p-5 sm:p-7 border border-white/10 bg-[#0d100c]/90 shadow-2xl flex flex-col gap-6">
           <div className="flex items-center justify-between border-b border-white/10 pb-4">
             <div className="flex items-center gap-3">
@@ -112,17 +101,28 @@ export default async function BemVindoPage() {
               </div>
               <div>
                 <h2 className="text-base sm:text-lg font-semibold text-neutral-100">
-                  Tutorial: Como Baixar, Instalar e Utilizar
+                  Passo a Passo de Instalação e Uso
                 </h2>
                 <p className="text-neutral-500 text-xs">
-                  Assista ao vídeo ou à animação com o passo a passo antes de abrir a Central DGS pela primeira vez.
+                  Veja na animação abaixo como baixar, descompactar e inicializar a Central DGS.
                 </p>
               </div>
             </div>
           </div>
 
-          {/* Player do Vídeo Tutorial (YouTube ou Animação MP4 Nativa) */}
-          <TutorialViewer youtubeEmbedUrl={tutorialEmbedUrl} />
+          {/* Player do Vídeo Ilustrativo */}
+          <div className="aspect-video w-full rounded-xl overflow-hidden border border-white/15 bg-black shadow-2xl relative">
+            <video
+              src="/tutorial/passo-a-passo.mp4"
+              poster="/tutorial/passo-1-extrair.png"
+              controls
+              autoPlay
+              loop
+              muted
+              playsInline
+              className="w-full h-full object-contain bg-black"
+            />
+          </div>
 
           {/* BOTÃO DE DOWNLOAD DA CENTRAL DGS (DIRETAMENTE ABAIXO DO VÍDEO) */}
           <div className="flex flex-col gap-3 pt-2">
@@ -150,76 +150,43 @@ export default async function BemVindoPage() {
           </div>
         </section>
 
-        {/* Guia Rápido de Instalação em 3 Passos Ilustrado com Imagens */}
-        <section className="flex flex-col gap-5">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <LineIcon name="check" size={18} className="text-brand" />
-              <h2 className="text-base sm:text-lg font-semibold text-neutral-200">
-                Passo a Passo Ilustrado de Instalação
-              </h2>
-            </div>
-            <span className="text-xs text-neutral-500">3 etapas simples</span>
+        {/* Guia Rápido de Instalação em 3 Passos (Sem imagens redundantes) */}
+        <section className="flex flex-col gap-4">
+          <div className="flex items-center gap-2">
+            <LineIcon name="check" size={18} className="text-brand" />
+            <h2 className="text-base sm:text-lg font-semibold text-neutral-200">
+              Passo a Passo Rápido
+            </h2>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-            {/* Passo 1 */}
-            <div className="dgs-card rounded-xl p-4 sm:p-5 border border-white/10 bg-white/[0.02] flex flex-col gap-3.5">
-              <div className="rounded-lg overflow-hidden border border-white/10 aspect-video bg-black/40">
-                <img
-                  src="/tutorial/passo-1-extrair.png"
-                  alt="Passo 1: Baixar e Extrair"
-                  className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
-                />
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div className="dgs-card rounded-xl p-5 border border-white/10 bg-white/[0.02] flex flex-col gap-3">
+              <div className="w-8 h-8 rounded-lg bg-brand/10 border border-brand/20 flex items-center justify-center text-brand font-bold text-sm">
+                1
               </div>
-              <div className="flex items-center gap-2">
-                <div className="w-6 h-6 rounded-md bg-brand/10 border border-brand/20 flex items-center justify-center text-brand font-bold text-xs shrink-0">
-                  1
-                </div>
-                <h3 className="text-sm font-semibold text-neutral-100">Baixar e Extrair</h3>
-              </div>
+              <h3 className="text-sm font-semibold text-neutral-100">Baixar e Extrair</h3>
               <p className="text-neutral-400 text-xs leading-relaxed">
                 Clique no botão verde acima para baixar o arquivo <strong>.zip</strong>. Em seguida, clique com o botão
-                direito sobre ele e selecione <strong>&quot;Extrair Tudo...&quot;</strong>.
+                direito sobre ele e selecione <strong>Extrair Tudo...</strong>.
               </p>
             </div>
 
-            {/* Passo 2 */}
-            <div className="dgs-card rounded-xl p-4 sm:p-5 border border-white/10 bg-white/[0.02] flex flex-col gap-3.5">
-              <div className="rounded-lg overflow-hidden border border-white/10 aspect-video bg-black/40">
-                <img
-                  src="/tutorial/passo-2-smartscreen.png"
-                  alt="Passo 2: Executar Instalador e SmartScreen"
-                  className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
-                />
+            <div className="dgs-card rounded-xl p-5 border border-white/10 bg-white/[0.02] flex flex-col gap-3">
+              <div className="w-8 h-8 rounded-lg bg-brand/10 border border-brand/20 flex items-center justify-center text-brand font-bold text-sm">
+                2
               </div>
-              <div className="flex items-center gap-2">
-                <div className="w-6 h-6 rounded-md bg-brand/10 border border-brand/20 flex items-center justify-center text-brand font-bold text-xs shrink-0">
-                  2
-                </div>
-                <h3 className="text-sm font-semibold text-neutral-100">Executar Instalador</h3>
-              </div>
+              <h3 className="text-sm font-semibold text-neutral-100">Executar o Instalador</h3>
               <p className="text-neutral-400 text-xs leading-relaxed">
-                Abra a pasta extraída e dê dois cliques em <strong className="text-brand">INSTALAR_CENTRAL_DGS.bat</strong>.
+                Abra a pasta descompactada e dê dois cliques em <strong className="text-brand">INSTALAR_CENTRAL_DGS.bat</strong>.
                 Se aparecer a tela azul do Windows, clique em <strong>&quot;Mais informações&quot;</strong> e em seguida em <strong>&quot;Executar assim mesmo&quot;</strong>.
               </p>
             </div>
 
-            {/* Passo 3 */}
-            <div className="dgs-card rounded-xl p-4 sm:p-5 border border-white/10 bg-white/[0.02] flex flex-col gap-3.5">
-              <div className="rounded-lg overflow-hidden border border-white/10 aspect-video bg-black/40">
-                <img
-                  src="/tutorial/passo-3-central.png"
-                  alt="Passo 3: Acessar a Central DGS"
-                  className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
-                />
+            <div className="dgs-card rounded-xl p-5 border border-white/10 bg-white/[0.02] flex flex-col gap-3">
+              <div className="w-8 h-8 rounded-lg bg-brand/10 border border-brand/20 flex items-center justify-center text-brand font-bold text-sm">
+                3
               </div>
-              <div className="flex items-center gap-2">
-                <div className="w-6 h-6 rounded-md bg-brand/10 border border-brand/20 flex items-center justify-center text-brand font-bold text-xs shrink-0">
-                  3
-                </div>
-                <h3 className="text-sm font-semibold text-neutral-100">Acessar a Central</h3>
-              </div>
+              <h3 className="text-sm font-semibold text-neutral-100">Fazer Login</h3>
               <p className="text-neutral-400 text-xs leading-relaxed">
                 Abra a Central DGS pelo novo atalho na sua Área de Trabalho e entre com seu <strong>e-mail e senha de aluno</strong>.
                 Todos os seus módulos serão liberados instantaneamente!
