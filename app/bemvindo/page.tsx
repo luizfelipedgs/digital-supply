@@ -101,25 +101,26 @@ export default async function BemVindoPage() {
               </div>
               <div>
                 <h2 className="text-base sm:text-lg font-semibold text-neutral-100">
-                  Passo a Passo de Instalação e Uso
+                  Tutorial Narrado: Como Baixar, Instalar e Utilizar
                 </h2>
                 <p className="text-neutral-500 text-xs">
-                  Veja na animação abaixo como baixar, descompactar e inicializar a Central DGS.
+                  Assista ao vídeo com narração oficial e efeitos sonoros demonstrando o passo a passo completo.
                 </p>
               </div>
             </div>
+            <div className="hidden sm:flex items-center gap-1.5 px-3 py-1 rounded-full bg-brand/10 border border-brand/20 text-brand text-xs font-semibold shrink-0">
+              <span>🔊 Com Narração</span>
+            </div>
           </div>
 
-          {/* Player do Vídeo Ilustrativo */}
+          {/* Player do Vídeo Ilustrativo Narrado */}
           <div className="aspect-video w-full rounded-xl overflow-hidden border border-white/15 bg-black shadow-2xl relative">
             <video
               src="/tutorial/passo-a-passo.mp4"
-              poster="/tutorial/passo-1-extrair.png"
+              poster="/tutorial/poster.png"
               controls
-              autoPlay
-              loop
-              muted
               playsInline
+              preload="auto"
               className="w-full h-full object-contain bg-black"
             />
           </div>
