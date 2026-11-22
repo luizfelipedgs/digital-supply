@@ -31,7 +31,7 @@ export default function AguardandoPage() {
 
     setChecking(false);
     if (profile?.status === "active") {
-      router.push("/dashboard");
+      router.push("/bemvindo");
     }
   }
 

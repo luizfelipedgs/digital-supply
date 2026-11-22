@@ -116,8 +116,8 @@ export default async function DesktopAppPage() {
 
             <div className="rounded-lg border border-white/10 p-4 flex flex-col gap-2.5">
               <div className="text-neutral-200 text-xs font-semibold">Windows (Recomendado)</div>
-              <a href={desktopAppDownloadUrl()} className="dgs-btn-primary no-underline text-center">
-                Baixar Central DGS para Windows (.exe)
+              <a href={desktopAppDownloadUrl()} download className="dgs-btn-primary no-underline text-center">
+                Baixar Central DGS para Windows (Instalador .zip)
               </a>
               <div className="rounded-lg border border-orange-700/30 bg-orange-700/5 px-4 py-3 flex items-start gap-2.5">
                 <span className="shrink-0 mt-0.5 text-orange-500">

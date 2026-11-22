@@ -62,9 +62,24 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(new URL("/assinatura-expirada", request.url));
   }
 
+  // Desativa completamente o antigo dashboard web.
+  // Alunos e administradores são direcionados para /bemvindo ao logar.
+  // Apenas o painel administrativo (/dashboard/admin/...) é acessível para admins.
+  const { pathname } = request.nextUrl;
+  if (pathname.startsWith("/dashboard/admin")) {
+    if (!profile.is_admin) {
+      return NextResponse.redirect(new URL("/bemvindo", request.url));
+    }
+    return supabaseResponse;
+  }
+
+  if (pathname === "/dashboard" || pathname.startsWith("/dashboard/")) {
+    return NextResponse.redirect(new URL("/bemvindo", request.url));
+  }
+
   return supabaseResponse;
 }
 
 export const config = {
-  matcher: ["/dashboard/:path*"],
+  matcher: ["/dashboard/:path*", "/bemvindo/:path*"],
 };

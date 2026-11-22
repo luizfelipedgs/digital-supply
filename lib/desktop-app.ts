@@ -18,7 +18,7 @@ export function desktopAppCheckoutUrl(email?: string | null) {
 // GitHub — ele redireciona sozinho pra release mais recente automaticamente,
 // sem precisar gerenciar tag nenhuma aqui.
 export function desktopAppDownloadUrl() {
-  return "https://github.com/luizfelipedgs/digital-supply/releases/latest/download/EditorDeMusicas-Setup.exe";
+  return "/downloads/Central_DGS_Instalador_Windows.zip";
 }
 
 // Mesma ideia do Windows, mas os instaladores Mac (.dmg) saem em dois

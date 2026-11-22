@@ -22,9 +22,9 @@ export default async function AssinaturaExpiradaPage() {
   const expiredByDate = !!profile.plan_expires_at && new Date(profile.plan_expires_at).getTime() < Date.now();
 
   // Se por acaso a pessoa já renovou (ou é admin) e caiu aqui por um link
-  // antigo, manda ela direto pro dashboard em vez de mostrar o aviso à toa.
+  // antigo, manda ela direto pra /bemvindo em vez de mostrar o aviso à toa.
   if (profile.is_admin || (profile.status === "active" && !expiredByDate)) {
-    redirect("/dashboard");
+    redirect("/bemvindo");
   }
 
   const expiresLabel = profile.plan_expires_at

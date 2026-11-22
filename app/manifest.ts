@@ -7,7 +7,7 @@ export default function manifest(): MetadataRoute.Manifest {
     name: "Comunidade DGS — Digital Supply",
     short_name: "DGS",
     description: "Área de membros da Comunidade DGS: conteúdos, faturamento e mais.",
-    start_url: "/dashboard",
+    start_url: "/bemvindo",
     display: "standalone",
     background_color: "#050503",
     theme_color: "#050503",

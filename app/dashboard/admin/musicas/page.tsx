@@ -9,7 +9,7 @@ export default async function MusicasAdminPage() {
   if (!userData.user) redirect("/login");
 
   const { data: profile } = await supabase.from("profiles").select("is_admin").eq("id", userData.user.id).single();
-  if (!profile?.is_admin) redirect("/dashboard");
+  if (!profile?.is_admin) redirect("/bemvindo");
 
   const { data: tracks } = await supabase
     .from("music_library")
