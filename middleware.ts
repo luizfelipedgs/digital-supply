@@ -62,17 +62,10 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(new URL("/assinatura-expirada", request.url));
   }
 
-  // Desativa completamente o antigo dashboard web.
-  // Alunos e administradores são direcionados para /bemvindo ao logar.
-  // Apenas o painel administrativo (/dashboard/admin/...) é acessível para admins.
+  // Desativa completamente o antigo dashboard web para todos os usuários (alunos e administradores).
+  // A partir de agora, toda a experiência e gestão ocorrem exclusivamente na Central DGS Desktop.
+  // O site web serve apenas para vendas, checkout, autenticação e direcionamento para download em /bemvindo.
   const { pathname } = request.nextUrl;
-  if (pathname.startsWith("/dashboard/admin")) {
-    if (!profile.is_admin) {
-      return NextResponse.redirect(new URL("/bemvindo", request.url));
-    }
-    return supabaseResponse;
-  }
-
   if (pathname === "/dashboard" || pathname.startsWith("/dashboard/")) {
     return NextResponse.redirect(new URL("/bemvindo", request.url));
   }

@@ -77,18 +77,9 @@ export default async function BemVindoPage() {
           </div>
 
           <div className="flex items-center gap-3">
-            {profile.is_admin ? (
-              <Link
-                href="/dashboard/admin"
-                className="text-xs text-brand hover:underline font-medium px-2 py-1"
-              >
-                Painel Admin
-              </Link>
-            ) : (
-              <span className="hidden sm:inline text-xs text-neutral-400 bg-white/[0.04] px-2.5 py-1 rounded-full border border-white/5">
-                {profile.email}
-              </span>
-            )}
+            <span className="hidden sm:inline text-xs text-neutral-400 bg-white/[0.04] px-2.5 py-1 rounded-full border border-white/5">
+              {profile.is_admin ? "Administrador DGS" : profile.email}
+            </span>
             <LogoutButton />
           </div>
         </div>
