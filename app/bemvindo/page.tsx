@@ -102,20 +102,17 @@ export default async function BemVindoPage() {
               </div>
               <div>
                 <h2 className="text-base sm:text-lg font-semibold text-neutral-100">
-                  Tutorial Narrado: Como Baixar, Instalar e Utilizar
+                  Como Baixar, Instalar e Acessar
                 </h2>
                 <p className="text-neutral-500 text-xs">
-                  Assista ao vídeo com narração oficial e efeitos sonoros demonstrando o passo a passo completo.
+                  Assista ao vídeo demonstrando o passo a passo completo.
                 </p>
               </div>
             </div>
-            <div className="hidden sm:flex items-center gap-1.5 px-3 py-1 rounded-full bg-brand/10 border border-brand/20 text-brand text-xs font-semibold shrink-0">
-              <span>🔊 Com Narração</span>
-            </div>
           </div>
 
-          {/* Player do Vídeo Tutorial Oficial (sem opção de download) */}
-          <VideoPlayer src="/tutorial/passo-a-passo.mp4" poster="/tutorial/poster.png" />
+          {/* Player do Vídeo Tutorial Oficial */}
+          <VideoPlayer src="/tutorial/DGS_Tutorial_v2.mp4" poster="/tutorial/poster_v2.png" />
 
           {/* BOTÃO DE DOWNLOAD ÚNICO DA CENTRAL DGS (DIRETAMENTE ABAIXO DO VÍDEO) */}
           <div className="flex flex-col gap-4 pt-2">
@@ -172,48 +169,6 @@ export default async function BemVindoPage() {
                   </div>
                 </div>
               </div>
-            </div>
-          </div>
-        </section>
-
-        {/* Guia Rápido de Instalação em 3 Passos */}
-        <section className="flex flex-col gap-4">
-          <div className="flex items-center gap-2">
-            <LineIcon name="check" size={18} className="text-brand" />
-            <h2 className="text-base sm:text-lg font-semibold text-neutral-200">
-              Instalação Simples em 3 Passos
-            </h2>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-            <div className="dgs-card rounded-xl p-5 border border-white/10 bg-white/[0.02] flex flex-col gap-3">
-              <div className="w-8 h-8 rounded-lg bg-brand/10 border border-brand/20 flex items-center justify-center text-brand font-bold text-sm">
-                1
-              </div>
-              <h3 className="text-sm font-semibold text-neutral-100">Baixar o Launcher</h3>
-              <p className="text-neutral-400 text-xs leading-relaxed">
-                Clique no botão verde acima para baixar o <strong>Launcher_Central_DGS.exe</strong>. Arquivo único e leve, sem necessidade de extrair pastas complexas.
-              </p>
-            </div>
-
-            <div className="dgs-card rounded-xl p-5 border border-white/10 bg-white/[0.02] flex flex-col gap-3">
-              <div className="w-8 h-8 rounded-lg bg-brand/10 border border-brand/20 flex items-center justify-center text-brand font-bold text-sm">
-                2
-              </div>
-              <h3 className="text-sm font-semibold text-neutral-100">Instalação Automática</h3>
-              <p className="text-neutral-400 text-xs leading-relaxed">
-                Abra o Launcher e clique em <strong className="text-brand">Instalar Central DGS</strong>. Ele configura tudo em <strong>C:\Central_DGS</strong> e cria o atalho oficial na sua Área de Trabalho.
-              </p>
-            </div>
-
-            <div className="dgs-card rounded-xl p-5 border border-white/10 bg-white/[0.02] flex flex-col gap-3">
-              <div className="w-8 h-8 rounded-lg bg-brand/10 border border-brand/20 flex items-center justify-center text-brand font-bold text-sm">
-                3
-              </div>
-              <h3 className="text-sm font-semibold text-neutral-100">Entrar pela Área de Trabalho</h3>
-              <p className="text-neutral-400 text-xs leading-relaxed">
-                Dê dois cliques no ícone <strong>Central DGS</strong> na Área de Trabalho e entre com seu e-mail de aluno. Atualizações futuras acontecem com 1 clique direto na tela da Central!
-              </p>
             </div>
           </div>
         </section>
