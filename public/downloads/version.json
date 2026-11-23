@@ -1,18 +1,17 @@
 {
-  "version": "2.2.0",
+  "version": "2.3.0",
   "release_date": "2026-11-23",
   "app_name": "Central DGS",
   "release_notes": [
-    "Instalação 100% automática e autônoma pelo Launcher oficial em C:\\Central_DGS.",
-    "Atalho oficial criado na Área de Trabalho com abertura silenciosa.",
-    "Nova janela dedicada de conexão para Instagram, TikTok e YouTube sem conflitos de portas.",
-    "Fallback em cascata com suporte nativo ao Microsoft Edge e navegadores padrão do Windows.",
-    "Novo método de conexão instantânea por Cookie: conecte suas redes sociais em 15 segundos sem depender de automação.",
-    "Correção definitiva no monitor de autenticação e proteção de integridade do banco de dados."
+    "Nova ferramenta integrada: Download em Massa para TikTok e Instagram Reels com extensão oficial Manifest V3.",
+    "Curadoria viral avançada por métricas reais (Top Views, Top Likes, Engajamento) e trava de segurança de até 100 vídeos.",
+    "Correção de Content Security Policy (CSP) na extensão do Chrome para renderização rápida e segura de thumbnails.",
+    "Botões inteligentes de acesso rápido às pastas da extensão e dos vídeos baixados direto no Windows Explorer.",
+    "Auto-recuperação e migração automática do banco de dados na biblioteca de vídeos (filesize e formatos webm/mp4)."
   ],
   "download_url": "https://digitalsupply.pro/downloads/Launcher_Central_DGS.exe",
   "launcher_url": "https://digitalsupply.pro/downloads/Launcher_Central_DGS.exe",
   "core_url": "https://digitalsupply.pro/downloads/Central_DGS_Core.zip",
-  "patch_url": "https://digitalsupply.pro/downloads/Central_DGS_Core.zip",
+  "patch_url": "https://digitalsupply.pro/downloads/Central_DGS_Patch.zip",
   "min_compatible_version": "2.0.0"
 }
