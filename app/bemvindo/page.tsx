@@ -128,16 +128,29 @@ export default async function BemVindoPage() {
               <span>Baixar Central DGS para Windows (Instalador .zip)</span>
             </a>
 
-            {/* Alerta SmartScreen do Windows */}
-            <div className="rounded-xl border border-amber-500/30 bg-amber-500/[0.08] p-4 flex items-start gap-3 text-xs leading-relaxed text-amber-200/90">
-              <span className="shrink-0 mt-0.5 text-amber-400">
-                <LineIcon name="warning" size={16} />
-              </span>
-              <div>
-                <strong className="text-amber-300">Aviso do Windows na 1ª abertura:</strong> Como o instalador é novo, o
-                Windows pode exibir a mensagem <em>&quot;O Windows protegeu o seu computador&quot;</em> (SmartScreen).
-                Basta clicar no texto sublinhado <strong>Mais informações</strong> e depois no botão{" "}
-                <strong>Executar assim mesmo</strong> para continuar a instalação normalmente.
+            {/* Alerta de Segurança do Windows (SmartScreen & Smart App Control) */}
+            <div className="rounded-xl border border-amber-500/30 bg-amber-500/[0.08] p-4 flex flex-col gap-2.5 text-xs leading-relaxed text-amber-200/90">
+              <div className="flex items-start gap-2.5">
+                <span className="shrink-0 mt-0.5 text-amber-400">
+                  <LineIcon name="warning" size={16} />
+                </span>
+                <div className="space-y-1.5">
+                  <strong className="text-amber-300 block text-sm">
+                    Avisos de Segurança do Windows na 1ª abertura:
+                  </strong>
+                  <div>
+                    <strong>1. Tela &quot;O Windows protegeu o seu computador&quot; (SmartScreen):</strong>{" "}
+                    Basta clicar em <span className="underline font-semibold text-amber-200">Mais informações</span> e depois no botão{" "}
+                    <span className="font-semibold text-amber-200">Executar assim mesmo</span>.
+                  </div>
+                  <div>
+                    <strong>2. &quot;Controle de Aplicativo Inteligente bloqueou...&quot; (Windows 11):</strong>{" "}
+                    O Windows 11 protege scripts baixados da web. Para liberar, clique com o{" "}
+                    <strong>botão direito no arquivo baixado (.zip ou .bat)</strong>, vá em{" "}
+                    <strong>Propriedades</strong>, marque a caixinha{" "}
+                    <strong className="text-brand">☑ Desbloquear</strong> no rodapé e clique em <strong>OK</strong>.
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -171,7 +184,7 @@ export default async function BemVindoPage() {
               <h3 className="text-sm font-semibold text-neutral-100">Executar o Instalador</h3>
               <p className="text-neutral-400 text-xs leading-relaxed">
                 Abra a pasta descompactada e dê dois cliques em <strong className="text-brand">INSTALAR_CENTRAL_DGS.bat</strong>.
-                Se aparecer a tela azul do Windows, clique em <strong>&quot;Mais informações&quot;</strong> e em seguida em <strong>&quot;Executar assim mesmo&quot;</strong>.
+                Se aparecer a tela azul do Windows, clique em <strong>&quot;Mais informações&quot;</strong> e <strong>&quot;Executar assim mesmo&quot;</strong>. No Windows 11, se houver aviso de bloqueio, basta ir em <strong>Propriedades</strong> do arquivo e marcar <strong>&quot;Desbloquear&quot;</strong>.
               </p>
             </div>
 
