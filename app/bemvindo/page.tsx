@@ -125,8 +125,19 @@ export default async function BemVindoPage() {
               className="dgs-btn-primary py-4 px-6 rounded-xl text-base sm:text-lg font-semibold text-center flex items-center justify-center gap-3 shadow-lg shadow-brand/20 hover:brightness-110 active:scale-[0.99] transition-all no-underline text-[#080806]"
             >
               <LineIcon name="download" size={24} className="stroke-[2.5]" />
-              <span>Baixar Central DGS para Windows (Instalador .zip)</span>
+              <span>Baixar Central DGS para Windows (Instalador Completo .zip)</span>
             </a>
+
+            <div className="flex items-center justify-center gap-2 text-xs text-neutral-400">
+              <span>Já tem a Central instalada no computador?</span>
+              <a
+                href="/downloads/Central_DGS_Patch.zip"
+                download="Central_DGS_Patch.zip"
+                className="text-brand hover:underline font-semibold flex items-center gap-1"
+              >
+                <LineIcon name="refresh" size={14} /> Baixar Atualização Direta v2.2.0 (Patch Leve - 380 KB)
+              </a>
+            </div>
 
             {/* Alerta de Segurança do Windows (SmartScreen & Smart App Control) */}
             <div className="rounded-2xl border border-amber-500/30 bg-amber-500/[0.07] p-5 flex flex-col gap-4 text-xs leading-relaxed text-amber-200/90 shadow-lg">
