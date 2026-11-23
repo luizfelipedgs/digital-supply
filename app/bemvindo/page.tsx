@@ -5,6 +5,7 @@ import { Logo } from "@/components/Logo";
 import { LineIcon } from "@/components/LineIcon";
 import { desktopAppDownloadUrl } from "@/lib/desktop-app";
 import { LogoutButton } from "./LogoutButton";
+import { VideoPlayer } from "./VideoPlayer";
 
 export const metadata: Metadata = {
   title: "Bem-vindo à Central DGS | Digital Supply",
@@ -113,17 +114,8 @@ export default async function BemVindoPage() {
             </div>
           </div>
 
-          {/* Player do Vídeo Ilustrativo Narrado */}
-          <div className="aspect-video w-full rounded-xl overflow-hidden border border-white/15 bg-black shadow-2xl relative">
-            <video
-              src="/tutorial/passo-a-passo.mp4"
-              poster="/tutorial/poster.png"
-              controls
-              playsInline
-              preload="auto"
-              className="w-full h-full object-contain bg-black"
-            />
-          </div>
+          {/* Player do Vídeo Tutorial Oficial (sem opção de download) */}
+          <VideoPlayer src="/tutorial/passo-a-passo.mp4" poster="/tutorial/poster.png" />
 
           {/* BOTÃO DE DOWNLOAD DA CENTRAL DGS (DIRETAMENTE ABAIXO DO VÍDEO) */}
           <div className="flex flex-col gap-3 pt-2">
