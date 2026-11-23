@@ -181,10 +181,10 @@ export default async function BemVindoPage() {
               <div className="w-8 h-8 rounded-lg bg-brand/10 border border-brand/20 flex items-center justify-center text-brand font-bold text-sm">
                 2
               </div>
-              <h3 className="text-sm font-semibold text-neutral-100">Executar o Instalador</h3>
+              <h3 className="text-sm font-semibold text-neutral-100">Executar o Launcher Oficial</h3>
               <p className="text-neutral-400 text-xs leading-relaxed">
-                Abra a pasta descompactada e dê dois cliques em <strong className="text-brand">INSTALAR_CENTRAL_DGS.bat</strong>.
-                Se aparecer a tela azul do Windows, clique em <strong>&quot;Mais informações&quot;</strong> e <strong>&quot;Executar assim mesmo&quot;</strong>. No Windows 11, se houver aviso de bloqueio, basta ir em <strong>Propriedades</strong> do arquivo e marcar <strong>&quot;Desbloquear&quot;</strong>.
+                Abra a pasta descompactada e dê dois cliques em <strong className="text-brand">Launcher_Central_DGS.exe</strong> (ou <strong>INSTALAR_CENTRAL_DGS.bat</strong>).
+                O instalador visual abrirá na tela exibindo a barra de progresso em tempo real e preparando tudo de forma 100% automática!
               </p>
             </div>
 
