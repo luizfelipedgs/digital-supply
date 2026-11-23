@@ -9,11 +9,11 @@ export async function GET() {
     release_date: "2026-11-23",
     app_name: "Central DGS",
     release_notes: [
-      "Nova ferramenta integrada: Download em Massa para TikTok e Instagram Reels com extensão oficial Manifest V3.",
-      "Curadoria viral avançada por métricas reais (Top Views, Top Likes, Engajamento) e trava de segurança de até 100 vídeos.",
-      "Correção de Content Security Policy (CSP) na extensão do Chrome para renderização rápida e segura de thumbnails.",
-      "Botões inteligentes de acesso rápido às pastas da extensão e dos vídeos baixados direto no Windows Explorer.",
-      "Auto-recuperação e migração automática do banco de dados na biblioteca de vídeos (filesize e formatos webm/mp4)."
+      "Nova ferramenta oficial: Download em Massa para TikTok e Instagram Reels integrado à Central DGS.",
+      "Mineração e curadoria viral por métricas reais (Mais Visualizados, Mais Curtidos e Maior Engajamento).",
+      "Otimização no carregamento de miniaturas e visualização dos vídeos minerados.",
+      "Acesso simplificado e direto às pastas da extensão e dos vídeos salvos no seu computador.",
+      "Melhorias contínuas de estabilidade, velocidade de processamento e segurança em todo o estúdio."
     ],
     download_url: "https://digitalsupply.pro/downloads/Launcher_Central_DGS.exe",
     launcher_url: "https://digitalsupply.pro/downloads/Launcher_Central_DGS.exe",
