@@ -129,26 +129,51 @@ export default async function BemVindoPage() {
             </a>
 
             {/* Alerta de Segurança do Windows (SmartScreen & Smart App Control) */}
-            <div className="rounded-xl border border-amber-500/30 bg-amber-500/[0.08] p-4 flex flex-col gap-2.5 text-xs leading-relaxed text-amber-200/90">
-              <div className="flex items-start gap-2.5">
+            <div className="rounded-2xl border border-amber-500/30 bg-amber-500/[0.07] p-5 flex flex-col gap-4 text-xs leading-relaxed text-amber-200/90 shadow-lg">
+              <div className="flex items-start gap-3">
                 <span className="shrink-0 mt-0.5 text-amber-400">
-                  <LineIcon name="warning" size={16} />
+                  <LineIcon name="warning" size={18} />
                 </span>
-                <div className="space-y-1.5">
-                  <strong className="text-amber-300 block text-sm">
-                    Avisos de Segurança do Windows na 1ª abertura:
-                  </strong>
+                <div className="space-y-3 w-full">
                   <div>
-                    <strong>1. Tela &quot;O Windows protegeu o seu computador&quot; (SmartScreen):</strong>{" "}
-                    Basta clicar em <span className="underline font-semibold text-amber-200">Mais informações</span> e depois no botão{" "}
-                    <span className="font-semibold text-amber-200">Executar assim mesmo</span>.
+                    <strong className="text-amber-300 block text-sm font-bold">
+                      Avisos de Segurança do Windows na 1ª abertura:
+                    </strong>
+                    <span className="text-neutral-400 text-[11px]">
+                      Como o aplicativo é novo e independente, o Windows pode exibir proteções de segurança de fábrica.
+                    </span>
                   </div>
-                  <div>
-                    <strong>2. &quot;Controle de Aplicativo Inteligente bloqueou...&quot; (Windows 11):</strong>{" "}
-                    O Windows 11 protege scripts baixados da web. Para liberar, clique com o{" "}
-                    <strong>botão direito no arquivo baixado (.zip ou .bat)</strong>, vá em{" "}
-                    <strong>Propriedades</strong>, marque a caixinha{" "}
-                    <strong className="text-brand">☑ Desbloquear</strong> no rodapé e clique em <strong>OK</strong>.
+
+                  {/* Caso 1: SmartScreen */}
+                  <div className="p-3 rounded-xl bg-black/30 border border-amber-500/20 space-y-1">
+                    <div className="font-semibold text-amber-200 flex items-center gap-1.5">
+                      <span className="w-1.5 h-1.5 rounded-full bg-amber-400"></span>
+                      1. Tela azul &quot;O Windows protegeu o seu computador&quot; (SmartScreen):
+                    </div>
+                    <p className="text-neutral-300 text-xs pl-3">
+                      Basta clicar no texto sublinhado <span className="underline font-bold text-white">Mais informações</span> e em seguida no botão{" "}
+                      <span className="font-bold text-white bg-white/10 px-1.5 py-0.5 rounded">Executar assim mesmo</span>.
+                    </p>
+                  </div>
+
+                  {/* Caso 2: Smart App Control do Windows 11 */}
+                  <div className="p-3.5 rounded-xl bg-black/40 border border-rose-500/30 space-y-2.5">
+                    <div className="font-bold text-rose-300 flex items-center gap-1.5 text-xs sm:text-sm">
+                      <span className="w-2 h-2 rounded-full bg-rose-400"></span>
+                      2. Tela preta &quot;O controle inteligente de aplicativos bloqueou um aplicativo&quot; (Windows 11):
+                    </div>
+                    <p className="text-neutral-300 text-xs">
+                      Nas versões recentes do Windows 11, esse recurso bloqueia qualquer programa independente fora da Microsoft Store. Para liberar em 15 segundos:
+                    </p>
+                    <ol className="list-decimal list-inside space-y-1 text-xs text-neutral-200 pl-1 font-medium">
+                      <li>Pressione a tecla <strong>Windows</strong> no teclado e digite: <code className="bg-black/60 px-1.5 py-0.5 rounded text-brand font-mono">Controle inteligente de aplicativos</code> (e dê Enter).</li>
+                      <li>Clique em <strong>&quot;Configurações do Controle Inteligente de Aplicativos&quot;</strong>.</li>
+                      <li>Alterne a chave de proteção para <strong>&quot;Desativado&quot;</strong>.</li>
+                      <li>Volte na pasta da Central e abra o <strong className="text-brand">Launcher_Central_DGS.exe</strong> normalmente!</li>
+                    </ol>
+                    <div className="text-[11px] text-neutral-400 pt-1 border-t border-white/5">
+                      💡 <em>Dica alternativa: Você também pode clicar com botão direito no arquivo baixado ➔ <strong>Propriedades</strong> ➔ marcar a caixinha <strong>☑ Desbloquear</strong> no rodapé ➔ clicar em <strong>OK</strong>.</em>
+                    </div>
                   </div>
                 </div>
               </div>
