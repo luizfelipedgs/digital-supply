@@ -60,9 +60,6 @@ export default async function BemVindoPage() {
             <Logo size={32} className="text-brand shrink-0" />
             <div className="flex items-center gap-2">
               <span className="text-sm font-semibold tracking-wider text-neutral-100">DIGITAL SUPPLY</span>
-              <span className="text-[10px] font-semibold tracking-wide uppercase px-2 py-0.5 rounded-full bg-brand/10 text-brand border border-brand/20">
-                Central DGS
-              </span>
             </div>
           </div>
 
@@ -84,13 +81,9 @@ export default async function BemVindoPage() {
             <span>Bem-vindo à Comunidade DGS PRO</span>
           </div>
 
-          <h1 className="text-2xl sm:text-4xl font-bold tracking-tight text-neutral-100 max-w-2xl mb-3">
+          <h1 className="text-2xl sm:text-4xl font-bold tracking-tight text-neutral-100 max-w-2xl">
             Sua jornada começa na <span className="text-brand">Central DGS</span>
           </h1>
-
-          <p className="text-neutral-400 text-sm sm:text-base leading-relaxed max-w-2xl">
-            Sua assinatura está ativa! Nosso ecossistema de ferramentas agora funciona diretamente no software desktop instalado no seu computador.
-          </p>
         </section>
 
         {/* Card do Vídeo Ilustrativo + Botão de Download Imediatamente Abaixo */}
