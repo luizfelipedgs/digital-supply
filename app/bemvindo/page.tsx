@@ -217,10 +217,10 @@ export default async function BemVindoPage() {
               <div className="w-8 h-8 rounded-lg bg-brand/10 border border-brand/20 flex items-center justify-center text-brand font-bold text-sm">
                 3
               </div>
-              <h3 className="text-sm font-semibold text-neutral-100">Fazer Login</h3>
+              <h3 className="text-sm font-semibold text-neutral-100">Fazer Login e Conectar Redes</h3>
               <p className="text-neutral-400 text-xs leading-relaxed">
                 Abra a Central DGS pelo novo atalho na sua Área de Trabalho e entre com seu <strong>e-mail e senha de aluno</strong>.
-                Todos os seus módulos serão liberados instantaneamente!
+                Na aba <strong>Contas</strong>, conecte suas redes pelo botão <strong>Conectar</strong> ou instantaneamente pelo botão <strong>Cookie</strong>!
               </p>
             </div>
           </div>
