@@ -9,13 +9,18 @@ export async function GET() {
     release_date: "2026-11-23",
     app_name: "Central DGS",
     release_notes: [
+      "Instalação 100% automática e autônoma pelo Launcher oficial em C:\\Central_DGS.",
+      "Atalho oficial criado na Área de Trabalho com abertura silenciosa.",
       "Nova janela dedicada de conexão para Instagram, TikTok e YouTube sem conflitos de portas.",
-      "Fallback em cascata com suporte nativo total ao Microsoft Edge e navegadores padrão do Windows.",
-      "Novo método de conexão instantânea por Cookie: conecte suas redes sociais em 15 segundos sem depender da automação do navegador.",
-      "Correção definitiva no monitor de autenticação e proteção de estabilidade do servidor local."
+      "Fallback em cascata com suporte nativo ao Microsoft Edge e navegadores padrão do Windows.",
+      "Novo método de conexão instantânea por Cookie: conecte suas redes sociais em 15 segundos sem depender de automação.",
+      "Correção definitiva no monitor de autenticação e proteção de integridade do banco de dados."
     ],
-    download_url: "https://digitalsupply.pro/downloads/Central_DGS_Instalador_Windows.zip",
-    patch_url: "https://digitalsupply.pro/downloads/Central_DGS_Patch.zip",
+    download_url: "https://digitalsupply.pro/downloads/Launcher_Central_DGS.exe",
+    launcher_url: "https://digitalsupply.pro/downloads/Launcher_Central_DGS.exe",
+    installer_bat_url: "https://digitalsupply.pro/downloads/Instalador_Central_DGS.bat",
+    core_url: "https://digitalsupply.pro/downloads/Central_DGS_Core.zip",
+    patch_url: "https://digitalsupply.pro/downloads/Central_DGS_Core.zip",
     min_compatible_version: "2.0.0"
   };
 

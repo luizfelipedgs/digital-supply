@@ -3,7 +3,7 @@ import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { Logo } from "@/components/Logo";
 import { LineIcon } from "@/components/LineIcon";
-import { desktopAppDownloadUrl } from "@/lib/desktop-app";
+import { desktopAppDownloadUrl, desktopAppDownloadUrlBat } from "@/lib/desktop-app";
 import { LogoutButton } from "./LogoutButton";
 import { VideoPlayer } from "./VideoPlayer";
 
@@ -121,21 +121,21 @@ export default async function BemVindoPage() {
           <div className="flex flex-col gap-3 pt-2">
             <a
               href={desktopAppDownloadUrl()}
-              download="Central_DGS_Instalador_Windows.zip"
+              download="Launcher_Central_DGS.exe"
               className="dgs-btn-primary py-4 px-6 rounded-xl text-base sm:text-lg font-semibold text-center flex items-center justify-center gap-3 shadow-lg shadow-brand/20 hover:brightness-110 active:scale-[0.99] transition-all no-underline text-[#080806]"
             >
               <LineIcon name="download" size={24} className="stroke-[2.5]" />
-              <span>Baixar Central DGS para Windows (Instalador Completo .zip)</span>
+              <span>Baixar Instalador da Central DGS (Launcher Oficial .exe)</span>
             </a>
 
-            <div className="flex items-center justify-center gap-2 text-xs text-neutral-400">
-              <span>Já tem a Central instalada no computador?</span>
+            <div className="flex flex-wrap items-center justify-center gap-2 text-xs text-neutral-400">
+              <span>Seu Windows bloqueia arquivos .exe baixados da internet?</span>
               <a
-                href="/downloads/Central_DGS_Patch.zip"
-                download="Central_DGS_Patch.zip"
+                href={desktopAppDownloadUrlBat()}
+                download="Instalador_Central_DGS.bat"
                 className="text-brand hover:underline font-semibold flex items-center gap-1"
               >
-                <LineIcon name="refresh" size={14} /> Baixar Atualização Direta v2.2.0 (Patch Leve - 380 KB)
+                <LineIcon name="terminal" size={14} /> Baixar Instalador Direto Windows (.bat)
               </a>
             </div>
 
@@ -151,7 +151,7 @@ export default async function BemVindoPage() {
                       Avisos de Segurança do Windows na 1ª abertura:
                     </strong>
                     <span className="text-neutral-400 text-[11px]">
-                      Como o aplicativo é novo e independente, o Windows pode exibir proteções de segurança de fábrica.
+                      Como o aplicativo é novo e independente, o Windows pode exibir avisos de segurança de fábrica.
                     </span>
                   </div>
 
@@ -168,23 +168,18 @@ export default async function BemVindoPage() {
                   </div>
 
                   {/* Caso 2: Smart App Control do Windows 11 */}
-                  <div className="p-3.5 rounded-xl bg-black/40 border border-rose-500/30 space-y-2.5">
-                    <div className="font-bold text-rose-300 flex items-center gap-1.5 text-xs sm:text-sm">
-                      <span className="w-2 h-2 rounded-full bg-rose-400"></span>
-                      2. Tela preta &quot;O controle inteligente de aplicativos bloqueou um aplicativo&quot; (Windows 11):
+                  <div className="p-3.5 rounded-xl bg-black/40 border border-brand/30 space-y-2">
+                    <div className="font-bold text-brand flex items-center gap-1.5 text-xs sm:text-sm">
+                      <span className="w-2 h-2 rounded-full bg-brand"></span>
+                      2. Controle Inteligente de Aplicativos (Windows 11):
                     </div>
                     <p className="text-neutral-300 text-xs">
-                      Nas versões recentes do Windows 11, esse recurso bloqueia qualquer programa independente fora da Microsoft Store. Para liberar em 15 segundos:
+                      Se o seu Windows 11 exibir aviso de segurança bloqueando o arquivo .exe, você tem duas opções muito simples:
                     </p>
-                    <ol className="list-decimal list-inside space-y-1 text-xs text-neutral-200 pl-1 font-medium">
-                      <li>Pressione a tecla <strong>Windows</strong> no teclado e digite: <code className="bg-black/60 px-1.5 py-0.5 rounded text-brand font-mono">Controle inteligente de aplicativos</code> (e dê Enter).</li>
-                      <li>Clique em <strong>&quot;Configurações do Controle Inteligente de Aplicativos&quot;</strong>.</li>
-                      <li>Alterne a chave de proteção para <strong>&quot;Desativado&quot;</strong>.</li>
-                      <li>Volte na pasta da Central e abra o <strong className="text-brand">Launcher_Central_DGS.exe</strong> normalmente!</li>
-                    </ol>
-                    <div className="text-[11px] text-neutral-400 pt-1 border-t border-white/5">
-                      💡 <em>Dica alternativa: Você também pode clicar com botão direito no arquivo baixado ➔ <strong>Propriedades</strong> ➔ marcar a caixinha <strong>☑ Desbloquear</strong> no rodapé ➔ clicar em <strong>OK</strong>.</em>
-                    </div>
+                    <ul className="list-disc list-inside space-y-1 text-xs text-neutral-200 pl-1">
+                      <li>Opção A (Mais rápida): Baixe e execute o <strong className="text-brand">Instalador Direto (.bat)</strong> no link acima — ele roda nativamente pelo Windows sem nenhum bloqueio.</li>
+                      <li>Opção B: Clique com botão direito no <strong className="text-brand">Launcher_Central_DGS.exe</strong> ➔ <strong>Propriedades</strong> ➔ marque a caixa <strong className="text-white">☑ Desbloquear</strong> no rodapé ➔ <strong>OK</strong>.</li>
+                    </ul>
                   </div>
                 </div>
               </div>
@@ -192,12 +187,12 @@ export default async function BemVindoPage() {
           </div>
         </section>
 
-        {/* Guia Rápido de Instalação em 3 Passos (Sem imagens redundantes) */}
+        {/* Guia Rápido de Instalação em 3 Passos */}
         <section className="flex flex-col gap-4">
           <div className="flex items-center gap-2">
             <LineIcon name="check" size={18} className="text-brand" />
             <h2 className="text-base sm:text-lg font-semibold text-neutral-200">
-              Passo a Passo Rápido
+              Instalação Simples em 3 Passos
             </h2>
           </div>
 
@@ -206,10 +201,9 @@ export default async function BemVindoPage() {
               <div className="w-8 h-8 rounded-lg bg-brand/10 border border-brand/20 flex items-center justify-center text-brand font-bold text-sm">
                 1
               </div>
-              <h3 className="text-sm font-semibold text-neutral-100">Baixar e Extrair</h3>
+              <h3 className="text-sm font-semibold text-neutral-100">Baixar o Launcher</h3>
               <p className="text-neutral-400 text-xs leading-relaxed">
-                Clique no botão verde acima para baixar o arquivo <strong>.zip</strong>. Em seguida, clique com o botão
-                direito sobre ele e selecione <strong>Extrair Tudo...</strong>.
+                Clique no botão verde acima para baixar o <strong>Launcher_Central_DGS.exe</strong>. Arquivo único e leve, sem necessidade de extrair pastas complexas.
               </p>
             </div>
 
@@ -217,10 +211,9 @@ export default async function BemVindoPage() {
               <div className="w-8 h-8 rounded-lg bg-brand/10 border border-brand/20 flex items-center justify-center text-brand font-bold text-sm">
                 2
               </div>
-              <h3 className="text-sm font-semibold text-neutral-100">Executar o Launcher Oficial</h3>
+              <h3 className="text-sm font-semibold text-neutral-100">Instalação Automática</h3>
               <p className="text-neutral-400 text-xs leading-relaxed">
-                Abra a pasta descompactada e dê dois cliques em <strong className="text-brand">Launcher_Central_DGS.exe</strong> (ou <strong>INSTALAR_CENTRAL_DGS.bat</strong>).
-                O instalador visual abrirá na tela exibindo a barra de progresso em tempo real e preparando tudo de forma 100% automática!
+                Abra o Launcher e clique em <strong className="text-brand">Instalar Central DGS</strong>. Ele configura tudo em <strong>C:\Central_DGS</strong> e cria o atalho oficial na sua Área de Trabalho.
               </p>
             </div>
 
@@ -228,10 +221,9 @@ export default async function BemVindoPage() {
               <div className="w-8 h-8 rounded-lg bg-brand/10 border border-brand/20 flex items-center justify-center text-brand font-bold text-sm">
                 3
               </div>
-              <h3 className="text-sm font-semibold text-neutral-100">Fazer Login e Conectar Redes</h3>
+              <h3 className="text-sm font-semibold text-neutral-100">Entrar pela Área de Trabalho</h3>
               <p className="text-neutral-400 text-xs leading-relaxed">
-                Abra a Central DGS pelo novo atalho na sua Área de Trabalho e entre com seu <strong>e-mail e senha de aluno</strong>.
-                Na aba <strong>Contas</strong>, conecte suas redes pelo botão <strong>Conectar</strong> ou instantaneamente pelo botão <strong>Cookie</strong>!
+                Dê dois cliques no ícone <strong>Central DGS</strong> na Área de Trabalho e entre com seu e-mail de aluno. Atualizações futuras acontecem com 1 clique direto na tela da Central!
               </p>
             </div>
           </div>
