@@ -5,14 +5,14 @@ export const revalidate = 0;
 
 export async function GET() {
   const versionData = {
-    version: "2.1.0",
-    release_date: "2026-11-22",
+    version: "2.2.0",
+    release_date: "2026-11-23",
     app_name: "Central DGS",
     release_notes: [
-      "Edição completa de agendamentos pendentes ou com falha na fila (data/hora de Brasília, conta, título, legenda, @ e hashtags).",
-      "Publicação direta no Instagram Reels restaurada para total compatibilidade com contas sem restrições de agendamento na Meta.",
-      "Novo instalador automático completo para Windows com atalhos de inicialização rápida na Área de Trabalho e Menu Iniciar.",
-      "Sistema de auto-atualização contínua integrado: novas melhorias e correções são baixadas em 1 clique preservando 100% dos seus dados, contas e agendamentos."
+      "Nova janela dedicada de conexão para Instagram, TikTok e YouTube sem conflitos de portas.",
+      "Fallback em cascata com suporte nativo total ao Microsoft Edge e navegadores padrão do Windows.",
+      "Novo método de conexão instantânea por Cookie: conecte suas redes sociais em 15 segundos sem depender da automação do navegador.",
+      "Correção definitiva no monitor de autenticação e proteção de estabilidade do servidor local."
     ],
     download_url: "https://digitalsupply.pro/downloads/Central_DGS_Instalador_Windows.zip",
     patch_url: "https://digitalsupply.pro/downloads/Central_DGS_Patch.zip",
