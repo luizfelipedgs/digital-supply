@@ -21,10 +21,6 @@ export function desktopAppDownloadUrl() {
   return "/downloads/Launcher_Central_DGS.exe";
 }
 
-export function desktopAppDownloadUrlBat() {
-  return "/downloads/Instalador_Central_DGS.bat";
-}
-
 // Mesma ideia do Windows, mas os instaladores Mac (.dmg) saem em dois
 // arquivos separados — um pra Apple Silicon (M1/M2/M3/M4...) e outro pra
 // Mac Intel (mais antigo) — porque são arquiteturas de processador

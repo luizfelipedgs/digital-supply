@@ -3,7 +3,7 @@ import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { Logo } from "@/components/Logo";
 import { LineIcon } from "@/components/LineIcon";
-import { desktopAppDownloadUrl, desktopAppDownloadUrlBat } from "@/lib/desktop-app";
+import { desktopAppDownloadUrl } from "@/lib/desktop-app";
 import { LogoutButton } from "./LogoutButton";
 import { VideoPlayer } from "./VideoPlayer";
 
@@ -117,8 +117,8 @@ export default async function BemVindoPage() {
           {/* Player do Vídeo Tutorial Oficial (sem opção de download) */}
           <VideoPlayer src="/tutorial/passo-a-passo.mp4" poster="/tutorial/poster.png" />
 
-          {/* BOTÃO DE DOWNLOAD DA CENTRAL DGS (DIRETAMENTE ABAIXO DO VÍDEO) */}
-          <div className="flex flex-col gap-3 pt-2">
+          {/* BOTÃO DE DOWNLOAD ÚNICO DA CENTRAL DGS (DIRETAMENTE ABAIXO DO VÍDEO) */}
+          <div className="flex flex-col gap-4 pt-2">
             <a
               href={desktopAppDownloadUrl()}
               download="Launcher_Central_DGS.exe"
@@ -127,17 +127,6 @@ export default async function BemVindoPage() {
               <LineIcon name="download" size={24} className="stroke-[2.5]" />
               <span>Baixar Instalador da Central DGS (Launcher Oficial .exe)</span>
             </a>
-
-            <div className="flex flex-wrap items-center justify-center gap-2 text-xs text-neutral-400">
-              <span>Seu Windows bloqueia arquivos .exe baixados da internet?</span>
-              <a
-                href={desktopAppDownloadUrlBat()}
-                download="Instalador_Central_DGS.bat"
-                className="text-brand hover:underline font-semibold flex items-center gap-1"
-              >
-                <LineIcon name="terminal" size={14} /> Baixar Instalador Direto Windows (.bat)
-              </a>
-            </div>
 
             {/* Alerta de Segurança do Windows (SmartScreen & Smart App Control) */}
             <div className="rounded-2xl border border-amber-500/30 bg-amber-500/[0.07] p-5 flex flex-col gap-4 text-xs leading-relaxed text-amber-200/90 shadow-lg">
@@ -171,14 +160,14 @@ export default async function BemVindoPage() {
                   <div className="p-3.5 rounded-xl bg-black/40 border border-brand/30 space-y-2">
                     <div className="font-bold text-brand flex items-center gap-1.5 text-xs sm:text-sm">
                       <span className="w-2 h-2 rounded-full bg-brand"></span>
-                      2. Controle Inteligente de Aplicativos (Windows 11):
+                      2. Tela preta &quot;O controle inteligente de aplicativos bloqueou um aplicativo&quot; (Windows 11):
                     </div>
                     <p className="text-neutral-300 text-xs">
-                      Se o seu Windows 11 exibir aviso de segurança bloqueando o arquivo .exe, você tem duas opções muito simples:
+                      Se o seu Windows 11 exibir este aviso de bloqueio, libere o executável facilmente:
                     </p>
                     <ul className="list-disc list-inside space-y-1 text-xs text-neutral-200 pl-1">
-                      <li>Opção A (Mais rápida): Baixe e execute o <strong className="text-brand">Instalador Direto (.bat)</strong> no link acima — ele roda nativamente pelo Windows sem nenhum bloqueio.</li>
-                      <li>Opção B: Clique com botão direito no <strong className="text-brand">Launcher_Central_DGS.exe</strong> ➔ <strong>Propriedades</strong> ➔ marque a caixa <strong className="text-white">☑ Desbloquear</strong> no rodapé ➔ <strong>OK</strong>.</li>
+                      <li><strong>Passo Rápido:</strong> Clique com o botão direito no <strong className="text-brand">Launcher_Central_DGS.exe</strong> ➔ selecione <strong>Propriedades</strong> ➔ marque a caixa <strong className="text-white">☑ Desbloquear</strong> no rodapé ➔ clique em <strong>OK</strong>.</li>
+                      <li><strong>Alternativa:</strong> Pressione a tecla <strong>Windows</strong>, digite <code className="bg-black/60 px-1.5 py-0.5 rounded text-brand font-mono">Controle inteligente de aplicativos</code> e alterne para <strong>&quot;Desativado&quot;</strong>.</li>
                     </ul>
                   </div>
                 </div>

@@ -18,7 +18,6 @@ export async function GET() {
     ],
     download_url: "https://digitalsupply.pro/downloads/Launcher_Central_DGS.exe",
     launcher_url: "https://digitalsupply.pro/downloads/Launcher_Central_DGS.exe",
-    installer_bat_url: "https://digitalsupply.pro/downloads/Instalador_Central_DGS.bat",
     core_url: "https://digitalsupply.pro/downloads/Central_DGS_Core.zip",
     patch_url: "https://digitalsupply.pro/downloads/Central_DGS_Core.zip",
     min_compatible_version: "2.0.0"
