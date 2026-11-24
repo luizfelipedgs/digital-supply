@@ -1,12 +1,12 @@
 {
-  "version": "2.3.2",
+  "version": "2.3.3",
   "release_date": "2026-11-24",
   "app_name": "Central DGS",
   "release_notes": [
-    "Motor nativo e autônomo para importação de anotações e apresentações do Canva (.pptx).",
-    "Extração resiliente de títulos, legendas e hashtags sem depender de pacotes externos.",
-    "Motor de Renderização DGS de alta performance integrado ao estúdio.",
-    "Correção e otimização completa no Editor de Músicas: corte, renderização e sincronização perfeita.",
+    "Motor de postagens 100% autônomo e invisível: execução em background sem exibir janelas do robô.",
+    "Correção e otimização completa no TikTok: espera inteligente de upload, seleção de capa e inclusão de músicas.",
+    "Pacing humano e cadência aprimorada para dar tempo de carregar todas as ferramentas das redes sociais.",
+    "Motor nativo e resiliente para apresentações e anotações do Canva (.pptx).",
     "Melhorias contínuas de estabilidade, velocidade de processamento e segurança em todo o estúdio."
   ],
   "download_url": "https://digitalsupply.pro/downloads/Launcher_Central_DGS.exe",
