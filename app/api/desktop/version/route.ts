@@ -5,14 +5,14 @@ export const revalidate = 0;
 
 export async function GET() {
   const versionData = {
-    version: "2.3.1",
+    version: "2.3.2",
     release_date: "2026-11-24",
     app_name: "Central DGS",
     release_notes: [
-      "Motor de Renderização DGS autônomo e de alta performance integrado ao estúdio.",
-      "Correção e otimização completa no Editor de Músicas: corte, renderização e sincronização perfeita no computador.",
-      "Geração instantânea e confiável de miniaturas (thumbnails) na biblioteca e nos lotes.",
-      "Verificação de atualizações em tempo real com proteção contra cache de borda.",
+      "Motor nativo e autônomo para importação de anotações e apresentações do Canva (.pptx).",
+      "Extração resiliente de títulos, legendas e hashtags sem depender de pacotes externos.",
+      "Motor de Renderização DGS de alta performance integrado ao estúdio.",
+      "Correção e otimização completa no Editor de Músicas: corte, renderização e sincronização perfeita.",
       "Melhorias contínuas de estabilidade, velocidade de processamento e segurança em todo o estúdio."
     ],
     download_url: "https://digitalsupply.pro/downloads/Launcher_Central_DGS.exe",
