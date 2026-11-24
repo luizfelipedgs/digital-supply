@@ -1,13 +1,13 @@
 {
-  "version": "2.3.4",
+  "version": "2.3.5",
   "release_date": "2026-11-24",
   "app_name": "Central DGS",
   "release_notes": [
-    "Finalização automática inteligente: ao fechar a janela da Central, todos os processos em segundo plano são encerrados de forma limpa.",
-    "Proteção anti-duplicação: previne abertura de múltiplos processos do Python em segundo plano e elimina conflitos de fila.",
-    "Novo botão 'Encerrar Central DGS' no menu e na barra lateral para desligamento imediato com 1 clique.",
-    "Motor de postagens 100% autônomo e invisível: execução sem janelas do robô.",
-    "Otimização no fluxo de agendamento e sincronização com banco de dados."
+    "Novo Calendário de Publicações no estilo Creator Studio: visualização mensal e semanal completa por dia e horário.",
+    "Redirecionamento automático inteligente: ao agendar após edição de música e filtro, você é direcionado diretamente para a Agenda & Calendário.",
+    "Pills visuais com status, horário e ícone oficial de cada rede (Instagram, TikTok e YouTube).",
+    "Novo modal de visualização e gerenciamento de publicações por dia com ações rápidas de disparo e edição.",
+    "Filtros instantâneos por conta e status de postagem na barra superior do calendário."
   ],
   "download_url": "https://digitalsupply.pro/downloads/Launcher_Central_DGS.exe",
   "launcher_url": "https://digitalsupply.pro/downloads/Launcher_Central_DGS.exe",
