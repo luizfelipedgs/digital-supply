@@ -1,13 +1,13 @@
 {
-  "version": "2.3.3",
+  "version": "2.3.4",
   "release_date": "2026-11-24",
   "app_name": "Central DGS",
   "release_notes": [
-    "Motor de postagens 100% autônomo e invisível: execução em background sem exibir janelas do robô.",
-    "Correção e otimização completa no TikTok: espera inteligente de upload, seleção de capa e inclusão de músicas.",
-    "Pacing humano e cadência aprimorada para dar tempo de carregar todas as ferramentas das redes sociais.",
-    "Motor nativo e resiliente para apresentações e anotações do Canva (.pptx).",
-    "Melhorias contínuas de estabilidade, velocidade de processamento e segurança em todo o estúdio."
+    "Finalização automática inteligente: ao fechar a janela da Central, todos os processos em segundo plano são encerrados de forma limpa.",
+    "Proteção anti-duplicação: previne abertura de múltiplos processos do Python em segundo plano e elimina conflitos de fila.",
+    "Novo botão 'Encerrar Central DGS' no menu e na barra lateral para desligamento imediato com 1 clique.",
+    "Motor de postagens 100% autônomo e invisível: execução sem janelas do robô.",
+    "Otimização no fluxo de agendamento e sincronização com banco de dados."
   ],
   "download_url": "https://digitalsupply.pro/downloads/Launcher_Central_DGS.exe",
   "launcher_url": "https://digitalsupply.pro/downloads/Launcher_Central_DGS.exe",
