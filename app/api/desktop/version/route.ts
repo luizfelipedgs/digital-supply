@@ -5,10 +5,11 @@ export const revalidate = 0;
 
 export async function GET() {
   const versionData = {
-    version: "2.5.0",
+    version: "2.5.1",
     release_date: "2026-11-25",
     app_name: "Central DGS",
     release_notes: [
+      "Conexão Oficial Instagram Corrigida: Conexão direta e instantânea com Instagram e Meta.",
       "Agendamento 100% Autônomo na Nuvem: Seus posts agora são enviados automaticamente mesmo com seu computador desligado!",
       "Sincronização em Nuvem: Agende seus vídeos e feche a Central com total tranquilidade.",
       "Disparo Imediato: Opção 'Postar Agora' aprimorada com publicação instantânea.",
