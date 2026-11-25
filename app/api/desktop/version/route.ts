@@ -9,10 +9,10 @@ export async function GET() {
     release_date: "2026-11-25",
     app_name: "Central DGS",
     release_notes: [
-      "Hotfix v2.4.2: Disparo imediato instantâneo ao clicar em 'Postar Agora' (processamento assíncrono em segundo plano sem travar o motor).",
-      "Correção de Compatibilidade run_proactor: Suporte universal para funções síncronas de API direta da Meta e do TikTok.",
-      "Inicialização Automática do Serviço: Motor de publicação agora sobe 100% ativo e saudável no boot.",
-      "Nova Conexão Oficial Meta Graph API: Conecte contas do Instagram Business e Criador em 1 clique sem robôs ou risco de shadowban."
+      "Disparo Imediato: Publicação instantânea ao clicar no botão 'Postar Agora'.",
+      "Mais Estabilidade e Rapidez: Envio direto e seguro para suas redes sociais sem travamentos.",
+      "Inicialização Automática: A Central já inicia pronta e conectada para suas postagens.",
+      "Conexão Oficial com Instagram e TikTok: Vincule seus perfis com segurança máxima e sem bloqueios."
     ],
     download_url: "https://digitalsupply.pro/downloads/Launcher_Central_DGS.exe",
     launcher_url: "https://digitalsupply.pro/downloads/Launcher_Central_DGS.exe",
