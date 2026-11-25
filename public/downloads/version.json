@@ -1,8 +1,9 @@
 {
-  "version": "2.4.0",
+  "version": "2.4.1",
   "release_date": "2026-11-25",
   "app_name": "Central DGS",
   "release_notes": [
+    "Hotfix v2.4.1: Correção definitiva da inicialização e hidratação do painel (eliminação do estado de carregamento infinito).",
     "Nova Conexão Oficial Meta Graph API: Conecte contas do Instagram Business e Criador em 1 clique sem robôs ou risco de shadowban.",
     "Suporte a Portfólios Empresariais: Detecção automática de Páginas e Contas do Instagram dentro do Meta Business Suite.",
     "Nova Conexão Oficial TikTok Content Posting API v2: Upload binário direto aos servidores do TikTok para envio de vídeos e reels.",
