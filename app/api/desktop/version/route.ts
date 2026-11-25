@@ -5,15 +5,15 @@ export const revalidate = 0;
 
 export async function GET() {
   const versionData = {
-    version: "2.3.5",
-    release_date: "2026-11-24",
+    version: "2.4.0",
+    release_date: "2026-11-25",
     app_name: "Central DGS",
     release_notes: [
-      "Novo Calendário de Publicações no estilo Creator Studio: visualização mensal e semanal completa por dia e horário.",
-      "Redirecionamento automático inteligente: ao agendar após edição de música e filtro, você é direcionado diretamente para a Agenda & Calendário.",
-      "Pills visuais com status, horário e ícone oficial de cada rede (Instagram, TikTok e YouTube).",
-      "Novo modal de visualização e gerenciamento de publicações por dia com ações rápidas de disparo e edição.",
-      "Filtros instantâneos por conta e status de postagem na barra superior do calendário."
+      "Nova Conexão Oficial Meta Graph API: Conecte contas do Instagram Business e Criador em 1 clique sem robôs ou risco de shadowban.",
+      "Suporte a Portfólios Empresariais: Detecção automática de Páginas e Contas do Instagram dentro do Meta Business Suite.",
+      "Nova Conexão Oficial TikTok Content Posting API v2: Upload binário direto aos servidores do TikTok para envio de vídeos e reels.",
+      "Interface Otimizada & Descontinuação do Motor Local: Remoção dos cards manuais de motor e botões desnecessários para inicialização instantânea e menor consumo de memória.",
+      "Topo de Janela Unificado: Identidade limpa DIGITAL SUPPLY — Central DGS."
     ],
     download_url: "https://digitalsupply.pro/downloads/Launcher_Central_DGS.exe",
     launcher_url: "https://digitalsupply.pro/downloads/Launcher_Central_DGS.exe",
