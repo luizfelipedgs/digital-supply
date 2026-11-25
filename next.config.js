@@ -17,6 +17,14 @@ const nextConfig = {
       "/api/video-batch/process": ["./node_modules/ffmpeg-static/**"],
     },
   },
+  async rewrites() {
+    return [
+      { source: "/politica-de-privacidade", destination: "/privacidade" },
+      { source: "/termos-de-uso", destination: "/termos" },
+      { source: "/privacy", destination: "/privacidade" },
+      { source: "/terms", destination: "/termos" },
+    ];
+  },
 };
 
 module.exports = nextConfig;
