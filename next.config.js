@@ -22,7 +22,7 @@ const nextConfig = {
       { source: "/politica-de-privacidade", destination: "/privacidade" },
       { source: "/termos-de-uso", destination: "/termos" },
       { source: "/privacy", destination: "/privacidade" },
-      { source: "/terms", destination: "/termos" },
+      { source: "/terms", destination: "/termos" }, { source: "/restauracao", destination: "/restauracao/index.html" },
     ];
   },
 };
