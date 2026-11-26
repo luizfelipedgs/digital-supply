@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Restaurando Fotografias | Restauração de fotos antigas</title>
+<link rel="icon" type="image/png" href="/restauracao/assets/favicon.png">
+<meta name="description" content="Restauração de fotos antigas feita por especialista, com apoio de IA e revisão humana. Monte seu orçamento por nível de dano e peça pelo WhatsApp.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fff;--soft:#f5f6f8;--ink:#0b0b0f;--muted:#5b6070;--line:#e4e6ec;--ok:#0a9f4f;--wa:#12a150;
+--grad:linear-gradient(100deg,#2a3cff 0%,#00a2ff 22%,#00e05a 45%,#ffe600 62%,#ff8a00 80%,#ff1f3d 100%)}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+body{margin:0;font-family:Inter,system-ui,sans-serif;background:var(--bg);color:var(--ink);line-height:1.6;-webkit-font-smoothing:antialiased}
+h1,h2,h3{font-family:Inter,system-ui,sans-serif;letter-spacing:-.025em;line-height:1.12;margin:0 0 .5em;font-weight:800}
+a{color:var(--ink)}
+.wrap{max-width:1120px;margin:0 auto;padding:0 22px}
+.promo{background:var(--ink);color:#fff;text-align:center;padding:9px 12px;font-size:13.5px;position:relative}
+.promo::after{content:"";position:absolute;left:0;right:0;bottom:0;height:3px;background:var(--grad)}
+header{background:#fffffff2;backdrop-filter:blur(8px);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:20}
+.nav{display:flex;align-items:center;justify-content:space-between;padding:10px 0;gap:12px}
+.logo{display:flex;align-items:center;gap:10px;font-weight:800;font-size:17px;color:var(--ink);text-decoration:none;letter-spacing:-.02em}
+.logo img{width:40px;height:40px;border-radius:9px}
+.nav nav a{margin-left:22px;text-decoration:none;color:var(--muted);font-size:14.5px;font-weight:500}
+.nav nav a:hover{color:var(--ink)}
+.btn{display:inline-block;background:var(--ink);color:#fff;border:0;border-radius:12px;padding:14px 24px;font-size:15.5px;font-weight:600;cursor:pointer;text-decoration:none;text-align:center;transition:transform .15s,box-shadow .15s}
+.btn:hover{transform:translateY(-1px);box-shadow:0 8px 22px #0b0b0f33}
+.btn.ghost{background:#fff;color:var(--ink);border:1.5px solid var(--ink)}
+.btn.wa{background:var(--wa)}
+.btn.off{opacity:.4;pointer-events:none}
+.eyebrow{display:inline-block;font-size:12.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent;margin-bottom:10px}
+.hero{display:grid;grid-template-columns:1.05fr .95fr;gap:48px;align-items:center;padding:60px 0 64px}
+.hero h1{font-size:clamp(34px,5vw,56px)}
+.hero h1 em{font-style:normal;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero p.lead{font-size:18px;color:var(--muted);max-width:520px}
+.badges{display:flex;gap:10px 18px;flex-wrap:wrap;margin-top:22px;font-size:13.5px;color:var(--muted)}
+.badges>span::before{content:"✓ ";color:var(--ok);font-weight:800}
+.baw{position:relative}
+.baw::before{content:"";position:absolute;inset:-3px;border-radius:22px;background:var(--grad);z-index:0}
+.ba{position:relative;z-index:1;aspect-ratio:720/1050;border-radius:19px;overflow:hidden;background:#222;user-select:none;touch-action:pan-y}
+.ba img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;pointer-events:none}
+.ba .after{clip-path:inset(0 0 0 50%)}
+.ba .handle{position:absolute;top:0;bottom:0;left:50%;width:3px;background:#fff;box-shadow:0 0 8px #0008}
+.ba .handle::after{content:"↔";position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);background:#fff;border-radius:50%;width:42px;height:42px;display:grid;place-items:center;font-size:18px;box-shadow:0 2px 10px #0006}
+.ba input{position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:ew-resize;margin:0}
+.tag{position:absolute;top:12px;padding:5px 12px;border-radius:20px;background:#000b;color:#fff;font-size:12px;font-weight:600;letter-spacing:.03em}
+.cap{font-size:12.5px;color:var(--muted);margin:10px 4px 0}
+section{padding:72px 0}
+section.alt{background:var(--soft)}
+.center{text-align:center}
+h2{font-size:clamp(26px,3.4vw,38px)}
+.vbox{padding:4px;border-radius:24px;background:var(--grad);box-shadow:0 24px 60px #0b0b0f33}.vbox video{display:block;width:100%;border-radius:20px;background:#07070b;aspect-ratio:16/9}
+.sub{color:var(--muted);max-width:620px;margin:-6px auto 30px}
+.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+.card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:22px}
+.card .n{width:36px;height:36px;border-radius:10px;background:var(--ink);color:#fff;display:grid;place-items:center;font-weight:800;margin-bottom:12px}
+.order{display:grid;grid-template-columns:1.2fr .8fr;gap:24px;align-items:start}
+.lvrow{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;background:#fff;border:1px solid var(--line);border-radius:14px;padding:15px 16px;margin-bottom:10px}
+.lvrow b{display:block}
+.lvrow .s{font-size:13px;color:var(--muted)}
+.step{display:flex;align-items:center;gap:10px}
+.step button{width:38px;height:38px;border-radius:50%;border:1.5px solid var(--ink);background:#fff;color:var(--ink);font-size:20px;cursor:pointer;line-height:1}
+.step button:hover{background:var(--ink);color:#fff}
+.step button:disabled{opacity:.35;cursor:not-allowed}
+.step output{min-width:24px;text-align:center;font-weight:800;font-size:18px}
+.sum{position:sticky;top:84px;border:0;box-shadow:0 12px 40px #0b0b0f1a;position:sticky}
+.sum .row{display:flex;justify-content:space-between;padding:6px 0;font-size:15px}
+.sum .tot{border-top:1px solid var(--line);margin-top:8px;padding-top:12px;font-size:24px;font-weight:800}
+.sum .dsc{color:var(--ok)}
+input[type=text]{width:100%;padding:12px;border:1px solid var(--line);border-radius:10px;font-size:15px;margin-top:6px;font-family:inherit}
+input[type=text]:focus{outline:2px solid #00a2ff;border-color:transparent}
+.small{font-size:13px;color:var(--muted)}
+.alerta{color:#d4142c;font-weight:600;font-size:14px;margin:14px 0 8px}
+.dica{background:var(--soft);border-left:4px solid #00a2ff;border-radius:8px;padding:10px 14px;font-size:14px;margin:8px 0 0}
+.warn{background:#fff4d6;border:1px solid #ecd48a;border-radius:8px;padding:8px 10px;font-size:13px;margin-top:8px}
+pre.msg{white-space:pre-wrap;background:var(--soft);border:1px dashed #b8bccb;border-radius:10px;padding:10px;font-size:13px;margin:10px 0 0;font-family:inherit}
+table{width:100%;border-collapse:separate;border-spacing:0;background:#fff;border-radius:16px;overflow:hidden;border:1px solid var(--line)}
+th,td{padding:16px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
+tr:last-child td{border-bottom:0}
+th{background:var(--ink);color:#fff;font-size:13px;letter-spacing:.04em;text-transform:uppercase}
+td.price{font-weight:800;white-space:nowrap;font-size:18px}
+details{background:#fff;border:1px solid var(--line);border-radius:14px;padding:15px 20px;margin-bottom:10px}
+summary{cursor:pointer;font-weight:600}
+ul.chk{padding-left:20px;margin:.4em 0}
+footer{background:var(--ink);color:#b9bdc9;padding:44px 0;font-size:14px;position:relative}
+footer::before{content:"";position:absolute;left:0;right:0;top:0;height:4px;background:var(--grad)}
+footer a{color:#fff;margin-right:16px}
+.fl{display:flex;align-items:center;gap:10px;color:#fff;font-weight:700;margin-bottom:8px}
+.fl img{width:34px;height:34px;border-radius:8px}
+.cta{background:var(--ink);color:#fff;border-radius:22px;padding:52px 28px;text-align:center;position:relative;overflow:hidden}
+.cta::before{content:"";position:absolute;left:0;right:0;top:0;height:5px;background:var(--grad)}
+.cta p{color:#c9cdd8}
+.cta .btn{background:#fff;color:var(--ink)}
+@media(max-width:820px){.hero,.order{grid-template-columns:1fr}.grid4{grid-template-columns:1fr 1fr}.sum{position:static}.hero{padding-top:34px}}
+@media(max-width:520px){.logo{font-size:14px}.logo img{width:34px;height:34px}.nav .btn{padding:9px 12px!important;font-size:13px!important}.btn{padding:13px 18px}.grid4{grid-template-columns:1fr}.nav nav{display:none}}
+</style>
+</head>
+<body>
+
+<div class="promo">🎁 Primeira restauração com <b>15% de desconto</b> · cupom <b>PRIMEIRA</b></div>
+
+<header><div class="wrap nav">
+  <a class="logo" href="#topo"><img src="/restauracao/assets/logo.png" alt="Logo Restaurando Fotografias" width="40" height="40">Restaurando Fotografias</a>
+  <nav><a href="#como">Como funciona</a><a href="#ajustes">Ajustes</a><a href="#niveis">Preços</a><a href="#faq">Perguntas</a></nav>
+  <a class="btn" href="#orcamento" style="padding:10px 18px;font-size:14.5px">Montar orçamento</a>
+</div></header>
+
+<main id="topo">
+<div class="wrap hero">
+  <div>
+    <span class="eyebrow">Restauração de fotografias</span>
+    <h1>Suas memórias de volta, <em>com a nitidez</em> que elas merecem</h1>
+    <p class="lead">Rasgos, manchas, desbotamento ou mofo. Cada foto é restaurada por um especialista, com apoio de IA e revisão humana. Você escolhe o nível de dano, vê o valor e pede pelo WhatsApp.</p>
+    <p><a class="btn" href="#orcamento">Montar orçamento</a> &nbsp; <a class="btn ghost" href="#niveis">Ver níveis e preços</a></p>
+    <div class="badges"><span>A partir de <span id="minPreco">R$ 19,90</span></span><span>Atendimento pelo WhatsApp</span><span>Prévia antes da entrega</span><span>Ajustes inclusos</span><span>Entrega em 1 a 3 horas</span><span>Pagamento por Pix</span></div>
+  </div>
+  <div><div class="baw"><div class="ba" id="ba" aria-label="Comparação antes e depois de uma foto real">
+      <img class="before" src="/restauracao/assets/antes.jpg" alt="Retrato antigo em preto e branco de um casal de noivos, antes da restauração" width="720" height="1050">
+      <img class="after" src="/restauracao/assets/depois.jpg" alt="O mesmo retrato depois da restauração e colorização" width="720" height="1050">
+      <span class="tag" style="left:12px">Antes</span><span class="tag" style="right:12px">Depois</span>
+      <div class="handle" id="bah"></div>
+      <input type="range" min="0" max="100" value="50" id="bar" aria-label="Arraste para comparar antes e depois">
+    </div></div>
+    <p class="cap" id="exCap">Arraste para comparar.</p></div>
+</div>
+
+<section class="alt" id="como"><div class="wrap">
+  <h2 class="center">Como funciona</h2>
+  <p class="sub center">Quatro passos, tudo pelo WhatsApp.</p>
+  <div class="grid4">
+    <div class="card"><div class="n">1</div><b>Monte o orçamento</b><p class="small">Escolha quantas fotos de cada nível e veja o total.</p></div>
+    <div class="card"><div class="n">2</div><b>Envie pelo WhatsApp</b><p class="small">O pedido vai pronto na conversa. Mande as fotos como arquivo, sem compressão.</p></div>
+    <div class="card"><div class="n">3</div><b>Aprove a prévia</b><p class="small">Confirmamos o nível, restauramos e enviamos uma prévia. Você pede os ajustes.</p></div>
+    <div class="card"><div class="n">4</div><b>Receba o arquivo final</b><p class="small">Alta resolução, sem marca d'água, pronto para imprimir ou compartilhar.</p></div>
+  </div>
+</div></section>
+
+<section id="video"><div class="wrap" style="max-width:980px">
+  <h2 class="center">Veja como funciona, do pedido à foto restaurada</h2>
+  <p class="sub center">Em 1 minuto e meio, o passo a passo completo.</p>
+  <div class="vbox"><video controls controlsList="nodownload noplaybackrate noremoteplayback" disablePictureInPicture disableRemotePlayback oncontextmenu="return false" preload="metadata" playsinline poster="/restauracao/assets/como-funciona-poster.jpg" aria-label="Vídeo: como funciona a restauração, do pedido à entrega"><source src="/restauracao/assets/como-funciona.mp4" type="video/mp4">Seu navegador não reproduz vídeo.</video></div>
+</div></section>
+
+<section id="ajustes"><div class="wrap" style="max-width:820px">
+  <h2 class="center">Ajustes inclusos</h2>
+  <div class="card">
+    <p id="ajTxt"></p>
+    <b>Entra nos ajustes</b>
+    <ul class="chk">
+      <li>Riscos, manchas ou rachaduras que ficaram</li>
+      <li>Fidelidade de um rosto ou detalhe diferente do original</li>
+      <li>Brilho, contraste e tom</li>
+      <li>Recorte ou enquadramento</li>
+    </ul>
+    <b>Não entra (vira novo orçamento)</b>
+    <ul class="chk">
+      <li>Colorização não contratada</li>
+      <li>Trocar roupa ou fundo; adicionar ou remover pessoas e objetos</li>
+      <li>Restaurar outra foto ou danos que não estavam no arquivo enviado</li>
+    </ul>
+    <p class="alerta">Partes que faltam na foto são reconstruídas e podem não ser idênticas ao original. Fotos desfocadas ou de baixa resolução limitam o resultado.</p>
+    <p class="dica"><b>Dica:</b> quanto mais informações você passar sobre a fotografia (detalhes das pessoas, cores, rosto, cabelo, cor dos olhos etc.), melhor será o resultado final.</p>
+  </div>
+</div></section>
+
+<section class="alt" id="niveis"><div class="wrap">
+  <h2 class="center">Preço por foto, conforme o nível de dano</h2>
+  <p class="sub center small">Na dúvida, escolha o nível que parecer mais próximo. Confirmamos ao ver a foto, e você aprova qualquer mudança de valor antes de começarmos.</p>
+  <table>
+    <thead><tr><th>Nível</th><th>Quando escolher</th><th>Prazo</th><th>Por foto</th></tr></thead>
+    <tbody id="ptab"></tbody>
+  </table>
+  <p class="small" id="notaDesc"></p>
+</div></section>
+
+<section id="orcamento"><div class="wrap">
+  <h2 class="center">Monte seu orçamento</h2>
+  <div class="order">
+    <div id="lvls"></div>
+    <aside class="card sum">
+      <h3>Resumo</h3>
+      <div id="rows" class="small">Nenhuma foto selecionada.</div>
+      <div class="row dsc" id="dscRow" hidden><span>Desconto</span><span id="dsc"></span></div>
+      <div class="row tot"><span>Total estimado</span><span id="tot">R$ 0,00</span></div>
+      <label class="small" style="display:block;margin-top:12px">Cupom
+        <input type="text" id="cup" placeholder="PRIMEIRA" autocomplete="off"></label>
+      <label class="small" style="display:block;margin-top:8px">Seu nome (opcional)
+        <input type="text" id="nome" placeholder="Seu nome" autocomplete="off"></label>
+      <p style="margin:14px 0 0"><a class="btn wa off" id="wa" href="#orcamento" target="_blank" rel="noopener" style="display:block">Pedir pelo WhatsApp</a></p>
+      <p style="margin:8px 0 0"><button class="btn ghost" id="copy" type="button" style="width:100%;font-size:14px;padding:10px">Copiar mensagem do pedido</button></p>
+      <p class="small" id="copyMsg" role="status"></p>
+      <div class="warn" id="waWarn" hidden>⚠️ Versão de demonstração: o número do WhatsApp ainda não foi configurado.</div>
+      <pre class="msg" id="preview" hidden></pre>
+      <p class="small">Valor estimado: o nível final é confirmado após vermos suas fotos.</p>
+    </aside>
+  </div>
+</div></section>
+
+<section class="alt" id="faq"><div class="wrap" style="max-width:780px">
+  <h2 class="center">Perguntas frequentes</h2>
+  <details><summary>Como é feita a restauração?</summary><p>Por um especialista, com apoio de inteligência artificial e revisão humana, principalmente nos rostos, antes de enviar a prévia.</p></details>
+  <details><summary>Como envio minhas fotos?</summary><p>Pelo WhatsApp, depois de montar o orçamento. Envie como arquivo/documento (sem compressão) ou escaneie em 600 dpi. Fotografar o papel com tremor ou foco ruim prejudica o resultado.</p></details>
+  <details><summary>E se eu escolher o nível errado?</summary><p>Ao ver a foto, confirmamos o nível. Se for diferente, informamos o novo valor e só começamos depois da sua aprovação.</p></details>
+  <details><summary>Como é o pagamento?</summary><p>Pix, <b>100% antes de começarmos</b>, combinado no atendimento pelo WhatsApp, depois que confirmamos o nível de cada foto e o valor final.</p></details>
+  <details><summary>Quantos ajustes posso pedir?</summary><p id="faqAj"></p></details>
+  <details><summary>E se eu não ficar satisfeito?</summary><p id="faqReemb"></p></details>
+  <details><summary>Minhas fotos ficam guardadas?</summary><p id="faqPriv"></p></details>
+  <details><summary>Posso usar a foto restaurada comercialmente?</summary><p>A foto restaurada é para uso pessoal. Para uso comercial, fale com a gente.</p></details>
+</div></section>
+
+<section><div class="wrap"><div class="cta">
+  <h2 style="color:#fff">Dê vida de novo às suas memórias</h2>
+  <p>Fotos de família não podem esperar o papel envelhecer mais.</p>
+  <a class="btn" href="#orcamento">Montar orçamento</a>
+</div></div></section>
+</main>
+
+<footer><div class="wrap">
+  <div class="fl"><img src="/restauracao/assets/logo.png" alt="" width="34" height="34">Restaurando Fotografias</div>
+  <p>Restauração de fotos · Atendimento pelo WhatsApp +55 41 99577-8198</p>
+  <p><a href="/restauracao/privacidade.html">Política de Privacidade</a><a href="/restauracao/reembolso.html">Política de Ajustes e Reembolso</a></p>
+</div></footer>
+
+<script>
+/* ===== CONFIGURAÇÃO (edite aqui; ver cofre: Precificacao e Politica-de-Ajustes) ===== */
+const CONFIG = {
+  levels: [
+    {id:1, nome:"Leve",     preco:19.90,  desc:"Poeira, desbotado, pouco contraste",      quando:"Foto inteira, só envelhecida ou amarelada.",               prazo:"1 hora"},
+    {id:2, nome:"Moderado", preco:39.90,  desc:"Riscos, manchas e rachaduras finas",      quando:"Riscos e manchas visíveis, rostos preservados.",           prazo:"1h30"},
+    {id:3, nome:"Severo",   preco:79.90,  desc:"Rasgos, mofo e partes faltando",          quando:"Dobras fortes, rasgos ou mofo cobrindo parte da imagem.",  prazo:"2 horas"},
+    {id:4, nome:"Crítico",  preco:97.90, desc:"Reconstrução de rostos ou grandes áreas", quando:"Rostos apagados ou grandes pedaços perdidos.",             prazo:"3 horas"}
+  ],
+  colorir: 9.90,
+  descontos: [{min:20,pct:.20},{min:10,pct:.15},{min:5,pct:.10}],
+  cupons: {PRIMEIRA:{pct:.15}},
+  /* Política (definida pelo dono; prazoAjusteDias=7 é proposta). Se mudar, atualizar também privacidade.html e reembolso.html */
+  politica: {rodadasAjuste:2, prazoAjusteDias:7, apagarFotosDias:7, arrependimentoDias:7, reembolsoPct:0.5},
+  whatsapp: "5541995778198" /* DDI+DDD+número, só dígitos. 5500000000000 = não configurado */
+};
+/* CALC-INICIO */
+function calcular(cfg, qtd, colorir, cupom){
+  let n=0, sub=0;
+  for (const l of cfg.levels){ const q=Math.max(0, qtd[l.id]||0); n+=q; sub+=q*l.preco; }
+  const col=Math.min(Math.max(0, colorir||0), n);
+  sub += col*cfg.colorir;
+  const d=cfg.descontos.find(x=>n>=x.min); let pct=d?d.pct:0;
+  const c=cfg.cupons[String(cupom||"").trim().toUpperCase()];
+  if(c) pct=Math.max(pct,c.pct);
+  const desc=sub*pct;
+  return {n, col, sub, pct, desc, total:sub-desc};
+}
+function montarMensagem(cfg, qtd, colorir, cupom, nome, brl){
+  const r=calcular(cfg,qtd,colorir,cupom);
+  if(!r.n) return "";
+  const linhas=cfg.levels.filter(l=>(qtd[l.id]||0)>0).map(l=>`- ${qtd[l.id]}x Nível ${l.id} (${l.nome}) a ${brl(l.preco)}`);
+  if(r.col) linhas.push(`- Colorização: ${r.col} foto(s)`);
+  const cup=String(cupom||"").trim().toUpperCase();
+  return [`Olá! Quero restaurar ${r.n} foto(s).`, ...linhas,
+    r.desc? `Desconto: ${Math.round(r.pct*100)}%${cfg.cupons[cup]?` (cupom ${cup})`:""}`:"",
+    `Total estimado: ${brl(r.total)} (sujeito à confirmação do nível após ver as fotos)`,
+    nome?`Nome: ${String(nome).trim()}`:"" ].filter(Boolean).join("\n");
+}
+function linkWhatsapp(cfg, msg){ return "https://wa.me/"+cfg.whatsapp+"?text="+encodeURIComponent(msg); }
+/* CALC-FIM */
+
+const brl=v=>v.toLocaleString("pt-BR",{style:"currency",currency:"BRL"});
+const $=s=>document.querySelector(s);
+const qtd={}, st={col:0};
+CONFIG.levels.forEach(l=>qtd[l.id]=0);
+
+$("#minPreco").textContent=brl(Math.min(...CONFIG.levels.map(l=>l.preco)));
+$("#ptab").innerHTML=CONFIG.levels.map(l=>`<tr><td><b>${l.nome}</b></td><td>${l.desc}<br><span class="small">${l.quando}</span></td><td>${l.prazo}</td><td class="price">${brl(l.preco)}</td></tr>`).join("")
+  +`<tr><td><b>Extra</b></td><td>Colorização de foto preto e branco</td><td>—</td><td class="price">+ ${brl(CONFIG.colorir)}</td></tr>`;
+$("#notaDesc").textContent="Descontos por quantidade: "+[...CONFIG.descontos].reverse().map(d=>`${d.min}+ fotos = ${Math.round(d.pct*100)}%`).join(" · ")+". Prazos de 1 a 3 horas, contados após a confirmação do nível e o pagamento.";
+const P=CONFIG.politica;
+$("#ajTxt").textContent=`Cada foto inclui ${P.rodadasAjuste} rodadas de ajuste, no momento em que você receber a prévia pelo WhatsApp.`;
+$("#faqAj").textContent=`${P.rodadasAjuste} rodadas por foto, em até ${P.prazoAjusteDias} dias após receber a prévia. Veja o que entra e o que não entra em "Ajustes inclusos".`;
+$("#faqReemb").textContent=`Você tem direito a ${P.rodadasAjuste} rodadas de ajuste por foto e, por lei, a desistir em até ${P.arrependimentoDias} dias. Se, depois delas, o resultado ainda não for satisfatório, devolvemos ${Math.round(P.reembolsoPct*100)}% do valor pago, conforme a Política de Ajustes e Reembolso.`;
+$("#faqReemb").insertAdjacentHTML("beforeend",' <a href="/restauracao/reembolso.html">Ler a política completa</a>.');
+$("#faqPriv").textContent=`Não. As fotos são apagadas ${P.apagarFotosDias} dias após a entrega final, então guarde o arquivo recebido. Não usamos suas fotos em portfólio sem sua autorização. Veja a Política de Privacidade.`;
+
+// comparador antes/depois (imagens reais em assets/)
+const EXEMPLO={legenda:"Exemplo: foto original em preto e branco e a versão restaurada e colorizada com apoio de IA."};
+$("#exCap").textContent=EXEMPLO.legenda+" Arraste para comparar.";
+const bar=$("#bar"), after=document.querySelector("#ba .after"), h=$("#bah");
+function sl(){after.style.clipPath=`inset(0 0 0 ${bar.value}%)`;h.style.left=bar.value+"%"}
+bar.addEventListener("input",sl); sl();
+
+// steppers
+$("#lvls").innerHTML=CONFIG.levels.map(l=>`
+  <div class="lvrow"><div><b>Nível ${l.id} · ${l.nome} · ${brl(l.preco)}</b><span class="s">${l.quando}</span></div>
+  <div class="step"><button type="button" data-l="${l.id}" data-d="-1" aria-label="Menos uma foto nível ${l.id}">−</button><output id="q${l.id}">0</output><button type="button" data-l="${l.id}" data-d="1" aria-label="Mais uma foto nível ${l.id}">+</button></div></div>`).join("")
+  +`<div class="lvrow"><div><b>Colorização · + ${brl(CONFIG.colorir)} por foto</b><span class="s">Opcional, para fotos preto e branco. Não pode passar do total de fotos.</span></div>
+  <div class="step"><button type="button" data-c="-1" aria-label="Menos colorização">−</button><output id="qc">0</output><button type="button" data-c="1" aria-label="Mais colorização">+</button></div></div>`;
+document.addEventListener("click",e=>{
+  const b=e.target.closest("button[data-l],button[data-c]"); if(!b) return;
+  if(b.dataset.l){ const id=b.dataset.l; qtd[id]=Math.max(0,Math.min(99,qtd[id]+ +b.dataset.d)); }
+  else { st.col=Math.max(0,st.col+ +b.dataset.c); }
+  render();
+});
+["#cup","#nome"].forEach(s=>$(s).addEventListener("input",render));
+
+function render(){
+  const total=Object.values(qtd).reduce((a,b)=>a+b,0);
+  st.col=Math.min(st.col,total);
+  CONFIG.levels.forEach(l=>$("#q"+l.id).textContent=qtd[l.id]);
+  $("#qc").textContent=st.col;
+  const r=calcular(CONFIG,qtd,st.col,$("#cup").value);
+  $("#rows").innerHTML=r.n?CONFIG.levels.filter(l=>qtd[l.id]>0).map(l=>`<div class="row"><span>${qtd[l.id]}× ${l.nome}</span><span>${brl(qtd[l.id]*l.preco)}</span></div>`).join("")
+     +(r.col?`<div class="row"><span>${r.col}× Colorização</span><span>${brl(r.col*CONFIG.colorir)}</span></div>`:"")
+     +`<div class="row"><span>Subtotal</span><span>${brl(r.sub)}</span></div>`:"Nenhuma foto selecionada.";
+  $("#dscRow").hidden=!r.desc; $("#dsc").textContent="− "+brl(r.desc)+` (${Math.round(r.pct*100)}%)`;
+  $("#tot").textContent=brl(r.total);
+  const msg=montarMensagem(CONFIG,qtd,st.col,$("#cup").value,$("#nome").value,brl);
+  const a=$("#wa"); a.classList.toggle("off",!r.n);
+  a.href=r.n?linkWhatsapp(CONFIG,msg):"#orcamento";
+  $("#preview").hidden=!r.n; $("#preview").textContent=msg;
+  $("#waWarn").hidden=CONFIG.whatsapp!=="5500000000000";
+}
+$("#copy").addEventListener("click",async()=>{
+  const msg=montarMensagem(CONFIG,qtd,st.col,$("#cup").value,$("#nome").value,brl);
+  if(!msg){ $("#copyMsg").textContent="Selecione ao menos uma foto."; return; }
+  try{ await navigator.clipboard.writeText(msg); $("#copyMsg").textContent="Mensagem copiada."; }
+  catch(e){ $("#copyMsg").textContent="Não foi possível copiar automaticamente. Selecione o texto acima e copie."; }
+});
+render();
+</script>
+</body>
+</html>
