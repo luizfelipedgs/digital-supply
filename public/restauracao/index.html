@@ -15,7 +15,8 @@
 body{margin:0;font-family:Inter,system-ui,sans-serif;background:var(--bg);color:var(--ink);line-height:1.6;-webkit-font-smoothing:antialiased}
 h1,h2,h3{font-family:Inter,system-ui,sans-serif;letter-spacing:-.025em;line-height:1.12;margin:0 0 .5em;font-weight:800}
 a{color:var(--ink)}
-.wrap{max-width:1120px;margin:0 auto;padding:0 22px}
+[hidden]{display:none!important}html{-webkit-text-size-adjust:100%}img,video{max-width:100%}body{overflow-x:hidden}
+.wrap{max-width:1120px;margin:0 auto;padding-left:max(20px,env(safe-area-inset-left));padding-right:max(20px,env(safe-area-inset-right))}
 .promo{background:var(--ink);color:#fff;text-align:center;padding:9px 12px;font-size:13.5px;position:relative}
 .promo::after{content:"";position:absolute;left:0;right:0;bottom:0;height:3px;background:var(--grad)}
 header{background:#fffffff2;backdrop-filter:blur(8px);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:20}
@@ -92,8 +93,25 @@ footer a{color:#fff;margin-right:16px}
 .cta::before{content:"";position:absolute;left:0;right:0;top:0;height:5px;background:var(--grad)}
 .cta p{color:#c9cdd8}
 .cta .btn{background:#fff;color:var(--ink)}
-@media(max-width:820px){.hero,.order{grid-template-columns:1fr}.grid4{grid-template-columns:1fr 1fr}.sum{position:static}.hero{padding-top:34px}}
-@media(max-width:520px){.logo{font-size:14px}.logo img{width:34px;height:34px}.nav .btn{padding:9px 12px!important;font-size:13px!important}.btn{padding:13px 18px}.grid4{grid-template-columns:1fr}.nav nav{display:none}}
+.detalhes h3{margin-bottom:4px}
+textarea#info{width:100%;min-height:130px;padding:12px;border:1px solid var(--line);border-radius:10px;font-size:15px;margin-top:8px;font-family:inherit;resize:vertical;line-height:1.5}
+textarea#info:focus{outline:2px solid #00a2ff;border-color:transparent}
+.cnt{text-align:right;font-size:12px;color:var(--muted)}
+.pick{display:flex;align-items:center;justify-content:center;gap:10px;border:2px dashed #b8bccb;border-radius:14px;padding:22px 16px;text-align:center;cursor:pointer;font-weight:600;background:var(--soft);margin-top:8px;transition:border-color .15s,background .15s}
+.pick:hover,.pick:focus-within{border-color:#00a2ff;background:#fff}
+.pick input{position:absolute;opacity:0;width:1px;height:1px}
+.fl-list{list-style:none;margin:10px 0 0;padding:0;display:grid;gap:8px}
+.fl-list li{display:grid;grid-template-columns:52px 1fr auto;gap:10px;align-items:center;background:#fff;border:1px solid var(--line);border-radius:12px;padding:6px 10px 6px 6px}
+.fl-list img{width:52px;height:52px;object-fit:cover;border-radius:8px;background:var(--soft)}
+.fl-list .nm{font-size:13.5px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.fl-list .sz{font-size:12px;color:var(--muted)}
+.fl-list button{border:0;background:var(--soft);border-radius:50%;width:34px;height:34px;font-size:18px;cursor:pointer;line-height:1}
+.fl-list button:hover{background:var(--ink);color:#fff}
+.err{color:#d4142c;font-size:13px;margin:8px 0 0}
+@media(min-width:1500px){.wrap{max-width:1240px}}
+@media(max-width:1024px){section{padding:60px 0}.hero{gap:32px}}
+@media(max-width:820px){.hero,.order{grid-template-columns:1fr}.grid4{grid-template-columns:1fr 1fr}.sum{position:static}.hero{padding:34px 0 44px;text-align:center}.hero p.lead{margin-left:auto;margin-right:auto}.badges{justify-content:center}.baw{max-width:440px;margin:0 auto}.cap{text-align:center}section{padding:52px 0}section h2{text-align:center}.cta{padding:40px 20px}footer{text-align:center}.fl{justify-content:center}footer a{display:inline-block;margin:4px 8px}.order{gap:18px}}
+@media(max-width:640px){#niveis table,#niveis thead,#niveis tbody,#niveis tr,#niveis td{display:block}#niveis thead{display:none}#niveis tr{padding:14px 16px;border-bottom:1px solid var(--line)}#niveis tr:last-child{border-bottom:0}#niveis td{border:0;padding:2px 0}#niveis td:nth-child(3)::before{content:"Prazo: ";color:var(--muted)}#niveis td.price{font-size:20px;margin-top:4px}.hero .btn{display:block;width:100%;margin:0 0 10px}.hero p:has(.btn){margin:0}}
+@media(max-width:520px){.wrap{padding-left:max(16px,env(safe-area-inset-left));padding-right:max(16px,env(safe-area-inset-right))}.lvrow{padding:13px 12px}.promo{font-size:12.5px}.logo{font-size:14px}.logo img{width:34px;height:34px}.nav .btn{padding:9px 12px!important;font-size:13px!important}.btn{padding:13px 18px}.grid4{grid-template-columns:1fr}.nav nav{display:none}}
 </style>
 </head>
 <body>
@@ -177,7 +195,21 @@ footer a{color:#fff;margin-right:16px}
 <section id="orcamento"><div class="wrap">
   <h2 class="center">Monte seu orçamento</h2>
   <div class="order">
+    <div>
     <div id="lvls"></div>
+    <div class="card detalhes" id="detalhes">
+      <h3>Conte sobre as suas fotos</h3>
+      <p class="small" style="margin:0">Quanto mais detalhes, melhor o resultado. Pode falar das pessoas, cores de roupa, cabelo, olhos, época, local e o que está danificado.</p>
+      <label for="info" class="small" style="display:block;margin-top:10px;font-weight:600">Descrição (opcional)</label>
+      <textarea id="info" maxlength="900" placeholder="Ex.: Casamento dos meus avós, 1958. Ela: cabelo castanho, olhos castanhos, vestido branco. Ele: terno cinza. Tem um rasgo no canto direito. Quero colorizar."></textarea>
+      <div class="cnt"><span id="infoN">0</span>/900</div>
+      <label class="pick" id="pickLbl"><input type="file" id="arq" accept="image/*,.heic,.heif" multiple>📷 Escolher fotos para restaurar</label>
+      <p class="small" style="margin:6px 0 0">JPG, PNG ou HEIC, até 20 fotos de 25 MB cada. Se puder, envie o arquivo original ou a melhor foto da peça.</p>
+      <ul class="fl-list" id="fotos"></ul>
+      <p class="err" id="fotoErr" role="alert" hidden></p>
+      <p class="small" id="fotoNota" role="status"></p>
+    </div>
+  </div>
     <aside class="card sum">
       <h3>Resumo</h3>
       <div id="rows" class="small">Nenhuma foto selecionada.</div>
@@ -250,7 +282,7 @@ function calcular(cfg, qtd, colorir, cupom){
   const desc=sub*pct;
   return {n, col, sub, pct, desc, total:sub-desc};
 }
-function montarMensagem(cfg, qtd, colorir, cupom, nome, brl){
+function montarMensagem(cfg, qtd, colorir, cupom, nome, brl, info, nArquivos){
   const r=calcular(cfg,qtd,colorir,cupom);
   if(!r.n) return "";
   const linhas=cfg.levels.filter(l=>(qtd[l.id]||0)>0).map(l=>`- ${qtd[l.id]}x Nível ${l.id} (${l.nome}) a ${brl(l.preco)}`);
@@ -259,14 +291,17 @@ function montarMensagem(cfg, qtd, colorir, cupom, nome, brl){
   return [`Olá! Quero restaurar ${r.n} foto(s).`, ...linhas,
     r.desc? `Desconto: ${Math.round(r.pct*100)}%${cfg.cupons[cup]?` (cupom ${cup})`:""}`:"",
     `Total estimado: ${brl(r.total)} (sujeito à confirmação do nível após ver as fotos)`,
-    nome?`Nome: ${String(nome).trim()}`:"" ].filter(Boolean).join("\n");
+    nome?`Nome: ${String(nome).trim()}`:"",
+    String(info||"").trim()?`Detalhes das fotos:\n${String(info).trim()}`:"",
+    nArquivos>0?`Fotos para restaurar: ${nArquivos} arquivo(s), enviadas nesta conversa.`:"" ].filter(Boolean).join("\n");
 }
 function linkWhatsapp(cfg, msg){ return "https://wa.me/"+cfg.whatsapp+"?text="+encodeURIComponent(msg); }
 /* CALC-FIM */
 
 const brl=v=>v.toLocaleString("pt-BR",{style:"currency",currency:"BRL"});
 const $=s=>document.querySelector(s);
-const qtd={}, st={col:0};
+const qtd={}, st={col:0}; let fotos=[];
+const MAX_FOTOS=20, MAX_MB=25;
 CONFIG.levels.forEach(l=>qtd[l.id]=0);
 
 $("#minPreco").textContent=brl(Math.min(...CONFIG.levels.map(l=>l.preco)));
@@ -299,7 +334,7 @@ document.addEventListener("click",e=>{
   else { st.col=Math.max(0,st.col+ +b.dataset.c); }
   render();
 });
-["#cup","#nome"].forEach(s=>$(s).addEventListener("input",render));
+["#cup","#nome","#info"].forEach(s=>$(s).addEventListener("input",render));
 
 function render(){
   const total=Object.values(qtd).reduce((a,b)=>a+b,0);
@@ -312,17 +347,64 @@ function render(){
      +`<div class="row"><span>Subtotal</span><span>${brl(r.sub)}</span></div>`:"Nenhuma foto selecionada.";
   $("#dscRow").hidden=!r.desc; $("#dsc").textContent="− "+brl(r.desc)+` (${Math.round(r.pct*100)}%)`;
   $("#tot").textContent=brl(r.total);
-  const msg=montarMensagem(CONFIG,qtd,st.col,$("#cup").value,$("#nome").value,brl);
+  const msg=montarMensagem(CONFIG,qtd,st.col,$("#cup").value,$("#nome").value,brl,$("#info").value,fotos.length);
+  $("#infoN").textContent=$("#info").value.length;
   const a=$("#wa"); a.classList.toggle("off",!r.n);
   a.href=r.n?linkWhatsapp(CONFIG,msg):"#orcamento";
   $("#preview").hidden=!r.n; $("#preview").textContent=msg;
   $("#waWarn").hidden=CONFIG.whatsapp!=="5500000000000";
 }
 $("#copy").addEventListener("click",async()=>{
-  const msg=montarMensagem(CONFIG,qtd,st.col,$("#cup").value,$("#nome").value,brl);
+  const msg=montarMensagem(CONFIG,qtd,st.col,$("#cup").value,$("#nome").value,brl,$("#info").value,fotos.length);
   if(!msg){ $("#copyMsg").textContent="Selecione ao menos uma foto."; return; }
   try{ await navigator.clipboard.writeText(msg); $("#copyMsg").textContent="Mensagem copiada."; }
   catch(e){ $("#copyMsg").textContent="Não foi possível copiar automaticamente. Selecione o texto acima e copie."; }
+});
+
+/* ===== Fotos: ficam no aparelho do cliente; nada é enviado ao site. Saem pelo compartilhamento do celular ou anexo manual no WhatsApp ===== */
+const ehImagem=f=>/^image\//.test(f.type)||/\.(heic|heif|jpe?g|png|webp)$/i.test(f.name);
+const fmtMB=b=>(b/1048576).toFixed(1).replace(".",",")+" MB";
+const thumbs=new Map();
+function podeCompartilhar(){ try{ return !!(navigator.share&&navigator.canShare&&fotos.length&&navigator.canShare({files:fotos})); }catch(e){ return false; } }
+function renderFotos(){
+  $("#fotos").innerHTML=fotos.map((f,i)=>`<li><img alt="" data-i="${i}"><div style="min-width:0"><div class="nm"></div><div class="sz">${fmtMB(f.size)}</div></div><button type="button" data-rm="${i}" aria-label="Remover foto ${i+1}">×</button></li>`).join("");
+  [...document.querySelectorAll("#fotos li")].forEach((li,i)=>{
+    li.querySelector(".nm").textContent=fotos[i].name;
+    const img=li.querySelector("img");
+    if(typeof URL.createObjectURL==="function"){ let u=thumbs.get(fotos[i]); if(!u){u=URL.createObjectURL(fotos[i]);thumbs.set(fotos[i],u);} img.src=u; }
+  });
+  const nota=$("#fotoNota");
+  if(!fotos.length) nota.textContent="";
+  else if(podeCompartilhar()) nota.textContent=`${fotos.length} foto(s) escolhida(s). Ao tocar em "Pedir pelo WhatsApp", o celular abre o compartilhamento: escolha o WhatsApp e a conversa com +55 41 99577-8198. As fotos não passam pelo nosso site.`;
+  else nota.textContent=`${fotos.length} foto(s) escolhida(s). Neste aparelho o WhatsApp abre com a mensagem pronta; depois toque no clipe e anexe as mesmas fotos na conversa. As fotos não passam pelo nosso site.`;
+  const tot=Object.values(qtd).reduce((a,b)=>a+b,0);
+  if(fotos.length&&tot&&fotos.length!==tot) nota.textContent+=` Atenção: o orçamento tem ${tot} foto(s) e você escolheu ${fotos.length} arquivo(s).`;
+}
+function addArquivos(lista){
+  const erros=[];
+  for(const f of lista){
+    if(!ehImagem(f)){ erros.push(`"${f.name}" não é uma imagem.`); continue; }
+    if(f.size>MAX_MB*1048576){ erros.push(`"${f.name}" passa de ${MAX_MB} MB.`); continue; }
+    if(fotos.some(x=>x.name===f.name&&x.size===f.size&&x.lastModified===f.lastModified)) continue;
+    if(fotos.length>=MAX_FOTOS){ erros.push(`Limite de ${MAX_FOTOS} fotos por pedido.`); break; }
+    fotos.push(f);
+  }
+  const e=$("#fotoErr"); e.hidden=!erros.length; e.textContent=erros.join(" ");
+  renderFotos(); render();
+}
+$("#arq").addEventListener("change",e=>{ addArquivos([...e.target.files]); e.target.value=""; });
+$("#fotos").addEventListener("click",e=>{
+  const b=e.target.closest("button[data-rm]"); if(!b) return;
+  const f=fotos.splice(+b.dataset.rm,1)[0]; const u=thumbs.get(f); if(u&&URL.revokeObjectURL){URL.revokeObjectURL(u);} thumbs.delete(f);
+  renderFotos(); render();
+});
+$("#wa").addEventListener("click",async e=>{
+  if(!podeCompartilhar()) return;
+  const msg=montarMensagem(CONFIG,qtd,st.col,$("#cup").value,$("#nome").value,brl,$("#info").value,fotos.length);
+  if(!msg) return;
+  e.preventDefault();
+  try{ await navigator.share({files:fotos,text:msg}); }
+  catch(err){ if(!err||err.name!=="AbortError") window.open(linkWhatsapp(CONFIG,msg),"_blank","noopener"); }
 });
 render();
 </script>
