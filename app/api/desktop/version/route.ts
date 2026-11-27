@@ -5,7 +5,7 @@ export const revalidate = 0;
 
 export async function GET() {
   const versionData = {
-    version: "2.6.1",
+    version: "2.6.2",
     release_date: "2026-11-27",
     app_name: "Central DGS",
     release_notes: [
