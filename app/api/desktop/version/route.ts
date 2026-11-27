@@ -5,15 +5,18 @@ export const revalidate = 0;
 
 export async function GET() {
   const versionData = {
-    version: "2.5.1",
-    release_date: "2026-11-25",
+    version: "2.6.0",
+    release_date: "2026-11-27",
     app_name: "Central DGS",
     release_notes: [
-      "Conexão Oficial Instagram Corrigida: Conexão direta e instantânea com Instagram e Meta.",
-      "Agendamento 100% Autônomo na Nuvem: Seus posts agora são enviados automaticamente mesmo com seu computador desligado!",
-      "Sincronização em Nuvem: Agende seus vídeos e feche a Central com total tranquilidade.",
-      "Disparo Imediato: Opção 'Postar Agora' aprimorada com publicação instantânea.",
-      "Máxima Estabilidade: Envio oficial direto via redes sociais sem bloqueios ou riscos para sua conta."
+      "Radar Viral DGS Oficial: Novo garimpador inteligente de vídeos virais e tendências no TikTok e Instagram Reels.",
+      "Busca por Perfil (@) Integrada: Minere os conteúdos mais assistidos e com maior engajamento diretamente de qualquer perfil.",
+      "Extração de Capas e Métricas Reais: Visualize capas originais, número exato de views, curtidas e comentários.",
+      "Player Fluido sem Travamentos: Reprodução em alta performance com suporte nativo a streaming contínuo.",
+      "Expansão de Descrição Completa: Leia e copie a legenda completa e todas as hashtags do vídeo com 1 clique.",
+      "Biblioteca de Inspirações: Salve e organize seus vídeos de referência com marcação verde visual instantânea.",
+      "Download em Alta Resolução: Baixe qualquer vídeo viral sem marca d'água direto para o seu computador.",
+      "Inicialização Blindada: Novo sistema de inicialização sem travamentos nem fechamentos abruptos no Windows."
     ],
     download_url: "https://digitalsupply.pro/downloads/Launcher_Central_DGS.exe",
     launcher_url: "https://digitalsupply.pro/downloads/Launcher_Central_DGS.exe",
